@@ -1,7 +1,5 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
-
 
     var calendar = new FullCalendar.Calendar(calendarEl, {        
         
@@ -30,25 +28,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById("endDate").setAttribute("min", diaInicio)
                 });
 
+                
                 $('#addModal').modal('show');
-
+                                
+                
             }
         },
 
-        eventClick: function (info) {
+        eventClick: function (info){
             evento = calendar.getEventById(info.event.id);
-            inicio = evento.start.toISOString().substring(11,16);
-            horaFinal = evento.end.toISOString().substring(11,16);
+
+            horaInicio = evento.start.toISOString().substring(11,16)
+            horaFinal = evento.end.toISOString().substring(11,16)
+            inicio = evento.start.toISOString().split('T')[0]
             final = evento.end.toISOString().split('T')[0]
-            
-            $('#changeModal').on('shown.bs.modal',function(){
+            color = evento.backgroundColor
+
+
+            $('#changeModal').on('show.bs.modal',function(){
+
+                document.getElementById("changeEndDate").setAttribute("min", inicio)
                 $("#changeTitle").val(evento.title);
                 $("#changeID").val(evento.id);
-                document.getElementById("changeStartTime").value = inicio
+                document.getElementById("changeStartTime").value = horaInicio
                 document.getElementById("changeEndTime").value = horaFinal
+                document.getElementById("changeStartDate").value = inicio
                 document.getElementById("changeEndDate").value = final
+                document.getElementById("changeEventColor").value = color
             });
+
             $('#changeModal').modal('show');
+
         }
     }
     );

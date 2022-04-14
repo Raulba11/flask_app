@@ -1,11 +1,13 @@
+#Imports
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import SocketIO, send
-from sqlalchemy import null, true
+from sqlalchemy import true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
-
+from datetime import datetime
+#Fin Imports
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
@@ -37,7 +39,9 @@ def login():
     # Al rellenar el formulario y presionar el botón pasa por la verficación
     if request.method == 'POST':
         if user and check_password_hash(user.password, password):
-            login_user(user, remember=request.form.get('remember'))
+            app.logger.debug(request.form.get('remember'))
+            
+            login_user(user, remember= request.form.get('remember'))
             return redirect(url_for('saludo'))
         elif not user:
             flash("Usuario no encontrado")
@@ -102,9 +106,15 @@ def calendario():
                 str(request.form.get('startTime'))
             end = str(request.form.get('endDate')) + " " + \
                 str(request.form.get('endTime'))
-            new_event = EventModel(title=title, start=start, end=end)
-            db.session.add(new_event)
-            db.session.commit()
+            color = request.form.get('eventColor')
+            
+
+            if validarFechas(start,end):
+                new_event = EventModel(title=title, start=start, end=end, backgroundColor=color)            
+                db.session.add(new_event)
+                db.session.commit()
+
+
         # Eliminar evento
         elif request.form.get('btn') == "delete":
             id = request.form.get('changeID')
@@ -116,14 +126,15 @@ def calendario():
         elif request.form.get('btn') == "update":
             id = request.form.get('changeID')
             newTitle = request.form.get('changeTitle')
-            newStart = str(request.form.get('changeStartDate')) + \
-                " " + str(request.form.get('changeStartTime'))
-            newEnd = str(request.form.get('changeEndDate')) + \
-                " " + str(request.form.get('changeEndTime'))
+            newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
+            newEnd = str(request.form.get('changeEndDate')) + " " + str(request.form.get('changeEndTime'))
+            newColor = request.form.get('changeEventColor')
 
-            EventModel.query.filter_by(id=id).update(
-                dict(title=newTitle, start=newStart, end=newEnd))
-            db.session.commit()
+
+            if validarFechas(newStart, newEnd):
+                EventModel.query.filter_by(id=id).update(
+                    dict(title=newTitle, start=newStart, end=newEnd, backgroundColor=newColor))
+                db.session.commit()
 
         return render_template('calendario.html')
 
@@ -169,7 +180,8 @@ def event_loader(user_name):
                 "id": evento.id,
                 "title": evento.title,
                 "start": evento.start.isoformat(),
-                "end": evento.end.isoformat()
+                "end": evento.end.isoformat(),
+                "backgroundColor": evento.backgroundColor
             }
         )
 
@@ -179,6 +191,15 @@ def event_loader(user_name):
 @login_required
 def eventos():
     return event_loader(current_user.name)
+
+def validarFechas(start, end):
+    if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
+        return True
+    else:
+        return False
+
+
+
 
 
 if __name__ == "__main__":
