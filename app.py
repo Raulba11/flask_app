@@ -122,6 +122,7 @@ def calendario():
             app.logger.debug(evento.title)
             db.session.delete(evento)
             db.session.commit()
+            
         # Actualizar evento
         elif request.form.get('btn') == "update":
             id = request.form.get('changeID')
