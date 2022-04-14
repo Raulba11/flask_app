@@ -6,8 +6,7 @@
     {% block content %}
     {%endblock%}
     
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css'
-      rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
     <link href="static/css/fullcalendar.css" rel="stylesheet" type="text/css">
     <link href="static/css/calendar.css" rel="stylesheet" type="text/css">
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
@@ -18,6 +17,25 @@
       if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
       }
+
+      function confirmar(startTime, endTime, startDate, endDate){
+        if(confirm("Confirmar")){
+          
+          start = document.getElementById(startDate).value + " " + document.getElementById(startTime).value
+          end = document.getElementById(endDate).value + " " + document.getElementById(endTime).value
+
+          if(new Date(start) > new Date(end)){
+            alert("Revise las fechas u horarios")
+            return false
+          } else {
+            return true
+          }
+
+        } else {
+          return false
+        }
+      }
+
     </script>
 
 
@@ -28,7 +46,6 @@
       <div id='calendar' class="block calendar">
       </div>
     </div>
-
 
     <!-- Inicio del modal add-->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog"
@@ -43,29 +60,34 @@
             </button>
           </div>
           <div class="modal-body">
-            <!-- Inicio del formulario -->
-            <form method="post" id = "modalform" onSubmit="return confirm('Añadir evento')">
+            <!-- Inicio del formulario add-->
+            <form method="post" id = "modalform" onSubmit="confirmar('startTime', 'endTime', 'startDate', 'endDate')">
               <div class="md-form md-outline input-with-post-icon">
 
+                <label for="title">Título</label>
                 <input placeholder="Título del evento" type="text" name="title"
                   id="title" class="form-control" required>
-                <label for="title">Título</label>
 
                 <input type="hidden" name = "startDate" id = "startDate"></a>
 
+                <label for="endDate">Día de fin</label>
                 <input placeholder="Día de fin" type="date"
                   id="endDate"
                   name="endDate" class="form-control" required>
-                <label for="endDate">Día de fin</label>
 
-                <input placeholder="Select start" type="time" id="startTime"
-                  name="startTime" class="form-control" required onchange="updateMin(this.value)">
                 <label for="startTime">Hora de inicio</label>
+                <input placeholder="Select start" type="time" id="startTime"
+                  name="startTime" class="form-control" required>
 
+                <label for="endTime">Hora de fin</label>
                 <input placeholder="Select end" type="time" id="endTime"
                   name="endTime"
                   class="form-control" required>
-                <label for="endTime">Hora de fin</label>
+
+                <label for="endTime">Fondo del evento</label>
+                <input type="color" name="eventColor" id="eventColor"
+                  class="form-control" required>
+
               </div>
             </div>
             <div class="modal-footer">
@@ -75,11 +97,13 @@
                 data-dismiss="modal">Close</button>
             </div>
           </form>
-          <!-- Fin del formulario -->
+          <!-- Fin del formulario add-->
         </div>
       </div>
     </div>
-    <!-- Fin del modal -->
+    <!-- Fin del modal add-->
+
+
 
     <!-- Inicio del modal change-->
     <div class="modal fade" id="changeModal" tabindex="-1" role="dialog"
@@ -94,29 +118,34 @@
             </button>
           </div>
           <div class="modal-body">
-            <!-- Inicio del formulario -->
-            <form method="post" id = "modalform" onSubmit="return confirm('¿Confirmar cambios?')">
+
+            <!-- Inicio del formulario change-->
+            <form method="post" id = "modalform" onSubmit="confirmar('changeStartTime', 'changeEndTime', 'changeStartDate', 'changeEndDate')">
               <div class="md-form md-outline input-with-post-icon">
                 <input type="hidden" name = "changeID" id = "changeID" value = "">
                 <input type="hidden" name = "changeStartDate" id = "changeStartDate" value = "">
 
+                <label for="changeTitle">Título</label>
                 <input placeholder="Título del evento" type="text" name="changeTitle"
                   id="changeTitle" class="form-control" required>
-                <label for="changeTitle">Título</label>
 
+                <label for="changeEndDate">Día de fin</label>
                 <input placeholder="Día de fin" type="date" min= ""
                   id="changeEndDate"
                   name="changeEndDate" min="" class="form-control" value= required>
-                <label for="changeEndDate">Día de fin</label>
 
+                <label for="changeStartTime">Hora de inicio</label>
                 <input placeholder="Select start" type="time" id="changeStartTime"
                   name="changeStartTime" class="form-control" required>
-                <label for="changeStartTime">Hora de inicio</label>
 
+                <label for="changeEndTime">Hora de fin</label>
                 <input placeholder="Select end" type="time" id="changeEndTime"
                   name="changeEndTime"
                   class="form-control" required>
-                <label for="changeEndTime">Hora de fin</label>
+
+                <label for="endTime">Fondo del evento</label>
+                <input type="color" name="changeEventColor" id="changeEventColor"
+                  class="form-control" required>
 
               </div>
             </div>
@@ -128,15 +157,11 @@
                 data-dismiss="modal">Close</button>
             </div>
           </form>
-          <!-- Fin del formulario -->
+          <!-- Fin del formulario change-->
         </div>
       </div>
     </div>
-    <!-- Fin del modal -->
-
-
-    
-
+    <!-- Fin del modal change-->
 
   </body>
 

@@ -38,12 +38,14 @@ class EventModel(db.Model):
     title = db.Column(db.String(), nullable = False)
     start = db.Column(db.DateTime(), nullable = False)
     end = db.Column(db.DateTime(), nullable = False)
+    backgroundColor = db.Column(db.String(), nullable = False)
 
-    def __init__(self, title, start, end):
+    def __init__(self, title, start, end, backgroundColor):
         self.id = current_user.name + "%" + str(uuid.uuid4())
         self.title = title
         self.start = start
         self.end = end
+        self.backgroundColor = backgroundColor
 
     def __repr__(self):
         return f"<Título: {self.title}>"
