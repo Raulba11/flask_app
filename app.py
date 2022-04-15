@@ -1,8 +1,7 @@
 #Imports
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
-from flask_socketio import SocketIO, send
-from sqlalchemy import true
+from flask_socketio import *
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -122,7 +121,7 @@ def calendario():
             app.logger.debug(evento.title)
             db.session.delete(evento)
             db.session.commit()
-            
+
         # Actualizar evento
         elif request.form.get('btn') == "update":
             id = request.form.get('changeID')
@@ -148,13 +147,50 @@ def calendario():
 def chat():
     return render_template('chat.html')
 
+@app.route('/chat/sala')
+def sala():
+    return render_template('sala.html')
+
+
+
+
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
+
+
+
+
+
+
 
 @socketio.on('my event')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
+    app.logger.debug(rooms())
+    
+    listaSalas = rooms()
+    sala = listaSalas[0]
+    socketio.emit('my response', json, callback=messageReceived, to = sala)
+
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    app.logger.debug(username)
+    
+    join_room(room)
+    emit('redirect', url_for('sala'), room = [room])
+    emit('user joined',username + " ha entrado en la sala.", to = room)
+    app.logger.debug(rooms())
+
+    
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    emit('user left',username + " has left the room.", to = room)
 
 #Fin chat
 
