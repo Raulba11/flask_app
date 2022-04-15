@@ -65,5 +65,48 @@
   </div>
   <div class="offcanvas-body">
     ...
+   
+   
+    <body>
+      
+      
+<script type="text/javascript" src="https://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      
+      
+
+
+      <form action = "" name = "formSala" id = "formSala" method="POST">
+        <input type="hidden" class="username" value = "{{current_user.name}}"/>
+        <input type="number" class = "room" placeholder="Sala"/>
+        <input type="submit">
+      </form>
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+        var socket = io.connect();
+        
+        socket.on( 'connect', function() {
+
+          var form2 = $('#formSala').on('submit', function(e){
+            e.preventDefault()
+            let username = $('input.username').val()
+            let room = $('input.room').val()
+            socket.emit('join',{
+              username : username,
+              room : room
+            })
+          })
+        } )  
+        
+        socket.on('redirect', (dest) => {
+          window.location.href = dest;
+        });
+        
+        </script>
+</body>
+
   </div>
 </div>
+
