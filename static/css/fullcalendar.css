@@ -143,7 +143,7 @@ html .fc,
 	display: inline-block;
 	padding: 0 5px;
 	overflow: hidden;
-
+	
 	white-space: nowrap;
 	cursor: pointer;
 	}
@@ -170,6 +170,7 @@ html .fc,
 .fc-button .fc-icon {
 	margin: 0 .1em;
 	font-size: 2em;
+	color: #1e6fe8;
 	font-family: "Courier New", Courier, monospace;
 	vertical-align: baseline; /* for IE7 */
 	}
@@ -196,6 +197,7 @@ html .fc,
 
 .fc-button .ui-icon {
 	position: relative;
+	
 	top: 50%;
 	float: left;
 	margin-top: -8px; /* we know jqui icons are always 16px tall */
