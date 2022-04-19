@@ -98,8 +98,11 @@ def saludo():
 def calendario():
 
     if request.method == 'POST':
+        app.logger.debug("Valor del action: " + str(request.form.get('action')))
+        app.logger.debug("Entra al método POST")
+        
         # Añadir evento
-        if request.form.get('btn') == "add":
+        if request.form.get('action') == "add":
             title = request.form.get('title')
             start = str(request.form.get('startDate')) + " " + \
                 str(request.form.get('startTime'))
@@ -115,7 +118,9 @@ def calendario():
 
 
         # Eliminar evento
-        elif request.form.get('btn') == "delete":
+        elif request.form.get('action') == "delete":
+            app.logger.debug("Entra al delete")
+                        
             id = request.form.get('changeID')
             evento = EventModel.query.filter_by(id=id).first()
             app.logger.debug(evento.title)
@@ -123,7 +128,9 @@ def calendario():
             db.session.commit()
 
         # Actualizar evento
-        elif request.form.get('btn') == "update":
+        elif request.form.get('action') == "update":
+            app.logger.debug("Entra al update")
+            
             id = request.form.get('changeID')
             newTitle = request.form.get('changeTitle')
             newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
@@ -212,15 +219,17 @@ def event_loader(user_name):
     events = db.session.query(EventModel).filter(
         EventModel.id.match(user_name)).all()
     for evento in events:
-        eventos.append(
-            {
-                "id": evento.id,
-                "title": evento.title,
-                "start": evento.start.isoformat(),
-                "end": evento.end.isoformat(),
-                "backgroundColor": evento.backgroundColor
-            }
-        )
+
+        if not (evento.end.date() < datetime.now().date()):
+            eventos.append(            
+                {
+                    "id": evento.id,
+                    "title": evento.title,
+                    "start": evento.start.isoformat(),
+                    "end": evento.end.isoformat(),
+                    "backgroundColor": evento.backgroundColor
+                }
+            )
 
     return jsonify(eventos)
 

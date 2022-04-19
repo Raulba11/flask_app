@@ -1,0 +1,73 @@
+body {
+    padding-bottom: 125;
+	padding-top: 75;
+	padding-left: 100;
+	padding-right: 100;
+    background-color: #1d2f43;
+    color: #141415;
+}
+
+.fc th,
+.fc td {
+    border-width: 0.1em;
+    border-color: #0d0d0e68;
+
+}
+
+
+.calendar {
+    border: solid 0.2em #02020235;
+}
+
+
+
+
+
+
+/* Marco animado */
+.block {
+    padding: 2%;
+    position: relative;
+    border-color: #0a0a0a;
+    width: 100%;
+    height: 100%;
+    background: #bdbcb6;
+}
+
+.block:before,
+.block:after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    border-color: #11111135;
+    background: linear-gradient(270deg, #5150506b, #656a6a);
+    width: 100%;
+    height: 100%;
+    transform: scale(1.07);
+    z-index: -1;
+    background-size: 300%;
+    animation: steam 7s ease infinite;
+}
+/*flechas*/
+.fc-button .fc-icon {
+	margin: 0 .1em;
+	font-size: 2em;
+	color: rgb(3, 3, 3);
+	font-family: "Courier New", Courier, monospace;
+	vertical-align: baseline; /* for IE7 */
+	}
+
+@keyframes steam {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}

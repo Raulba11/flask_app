@@ -1,0 +1,66 @@
+body {
+    padding-bottom: 125;
+	padding-top: 75;
+	padding-left: 100;
+	padding-right: 100;
+    background-image: url("xp.jpg");
+    background-size: cover;
+    color: #141415;
+}
+
+.fc th,
+.fc td {
+    border-width: 0.1em;
+    border-color: #000000;
+
+}
+
+
+.calendar {
+    border: solid 0.2em #02020235;
+}
+
+
+
+
+
+
+/* Marco animado */
+.block {
+    padding: 2%;
+    position: relative;
+    border-color: #0a0a0a;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+}
+
+.block:before,
+.block:after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    border-color: #11111135;
+    background: linear-gradient(270deg, #0077ff, #1536c5);
+    width: 100%;
+    height: 100%;
+    transform: scale(1.07);
+    z-index: -1;
+    background-size: 300%;
+    animation: steam 7s ease infinite;
+}
+
+@keyframes steam {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}

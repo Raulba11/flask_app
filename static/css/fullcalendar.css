@@ -1,9 +1,3 @@
-/*!
- * FullCalendar v2.0.2 Stylesheet
- * Docs & License: http://arshaw.com/fullcalendar/
- * (c) 2013 Adam Shaw
- */
-
 
  .fc {
 	direction: ltr;
@@ -15,16 +9,10 @@
 	border-spacing: 0;
 	}
 	
-html .fc,
-.fc table {
-	font-size: 1em;
-	}
+
 	
-.fc td,
-.fc th {
-	padding: 0;
-	vertical-align: top;
-	}
+
+
 
 
 
@@ -72,11 +60,13 @@ html .fc,
 
 .fc-header .fc-button {
 	margin-right: -1px;
+	
 	}
 	
 .fc-header .fc-corner-right,  /* non-theme */
 .fc-header .ui-corner-right { /* theme */
 	margin-right: 0; /* back to normal */
+	
 	}
 	
 /* button layering (for border precedence) */
@@ -84,15 +74,18 @@ html .fc,
 .fc-header .fc-state-hover,
 .fc-header .ui-state-hover {
 	z-index: 2;
+	
 	}
 	
 .fc-header .fc-state-down {
 	z-index: 3;
+	
 	}
 
 .fc-header .fc-state-active,
 .fc-header .ui-state-active {
 	z-index: 4;
+	
 	}
 	
 	
@@ -104,12 +97,14 @@ html .fc,
 	position: relative;
 	z-index: 1; /* scopes all other z-index's to be inside this container */
 	clear: both;
+	
 	zoom: 1; /* for IE7, gives accurate coordinates for [un]freezeContentHeight */
 	}
 	
 .fc-view {
 	position: relative;
 	width: 100%;
+	
 	}
 	
 	
@@ -124,11 +119,11 @@ html .fc,
 	}
 	
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
-	background: #fcf8e3;
+	background: #fce8e3;
 	}
 	
 .fc-cell-overlay { /* semi-transparent rectangle while dragging */
-	background: #bce8f1;
+	background: #10e4e8;
 	opacity: .3;
 	filter: alpha(opacity=30); /* for IE */
 	}
@@ -150,16 +145,20 @@ html .fc,
 	
 .fc-state-default { /* non-theme */
 	border: 1px solid;
+	
+
 	}
 
 .fc-state-default.fc-corner-left { /* non-theme */
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
+	
 	}
 
 .fc-state-default.fc-corner-right { /* non-theme */
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
+	
 	}
 
 /*
@@ -167,17 +166,12 @@ html .fc,
 	and we'll try to make them look good cross-browser.
 */
 
-.fc-button .fc-icon {
-	margin: 0 .1em;
-	font-size: 2em;
-	color: #e0cece;
-	font-family: "Courier New", Courier, monospace;
-	vertical-align: baseline; /* for IE7 */
-	}
+
 
 .fc-icon-left-single-arrow:after {
 	content: "\02039";
 	font-weight: bold;
+	
 	}
 
 .fc-icon-right-single-arrow:after {
@@ -197,6 +191,7 @@ html .fc,
 
 .fc-button .ui-icon {
 	position: relative;
+	
 	
 	top: 50%;
 	float: left;
@@ -248,6 +243,7 @@ html .fc,
 	opacity: 0.65;
 	filter: alpha(opacity=65);
 	box-shadow: none;
+	
 	}
 
 	
@@ -383,16 +379,18 @@ table.fc-border-separate {
 
 .fc-grid th {
 	text-align: center;
-	background-color:#f6f7f8
+	background-color:#f8f6f6
 	}
 
 .fc .fc-week-number {
 	width: 22px;
 	text-align: center;
+	
 	}
 
 .fc .fc-week-number div {
 	padding: 0 2px;
+	
 	}
 	
 .fc-grid .fc-day-number {
@@ -400,10 +398,12 @@ table.fc-border-separate {
 	padding: 0 2px;
 	margin: 96px 0 0 115px;
     position: absolute;
+	
 	}
 	
 .fc-grid .fc-other-month .fc-day-number {
 	opacity: 0.3;
+	
 	filter: alpha(opacity=30); /* for IE */
 	/* opacity with small font can sometimes look too faded
 	   might want to set the 'color' property instead
@@ -413,6 +413,7 @@ table.fc-border-separate {
 .fc-grid .fc-day-content {
 	clear: both;
 	padding: 2px 2px 1px; /* distance between events and day edges */
+	
 	}
 	
 /* event styles */
@@ -420,12 +421,14 @@ table.fc-border-separate {
 .fc-grid .fc-event-time {
 	font-weight: bold;
 	display:none
+	
 	}
 	
 /* right-to-left */
 	
 .fc-rtl .fc-grid .fc-day-number {
 	float: left;
+	
 	}
 	
 .fc-rtl .fc-grid .fc-event-time {
@@ -439,6 +442,7 @@ table.fc-border-separate {
 
 .fc-agenda table {
 	border-collapse: separate;
+	
 	}
 	
 .fc-agenda-days th {

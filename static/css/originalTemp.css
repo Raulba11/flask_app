@@ -1,0 +1,60 @@
+body {
+	margin: 0;
+	padding: 100;
+	background-color: #1d2f43;
+	color: #010b13;
+}
+
+.fc th, .fc td {
+	border-width: 0.1em;
+	border-color: #100c08;
+}
+
+
+.calendar{
+	border: solid 0.2em black;
+}
+
+
+
+
+
+
+/* Marco animado */
+.block {
+	padding: 2%;
+	position: relative;
+
+	width: 100%;
+	height: 100%;
+	background: #ffffff;
+}
+
+.block:before,
+.block:after {
+	content: '';
+	position: absolute;
+	left: -2px;
+	top: -2px;
+	background: linear-gradient(270deg, #841b2d, #ff0000);
+	width: 100%;
+	height: 100%;
+	transform: scale(1.07);
+	z-index: -1;
+	background-size: 300%;
+	animation: steam 7s ease infinite;
+}
+
+@keyframes steam {
+	0% {
+		background-position: 0% 50%
+	}
+
+	50% {
+		background-position: 100% 50%
+	}
+
+	100% {
+		background-position: 0% 50%
+	}
+}
