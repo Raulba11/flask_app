@@ -29,8 +29,6 @@ class UserModel(db.Model, UserMixin):
     def __repr__(self):
         return f"<Nombre: {self.name} - Email: {self.email}>"
 
-
-
 class EventModel(db.Model):
     __tablename__ = 'Eventos'
 

@@ -1,6 +1,8 @@
 body {
-	margin: 0;
-	padding: 100;
+	padding-bottom: 125;
+	padding-top: 75;
+	padding-left: 100;
+	padding-right: 100;
 	background-color: #0a0a0a;
 	color: #1375cb;
     background-image: url("agua-clara.jpg");
@@ -12,6 +14,7 @@ body {
 	border-color:#0629ed68 ;
 	
 }
+
 
 
 .calendar{
@@ -52,7 +55,7 @@ body {
 .fc-button .fc-icon {
 	margin: 0 .1em;
 	font-size: 2em;
-	color: rgb(43, 0, 255);
+	color: rgb(0, 195, 255);
 	font-family: "Courier New", Courier, monospace;
 	vertical-align: baseline; /* for IE7 */
 	}

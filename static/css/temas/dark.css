@@ -1,0 +1,100 @@
+body {
+    padding-bottom: 125;
+	padding-top: 75;
+	padding-left: 480;
+	padding-right: 10;
+    background-image: url("dark2.PNG");
+    background-size: cover;
+    color: #141415;
+}
+
+.fc th,
+.fc td {
+    border-width: 0.1em;
+    border-color: #000000;
+
+}
+
+
+.calendar {
+    border: solid 0.2em #02020235;
+}
+
+
+
+
+
+
+/* Marco animado */
+.block {
+    padding: 2%;
+    position: relative;
+    border-color: rgb(0, 255, 136);
+    border-style: groove;
+    width: 90%;
+    height: 100%;
+    background: #050505;
+}
+
+
+
+/*flechas*/
+.fc-button .fc-icon {
+	margin: 0 .1em;
+	font-size: 2em;
+	color: rgb(0, 255, 136);
+	font-family: "Courier New", Courier, monospace;
+	vertical-align: baseline; /* for IE7 */
+	}
+
+
+    /*encabezado calendario Ej:lunes,martes*/
+.fc th {
+        padding: 0;
+        vertical-align: top;
+       color:rgb(0, 255, 136);
+}
+/*celdas de dias del calendario */
+.fc td{
+
+    padding: 0;
+        vertical-align: top;
+        border-style: double;
+        border-color: rgb(0, 255, 136);
+        
+     
+}
+
+
+/*Mes del calendario:Ej Abril de 2022 */
+html .fc{
+	font-size: 1em;
+	color:rgb(0, 255, 136);
+    
+
+}
+
+
+
+
+/*numeros de dias del calendario */
+.fc table {
+	font-size: 1em;
+	color:rgb(0, 255, 136);
+	}
+
+
+
+@keyframes steam {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}

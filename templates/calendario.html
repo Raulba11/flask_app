@@ -9,7 +9,7 @@
 
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
   <link href="static/css/fullcalendar.css" rel="stylesheet" type="text/css">
-  <link href="static/css/originalTemp.css" rel="stylesheet" type="text/css" id = "theme">
+  <link href="static/css/original.css" rel="stylesheet" type="text/css" id = "theme">
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
   <script src='static/JS/calendar.js'></script>
@@ -67,18 +67,21 @@
 </head>
 
 <body>
-  <select name="temas" id="selector">
-    <option value="original">Original</option>
-    <option value="gris">Gris</option>
-    <option value="espacio">Espacio</option>
-    <option value="xp">Xp</option>
-    <option value="azul">Azul</option>
-  </select>
+
+    <select class="" name="temas" id="selector">
+      <option value="original">Original</option>
+      <option value="gris">Gris</option>
+      <option value="xp">Xp</option>
+      <option value = "espacio">Espacio</option>
+      <option value = "azul">Azul</option>
+      <option value = "dark">Dark</option>
+    </select>
+
+    <a href="{{ url_for('index') }}">
+      <button>Salir</button>
+    </a>
 
 
-  <a href="{{ url_for('index') }}">
-    <button>Salir</button>
-  </a>
 
 
   <div class="container">

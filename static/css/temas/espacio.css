@@ -3,7 +3,7 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
-    background-image: url("espacio.jpg");
+    background-image: url("space.jpg");
     background-size: cover;
     color: #141415;
 }
@@ -57,7 +57,7 @@ body {
 .fc-button .fc-icon {
 	margin: 0 .1em;
 	font-size: 2em;
-	color: aqua;
+	color: rgb(0, 0, 0);
 	font-family: "Courier New", Courier, monospace;
 	vertical-align: baseline; /* for IE7 */
 	}
