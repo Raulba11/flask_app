@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send messages
     document.querySelector('#send_message').onclick = () => {
-        socket.emit('incoming-msg', {'msg': document.querySelector('#user_message').value,
-            'username': username, 'room': room});
+        socket.emit('incoming-msg', {
+            'msg': document.querySelector('#user_message').value,
+            'username': username, 'room': room
+        });
 
         document.querySelector('#user_message').value = '';
     };
@@ -23,29 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Display current message
         if (data.msg) {
-            const p = document.createElement('p');
             const span_username = document.createElement('span');
             const span_timestamp = document.createElement('span');
             const br = document.createElement('br');
             const div = document.createElement('div');
             // Display user's own message
             if (data.username == username) {
-                    div.setAttribute("class", "my-msg");
+                div.setAttribute("class", "my-msg");
 
-                    // Username
-                    span_username.setAttribute("class", "my-username");
-                    span_username.innerText = data.username;
+                // Username
+                span_username.setAttribute("class", "my-username");
+                span_username.innerText = data.username;
 
-                    // Timestamp
-                    span_timestamp.setAttribute("class", "timestamp");
-                    span_timestamp.innerText = data.time_stamp;
+                // Timestamp
+                span_timestamp.setAttribute("class", "timestamp");
+                span_timestamp.innerText = data.time_stamp;
 
-                    // HTML to append
-                    p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
-                    div.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
+                // HTML to append
+                div.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
 
-                    //Append
-                    document.querySelector('#display-message-section').append(div);
+                //Append
+                document.querySelector('#display-message-section').append(div);
             }
             // Display other users' messages
             else if (typeof data.username !== 'undefined') {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trigger 'leave' event if user was previously on a room
     function leaveRoom(room) {
-        socket.emit('leave', {'username': username, 'room': room});
+        socket.emit('leave', { 'username': username, 'room': room });
 
         document.querySelectorAll('.select-room').forEach(p => {
             p.style.color = "white";
@@ -107,18 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trigger 'join' event
     function joinRoom(room) {
-
+        
         // Join room
-        socket.emit('join', {'username': username, 'room': room});
-
+        socket.emit('join', { 'username': username, 'room': room });
+        
         // Highlight selected room
         document.querySelector('#' + CSS.escape(room)).style.color = "#ffc107";
-
+        
         // Clear message area
         document.querySelector('#display-message-section').innerHTML = '';
-
+        
         // Autofocus on text box
         document.querySelector("#user_message").focus();
+        
+        //Cargar mensajes
+        socket.emit('loadHistorial', {'room': room})
     }
 
     // Scroll chat window down

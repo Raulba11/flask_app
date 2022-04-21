@@ -2,6 +2,7 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
+from psycopg2 import Date
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -159,12 +160,21 @@ def chat():
         return redirect(url_for('login'))
     return render_template("chat.html", username=current_user.name, rooms=ROOMS)
 
+@socketio.on('loadHistorial')
+def on_load(data):
+    mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
+    mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
+    mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
+    mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
+    mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
+    room = data["room"]
+    for msg in mensajes:      
+        send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
 
 
 @socketio.on('incoming-msg')
 def on_message(data):
     """Broadcast messages"""
-
     msg = data["msg"]
     username = data["username"]
     room = data["room"]
@@ -241,6 +251,19 @@ def validarFechas(start, end):
 
 
 
+
+
+
+
+
+
+
+class mensaje:
+    def __init__(self, usuario, mensaje, tiempo):
+        self.usuario = usuario
+        self.mensaje = mensaje
+        self.tiempo = tiempo
+        
 
 
 if __name__ == "__main__":
