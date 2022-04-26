@@ -2,17 +2,16 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
-from psycopg2 import Date
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
+
 #Fin Imports
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
-db.init_app(app)
 socketio = SocketIO(app, manage_session=False)
 
 login_manager = LoginManager(app)
@@ -150,7 +149,7 @@ def calendario():
     app.logger.debug("Prueba flask log")
     return render_template('calendario.html')
 
-#Chat
+#Chat /*ACABAR SI SOBRA TIEMPO*/
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
     ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
@@ -204,7 +203,7 @@ def on_leave(data):
     leave_room(room)
     send({"msg": username.capitalize() + " ha abandonado la sala"}, room=room)
 
-#Fin chat
+#Fin chat /*ACABAR SI SOBRA TIEMPO*/
 
 
 
@@ -212,6 +211,15 @@ def on_leave(data):
 
 
 # Extra
+
+def create_app():
+    app = Flask(__name__)
+    setup(app)
+    db.init_app(app)
+    return app
+
+
+
 @login_manager.user_loader
 def load_user(user_id):
     user = UserModel.query.filter_by(id=user_id).first()

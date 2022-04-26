@@ -46,4 +46,4 @@ class EventModel(db.Model):
         self.backgroundColor = backgroundColor
 
     def __repr__(self):
-        return f"<Título: {self.title}>"
+        return f"Título: {self.title}, Inicio: {self.start}, final: {self.end}\n"
