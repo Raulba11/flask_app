@@ -3,7 +3,7 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
-    background-image: url("xp.jpg");
+    background-image: url("../imagenes/xp.jpg");
     background-size: cover;
     color: #141415;
 }

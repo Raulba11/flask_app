@@ -22,11 +22,11 @@ def obtenerEventos():
 def contenidoTablaEventos(eventos):
     cuerpo = ""
     for evento in eventos:
-        cuerpo += "<tr>"
-        cuerpo += "<td>" + evento.title + "</td>"
-        cuerpo += "<td>" + str(evento.start.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
-        cuerpo += "<td>" + str(evento.end.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
-        cuerpo += "</tr>"
+        cuerpo += " <tr>"
+        cuerpo += " <td style = 'border: 1px solid black'>" + evento.title + "</td>"
+        cuerpo += " <td style = 'border: 1px solid black'>" + str(evento.start.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
+        cuerpo += " <td style = 'border: 1px solid black'>" + str(evento.end.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
+        cuerpo += " </tr>"
     return cuerpo
 #FIN DE MÉTODOS
 
@@ -37,16 +37,15 @@ def contenidoTablaEventos(eventos):
 try:
     eventos = obtenerEventos()
     cuerpo = contenidoTablaEventos(eventos)
-    receiver = "hifika5091@viemery.com"
-    body = "<table style = 'width:100%'>"
-    body += "<h1>Eventos de esta semana</h1>   <tr><th>Título</th>    <th>Inicio</th>  <th>Final</th></tr>" + cuerpo + "</table>"
+    receiver = "cowenav776@svcache.com"
+    content = " <h1 style = 'font-size: 2.5vw'>Eventos de esta semana</h1>  <table style = 'border: 1px solid black; font-size: 2vw'> <tr><th style = 'border: 1px solid black'>Título</th>    <th style = 'border: 1px solid black'>Inicio</th>  <th style = 'border: 1px solid black'>Final</th></tr>" + cuerpo + " </table>"
 
     yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")
 
     yag.send(
         to=receiver,
         subject="Eventos de esta semana",
-        contents=body, 
+        contents=content, 
     )
 
     print("Email enviado a " + receiver)

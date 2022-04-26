@@ -149,6 +149,13 @@ def calendario():
     app.logger.debug("Prueba flask log")
     return render_template('calendario.html')
 
+@app.route('/grupos')
+def grupos():
+
+    grupos = ["Grupo 1", "Grupo 2", "Grupo 3", "Grupo 4", "Grupo 5"]
+
+    return render_template('grupos.html', grupos = grupos)
+
 #Chat /*ACABAR SI SOBRA TIEMPO*/
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
