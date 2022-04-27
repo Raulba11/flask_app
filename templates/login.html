@@ -42,8 +42,12 @@
                   
                 </form>
                 <div class = "pt-2">
-                {% for mesg in get_flashed_messages() %}
-                <h4 class="text-danger animate__animated animate__heartBeat">{{ mesg }}</h4>
+                {% for msg in get_flashed_messages() %}
+                {% if msg == "Usuario creado"%}
+                  <h4 class="text-success animate__animated animate__heartBeat">{{ msg }}</h4>
+                {%else%}
+                  <h4 class="text-danger animate__animated animate__heartBeat">{{ msg }}</h4>
+                {%endif%}
                 {% endfor %}
               </div>
               

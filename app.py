@@ -38,9 +38,7 @@ def login():
 
     # Al rellenar el formulario y presionar el botón pasa por la verficación
     if request.method == 'POST':
-        if user and check_password_hash(user.password, password):
-            app.logger.debug(request.form.get('remember'))
-            
+        if user and check_password_hash(user.password, password):            
             login_user(user, remember= request.form.get('remember'))
             return redirect(url_for('saludo'))
         elif not user:
@@ -55,7 +53,7 @@ def login():
 def signup():
     created = False
     if request.method == 'POST':
-        username = request.form.get('username')
+        username = request.form.get('username')        
         email = request.form.get('email')
         password = request.form.get('password')
         confirmpassword = request.form.get('confirmpassword')
@@ -77,8 +75,8 @@ def signup():
             new_user = UserModel(name=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
-            created = True
-            flash("Usuario registrado exitosamente")
+            flash("Usuario creado")
+            return render_template('login.html')
 
         return render_template('signup.html', created=created)
     # Carga de HTML del método GET
@@ -99,8 +97,6 @@ def saludo():
 def calendario():
 
     if request.method == 'POST':
-        app.logger.debug("Valor del action: " + str(request.form.get('action')))
-        app.logger.debug("Entra al método POST")
         
         # Añadir evento
         if request.form.get('action') == "add":
@@ -120,17 +116,14 @@ def calendario():
 
         # Eliminar evento
         elif request.form.get('action') == "delete":
-            app.logger.debug("Entra al delete")
                         
             id = request.form.get('changeID')
             evento = EventModel.query.filter_by(id=id).first()
-            app.logger.debug(evento.title)
             db.session.delete(evento)
             db.session.commit()
 
         # Actualizar evento
         elif request.form.get('action') == "update":
-            app.logger.debug("Entra al update")
             
             id = request.form.get('changeID')
             newTitle = request.form.get('changeTitle')
@@ -146,15 +139,28 @@ def calendario():
 
         return render_template('calendario.html')
 
-    app.logger.debug("Prueba flask log")
     return render_template('calendario.html')
 
-@app.route('/grupos')
+@app.route('/grupos' , methods=['GET', 'POST'])
 def grupos():
+    grupos = []
+    # TEMPORAL PARA HACER PRUEBAS HASTA TENER LA BASE DE DATOS
+    for i in range(0,100):
+        grupo = Grupos("Grupo " + str(i))
+        grupo.admins.append("Creador")
+        grupo.admins.append("Admin 1")
+        grupo.admins.append("Admin 2")
+        grupos.append(grupo)
+    # FINAL DEL TEMPORAL
 
-    grupos = ["Grupo 1", "Grupo 2", "Grupo 3", "Grupo 4", "Grupo 5"]
+    if request.method == 'POST':
+       return render_template('grupos.html', len = len(grupos), lista = grupos)
 
-    return render_template('grupos.html', grupos = grupos)
+       
+        
+    return render_template('grupos.html', len = len(grupos), lista = grupos)
+
+
 
 #Chat /*ACABAR SI SOBRA TIEMPO*/
 @app.route("/chat", methods=['GET', 'POST'])
@@ -272,12 +278,18 @@ def validarFechas(start, end):
 
 
 
-
+# INICIO DE CLASES TEMPORALES
 class mensaje:
     def __init__(self, usuario, mensaje, tiempo):
         self.usuario = usuario
         self.mensaje = mensaje
         self.tiempo = tiempo
+
+class Grupos:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.admins = []
+# FINAL DE CLASES TEMPORALES
         
 
 

@@ -1,177 +1,280 @@
-body {
-    padding-left: 240px;
+.navbar {
+  z-index: 2;
+  border-bottom: solid 2px black;
+}
+
+.contenedor {
+  padding-left: 240px;
+  background-image: url("imagenes/gruposBG.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: left;
+  padding-top: 15px;
+  padding-left: 15px;
+
+}
+
+.grupos {
+  width: 75%;
+  list-style: none;
+  text-align: left;
+  margin: auto;
+}
+
+.par {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-left: solid 1px rgba(0, 0, 0, 0.267);
+  border-right: solid 1px rgba(0, 0, 0, 0.267);
+  background-color: rgba(192, 186, 186, 0.623);
+  padding-left: 5%;
+}
+
+.impar {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-left: solid 1px rgba(0, 0, 0, 0.267);
+  border-right: solid 1px rgba(0, 0, 0, 0.267);
+  background-color: rgb(255, 255, 255, 0.623);
+  padding-left: 5%;
+}
+
+.nombre {
+  cursor: pointer;
+  width: fit-content;
+  font-size: xx-large;
+  font-weight: bolder;
+}
+
+.admin {
+  width: fit-content;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.cajaBusqueda {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.cajaBusqueda:focus {
+  outline: none;
+}
+
+
+/* PARA EVITAR QUE EL FONDO SALTE AL ABRIR UN MODAL */
+.modal-open {
+  padding-right: 0 !important;
+}
+html {
+  overflow-y: scroll !important;
+}
+/* ----------------------------------------------- */
+
+.menu {
+  border-right: solid 5px rgb(0, 0, 0);
+  z-index: 1;
+  word-break: break-all;
+  background-image: url('imagenes/restoSBGrupos.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 240px;
+  position: fixed;
+  outline: none;
+}
+
+.menu .avatar {
+  background-image: url('imagenes/topSBGrupos.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 2em 0.5em;
+  text-align: center;
+}
+
+.menu .avatar h2 {
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0.5em 0;
+  margin: 0;
+}
+
+.menu ul li {
+  border-bottom: solid 1px rgba(255, 255, 255, 0.623);
+  color: white;
+  padding: 0.5em 1em 0.5em 3em;
+  font-size: 0.95em;
+  font-weight: regular;
+  background-repeat: no-repeat;
+  background-position: left 15px center;
+  background-size: auto 20px;
+  transition: all 0.15s linear;
+  cursor: pointer;
+}
+
+.menu ul li.icon-dashboard {
+  background-image: url("http://www.entypo.com/images//gauge.svg");
+}
+
+.menu ul li.icon-customers {
+  background-image: url("http://www.entypo.com/images//briefcase.svg");
+}
+
+.menu ul li.icon-users {
+  background-image: url("http://www.entypo.com/images//users.svg");
+}
+
+.menu ul li.icon-settings {
+  background-image: url("http://www.entypo.com/images//tools.svg");
+}
+
+.menu ul li:hover {
+  background-color: rgba(255, 255, 255, 0.534);
+}
+
+.menu ul li:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 900px) and (min-width: 400px) {
+
+  .navbar {
+    z-index: 1 !important;
+    padding-left: 95px;
+  }
+
+  .contenido {
+    padding-left: 90px;
   }
 
   .menu {
-    background-image: url('imagenes/restoSBGrupos.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 240px;
-    position: fixed;
+    z-index: 5;
     top: 0;
     left: 0;
-    z-index: -5;
-    outline: none;
+    width: 90px;
   }
+
   .menu .avatar {
-    /* background: rgba(0, 0, 0, 0.1); */
-    background-image: url('imagenes/topSBGrupos.jpg');
-    background-size: contain;
-    padding: 2em 0.5em;
-    text-align: center;
+    background-image: none;
+    padding: 0.5em;
+    position: relative;
   }
-  .menu .avatar img {
-    width: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 4px solid #ffea92;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-  }
+
+
+
   .menu .avatar h2 {
-    font-weight: normal;
-    margin-bottom: 0;
-  }
-  .menu ul {
-    list-style: none;
-    padding: 0.5em 0;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 100px;
     margin: 0;
+    min-width: 200px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    transform: translate3d(-20px, -50%, 0);
+    transition: all 0.15s ease-in-out;
   }
+
+
   .menu ul li {
-    color: white;
-    padding: 0.5em 1em 0.5em 3em;
-    font-size: 0.95em;
-    font-weight: regular;
-    background-repeat: no-repeat;
-    background-position: left 15px center;
-    background-size: auto 20px;
-    transition: all 0.15s linear;
-    cursor: pointer;
+    height: 60px;
+    background-position: center center;
+    background-size: 30px auto;
+    position: relative;
   }
-  .menu ul li.icon-dashboard {
-    background-image: url("http://www.entypo.com/images//gauge.svg");
+
+  .menu ul li span {
+    opacity: 0;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    top: 50%;
+    left: 80px;
+    transform: translate3d(-15px, -50%, 0);
+    transition: all 0.15s ease-in-out;
   }
-  .menu ul li.icon-customers {
-    background-image: url("http://www.entypo.com/images//briefcase.svg");
+
+  .menu ul li span:before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%);
   }
-  .menu ul li.icon-users {
-    background-image: url("http://www.entypo.com/images//users.svg");
+
+  .menu ul li:hover span {
+    opacity: 1;
+    transform: translate3d(0px, -50%, 0);
   }
-  .menu ul li.icon-settings {
-    background-image: url("http://www.entypo.com/images//tools.svg");
+}
+
+@media screen and (max-width: 400px) {
+  .contenido {
+    padding-left: 0;
   }
-  .menu ul li:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+
+  .menu {
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: 230px;
+    box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
+    transform: translate3d(-230px, 0, 0);
+    transition: all 0.3s ease-in-out;
   }
-  .menu ul li:focus {
-    outline: none;
+
+  .menu .smartphone-menu-trigger {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 100%;
+    background: #5bc995;
   }
-  @media screen and (max-width: 900px) and (min-width: 400px) {
-    body {
-      padding-left: 90px;
-    }
-    .menu {
-      width: 90px;
-    }
-    .menu .avatar {
-      padding: 0.5em;
-      position: relative;
-    }
-    .menu .avatar img {
-      width: 60px;
-    }
-    .menu .avatar h2 {
-      opacity: 0;
-      position: absolute;
-      top: 50%;
-      left: 100px;
-      margin: 0;
-      min-width: 200px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.4);
-      transform: translate3d(-20px, -50%, 0);
-      transition: all 0.15s ease-in-out;
-    }
-    .menu .avatar:hover h2 {
-      opacity: 1;
-      transform: translate3d(0px, -50%, 0);
-    }
-    .menu ul li {
-      height: 60px;
-      background-position: center center;
-      background-size: 30px auto;
-      position: relative;
-    }
-    .menu ul li span {
-      opacity: 0;
-      position: absolute;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 0.2em 0.5em;
-      border-radius: 4px;
-      top: 50%;
-      left: 80px;
-      transform: translate3d(-15px, -50%, 0);
-      transition: all 0.15s ease-in-out;
-    }
-    .menu ul li span:before {
-      content: '';
-      width: 0;
-      height: 0;
-      position: absolute;
-      top: 50%;
-      left: -5px;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-right: 5px solid rgba(0, 0, 0, 0.5);
-      transform: translateY(-50%);
-    }
-    .menu ul li:hover span {
-      opacity: 1;
-      transform: translate3d(0px, -50%, 0);
-    }
+
+  .menu .smartphone-menu-trigger:before,
+  .menu .smartphone-menu-trigger:after {
+    content: '';
+    width: 50%;
+    height: 2px;
+    background: #fff;
+    border-radius: 10px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
   }
-  @media screen and (max-width: 400px) {
-    body {
-      padding-left: 0;
-    }
-    .menu {
-      width: 230px;
-      box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
-      transform: translate3d(-230px, 0, 0);
-      transition: all 0.3s ease-in-out;
-    }
-    .menu .smartphone-menu-trigger {
-      width: 40px;
-      height: 40px;
-      position: absolute;
-      left: 100%;
-      background: #5bc995;
-    }
-    .menu .smartphone-menu-trigger:before,
-    .menu .smartphone-menu-trigger:after {
-      content: '';
-      width: 50%;
-      height: 2px;
-      background: #fff;
-      border-radius: 10px;
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-    }
-    .menu .smartphone-menu-trigger:after {
-      top: 55%;
-      transform: translate3d(-50%, -50%, 0);
-    }
-    .menu ul li {
-      padding: 1em 1em 1em 3em;
-      font-size: 1.2em;
-    }
-    .menu:focus {
-      transform: translate3d(0, 0, 0);
-      box-shadow: 0 0 0 100em rgba(0, 0, 0, 0.6);
-    }
-    .menu:focus .smartphone-menu-trigger {
-      pointer-events: none;
-    }
+
+  .menu .smartphone-menu-trigger:after {
+    top: 55%;
+    transform: translate3d(-50%, -50%, 0);
   }
+
+  .menu ul li {
+    padding: 1em 1em 1em 3em;
+    font-size: 1.2em;
+  }
+
+  .menu:focus {
+    transform: translate3d(0, 0, 0);
+    box-shadow: 0 0 0 100em rgba(0, 0, 0, 0.6);
+  }
+
+  .menu:focus .smartphone-menu-trigger {
+    pointer-events: none;
+  }
+}

@@ -55,9 +55,7 @@
 
                   <div class="pt-2">
                     {% for mesg in get_flashed_messages() %}
-                    {%if created%}
-                    <h4 class="text-success">{{ mesg }}</h4>
-                    {% else %}
+                    {%if not created%}
                     <h4 class="text-danger animate__animated
                       animate__heartBeat">{{ mesg }}</h4>
                     {% endif %}
