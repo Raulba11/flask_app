@@ -28,11 +28,14 @@ body{
   margin: auto;
 }
 
+.grupos li{
+  border-left: solid 1px rgba(0, 0, 0, 0.267);
+  border-right: solid 1px rgba(0, 0, 0, 0.267);
+}
+
 .par {
   padding-top: 5px;
   padding-bottom: 5px;
-  border-left: solid 1px rgba(0, 0, 0, 0.267);
-  border-right: solid 1px rgba(0, 0, 0, 0.267);
   background-color: rgba(192, 186, 186, 0.438);
   padding-left: 5%;
 }
@@ -40,8 +43,6 @@ body{
 .impar {
   padding-top: 5px;
   padding-bottom: 5px;
-  border-left: solid 1px rgba(0, 0, 0, 0.267);
-  border-right: solid 1px rgba(0, 0, 0, 0.267);
   background-color: rgba(255, 255, 255, 0.438);
   padding-left: 5%;
 }
@@ -68,7 +69,6 @@ body{
 .cajaBusqueda:focus {
   outline: none;
 }
-
 
 /* PARA EVITAR QUE EL FONDO SALTE AL ABRIR UN MODAL */
 .modal-open {
@@ -124,20 +124,20 @@ html {
   cursor: pointer;
 }
 
-.menu ul li.icon-dashboard {
-  background-image: url("http://www.entypo.com/images//gauge.svg");
+.menu ul li.icon-main {
+  background-image: url("http://www.entypo.com/images/home.svg");
 }
 
-.menu ul li.icon-customers {
-  background-image: url("http://www.entypo.com/images//briefcase.svg");
+.menu ul li.icon-misGrupos {
+  background-image: url("http://entypo.com/images/user.svg");
 }
 
-.menu ul li.icon-users {
+.menu ul li.icon-grupos {
   background-image: url("http://www.entypo.com/images//users.svg");
 }
 
-.menu ul li.icon-settings {
-  background-image: url("http://www.entypo.com/images//tools.svg");
+.menu ul li.icon-calendar {
+  background-image: url("http://www.entypo.com/images/calendar.svg");
 }
 
 .menu ul li:hover {

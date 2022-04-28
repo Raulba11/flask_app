@@ -91,14 +91,16 @@
 
       <ul>
         <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
-            tabindex="0" class="icon-dashboard" style="user-select: none;"><span
-              href="{{ url_for('index')}}">Perfil principal</span></li></a>
-        <a style="text-decoration: none;" href="#"><li tabindex="0"
-            class="icon-customers" style="user-select: none;"><span>Customers</span></li></a>
-        <a style="text-decoration: none;" href="#"><li tabindex="0"
-            class="icon-users" style="user-select: none;"><span>Users</span></li></a>
-        <a style="text-decoration: none;" href="#"><li tabindex="0"
-            class="icon-settings" style="user-select: none;"><span>Settings</span></li></a>
+            tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil principal</span></li></a>
+        
+        <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li tabindex="0"
+            class="icon-misGrupos" style="user-select: none;"><span>Mis grupos</span></li></a>
+       
+        <a style="text-decoration: none;" href="{{url_for('grupos')}}"><li tabindex="0"
+            class="icon-grupos" style="user-select: none;"><span>Todos los grupos</span></li></a>
+        
+        <a style="text-decoration: none;" href="{{ url_for('calendario')}}"><li
+            tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
       </ul>
     </nav>
 
@@ -219,15 +221,6 @@
       </div>
     </div>
     <!-- Fin del modal create-->
-
-
-
-
-
-
-
-
-
 
   </body>
   {%endblock%}

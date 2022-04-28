@@ -14,29 +14,43 @@
     <div class="container pt-5">
       <div class="row border border-dark">
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/login" class="text-dark-50
+          <h1><a href="{{ url_for('login') }}" class="text-dark-50
               fw-bold link-success">Login</a></h1>
         </div>
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/signup" class="text-dark-50
+          <h1><a href="{{ url_for('signup') }}" class="text-dark-50
               fw-bold link-success">Signup</a></h1>
         </div>
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/saludo" class="text-dark-50
+          <h1><a href="{{ url_for('saludo') }}" class="text-dark-50
               fw-bold">Login required</a></h1>
         </div>
       </div>
       <div class="row border border-dark">
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/calendario" class="text-dark-50
+          <h1><a href="{{ url_for('calendario') }}" class="text-dark-50
               fw-bold">Calendario</a></h1>
         </div>
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/chat" class="text-dark-50
+          <h1><a href="{{ url_for('chat') }}" class="text-dark-50
               fw-bold">Chat</a></h1>
         </div>
         <div class="col border border-dark text-center">
-          <h1><a href="http://127.0.0.1:5000/grupos" class="text-dark-50
+          <h1><a href="{{ url_for('grupos') }}" class="text-dark-50
+              fw-bold">Grupos</a></h1>
+        </div>
+      </div>
+      <div class="row border border-dark">
+        <div class="col border border-dark text-center">
+          <h1><a href="{{ url_for('misGrupos') }}" class="text-dark-50
+              fw-bold">Mis grupos</a></h1>
+        </div>
+        <div class="col border border-dark text-center">
+          <h1><a href="#" class="text-dark-50
+              fw-bold">Chat</a></h1>
+        </div>
+        <div class="col border border-dark text-center">
+          <h1><a href="#" class="text-dark-50
               fw-bold">Grupos</a></h1>
         </div>
       </div>

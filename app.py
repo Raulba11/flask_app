@@ -1,4 +1,6 @@
-#Imports
+# INICIO DE IMPORTS
+
+from unicodedata import name
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
@@ -8,7 +10,10 @@ from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
 
-#Fin Imports
+# FINAL DE IMPORTS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DE CONFIGURACION
+
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
@@ -20,6 +25,46 @@ login_manager.login_message = "Necesitas iniciar sesión para ver esta página"
 
 db.init_app(app)
 
+def create_app():
+    app = Flask(__name__)
+    setup(app)
+    db.init_app(app)
+    return app
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = UserModel.query.filter_by(id=user_id).first()
+    if user:
+        return user
+    return None
+
+def event_loader(user_name):
+    eventos = []
+    events = db.session.query(EventModel).filter(
+        EventModel.id.match(user_name)).all()
+    for evento in events:
+
+        if not (evento.end.date() < datetime.now().date()):
+            eventos.append(            
+                {
+                    "id": evento.id,
+                    "title": evento.title,
+                    "start": evento.start.isoformat(),
+                    "end": evento.end.isoformat(),
+                    "backgroundColor": evento.backgroundColor
+                }
+            )
+
+    return jsonify(eventos)
+
+@app.route('/eventos')
+@login_required
+def eventos():
+    return event_loader(current_user.name)
+
+# FINAL DE CONFIGURACION
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DE RUTAS VISIBLES
 
 @app.route('/')
 def index():
@@ -182,11 +227,12 @@ def grupos():
 
 @app.route('/misGrupos' , methods=['GET', 'POST'])
 @login_required
-def misEventos():
-    pass
+def misGrupos():
+    grupos = myGroup_loader()
+    return render_template('misGrupos.html', len = len(grupos), lista = grupos)
 
-
-
+# FINAL DE RUTAS VISIBLES
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS GRUPOS
 
 def group_loader():
@@ -220,61 +266,17 @@ def comprobarPass(name, password):
     return password == grupo.password
 
 # FINAL MÉTODOS GRUPOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO MÉTODOS MIS GRUPOS
 
+def myGroup_loader():
+    grupos = GroupModel.query.filter_by(owner = current_user.name).order_by(GroupModel.name).all()
+    return grupos
 
+# FINAL MÉTODOS MIS GRUPOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
 
-# INICIO DE EXTRA
-
-def create_app():
-    app = Flask(__name__)
-    setup(app)
-    db.init_app(app)
-    return app
-
-@login_manager.user_loader
-def load_user(user_id):
-    user = UserModel.query.filter_by(id=user_id).first()
-    if user:
-        return user
-    return None
-
-def event_loader(user_name):
-    eventos = []
-    events = db.session.query(EventModel).filter(
-        EventModel.id.match(user_name)).all()
-    for evento in events:
-
-        if not (evento.end.date() < datetime.now().date()):
-            eventos.append(            
-                {
-                    "id": evento.id,
-                    "title": evento.title,
-                    "start": evento.start.isoformat(),
-                    "end": evento.end.isoformat(),
-                    "backgroundColor": evento.backgroundColor
-                }
-            )
-
-    return jsonify(eventos)
-
-@app.route('/eventos')
-@login_required
-def eventos():
-    return event_loader(current_user.name)
-
-# FIN DE EXTRA
-
-# INICIO DE CLASES TEMPORALES
-class mensaje:
-    def __init__(self, usuario, mensaje, tiempo):
-        self.usuario = usuario
-        self.mensaje = mensaje
-        self.tiempo = tiempo
-# FINAL DE LAS CLASES TEMPORALES
-
-
-
-#Chat /*ACABAR SI SOBRA TIEMPO*/
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
     ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
@@ -285,15 +287,15 @@ def chat():
     return render_template("chat.html", username=current_user.name, rooms=ROOMS)
 
 @socketio.on('loadHistorial')
-def on_load(data):
-    mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
-    mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
-    mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
-    mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
-    mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
-    room = data["room"]
-    for msg in mensajes:      
-        send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
+# def on_load(data):
+#     mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
+#     mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
+#     mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
+#     mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
+#     mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
+#     room = data["room"]
+#     for msg in mensajes:      
+#         send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
 
 @socketio.on('incoming-msg')
 def on_message(data):
@@ -325,7 +327,7 @@ def on_leave(data):
     leave_room(room)
     send({"msg": username.capitalize() + " ha abandonado la sala"}, room=room)
 
-#Fin chat /*ACABAR SI SOBRA TIEMPO*/
+# FINAL DE CHAT /*ACABAR SI SOBRA TIEMPO*/
         
 
 
