@@ -83,6 +83,7 @@ def signup():
     return render_template('signup.html', created=created)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
@@ -178,6 +179,11 @@ def grupos():
         return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = alertar)
         
     return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = False)
+
+@app.route('/misGrupos' , methods=['GET', 'POST'])
+@login_required
+def misEventos():
+    pass
 
 
 
