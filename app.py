@@ -142,96 +142,88 @@ def calendario():
     return render_template('calendario.html')
 
 @app.route('/grupos' , methods=['GET', 'POST'])
+@login_required
 def grupos():
-    grupos = []
-    # TEMPORAL PARA HACER PRUEBAS HASTA TENER LA BASE DE DATOS
-    for i in range(0,100):
-        grupo = Grupos("Grupo " + str(i))
-        grupo.admins.append("Creador")
-        grupo.admins.append("Admin 1")
-        grupo.admins.append("Admin 2")
-        grupos.append(grupo)
-    # FINAL DEL TEMPORAL
+    grupos = group_loader()
 
     if request.method == 'POST':
-       return render_template('grupos.html', len = len(grupos), lista = grupos)
+        alertar = True    
+        action = request.form.get('action')
 
-       
+        if action == "enter": 
+            name = request.form.get("enterName")
+            password = request.form.get("enterPass")
+            correcto = comprobarPass(name, password)
+            if not correcto:
+                flash("Contraseña incorrecta")
+            else:
+                alertar = False
+                pass #Método para añadir usuario al grupo
+
+        elif action == "search":
+            resultado = buscador(request.form.get('search'))
+            if len(resultado) == 0:
+                flash("No se ha encontrado ningún grupo")
+            else:
+                alertar = False
+                grupos = resultado
+
+        elif action == "create":
+            name = request.form.get('createName')
+            password = request.form.get('createPass')
+            confPass = request.form.get('createConfPass')
+            msg = crearGrupo(name, password, confPass)
+            flash(msg)
         
-    return render_template('grupos.html', len = len(grupos), lista = grupos)
+        return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = alertar)
+        
+    return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = False)
 
 
 
-#Chat /*ACABAR SI SOBRA TIEMPO*/
-@app.route("/chat", methods=['GET', 'POST'])
-def chat():
-    ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
+# INICIO MÉTODOS GRUPOS
 
-    if not current_user.is_authenticated:
-        flash('Please login', 'danger')
-        return redirect(url_for('login'))
-    return render_template("chat.html", username=current_user.name, rooms=ROOMS)
+def group_loader():
+    allGroups = GroupModel.query.order_by(GroupModel.name).all()
+    return allGroups
 
-@socketio.on('loadHistorial')
-def on_load(data):
-    mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
-    mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
-    mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
-    mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
-    mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
-    room = data["room"]
-    for msg in mensajes:      
-        send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
+def validarFechas(start, end):
+    if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
+        return True
+    else:
+        return False
 
+def buscador(search):
+    grupos = GroupModel.query.filter(GroupModel.name.like("%" + search.upper() + "%")).all()
+    return grupos
 
-@socketio.on('incoming-msg')
-def on_message(data):
-    """Broadcast messages"""
-    msg = data["msg"]
-    username = data["username"]
-    room = data["room"]
-    # Set timestamp
-    time_stamp = datetime.strftime(datetime.now(),'%b-%d %I:%M%p')
-    send({"username": username, "msg": msg, "time_stamp": time_stamp}, room=room)
+def crearGrupo(name, password, confPassword):
+    grupo = GroupModel.query.filter_by(name = name.upper()).all()
+    if grupo:
+        return "Grupo ya existente"
+    elif password != confPassword:
+        return "Las contraseñas no coinciden"
+    else:
+        new_group = GroupModel(name = name.upper(), password = password, owner = current_user.name)
+        db.session.add(new_group)
+        db.session.commit()
+        return "Grupo creado exitosamente"
 
+def comprobarPass(name, password):
+    grupo = GroupModel.query.filter_by(name = name).first()
+    return password == grupo.password
 
-@socketio.on('join')
-def on_join(data):
-    """User joins a room"""
-
-    username = data["username"]
-    room = data["room"]
-    join_room(room)
-
-    # Broadcast that new user has joined
-    send({"msg": username.capitalize() + " ha entrado en la sala " + room }, room=room)
-
-
-@socketio.on('leave')
-def on_leave(data):
-    """User leaves a room"""
-
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    send({"msg": username.capitalize() + " ha abandonado la sala"}, room=room)
-
-#Fin chat /*ACABAR SI SOBRA TIEMPO*/
+# FINAL MÉTODOS GRUPOS
 
 
 
-
-
-
-# Extra
+# INICIO DE EXTRA
 
 def create_app():
     app = Flask(__name__)
     setup(app)
     db.init_app(app)
     return app
-
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -264,19 +256,7 @@ def event_loader(user_name):
 def eventos():
     return event_loader(current_user.name)
 
-def validarFechas(start, end):
-    if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
-        return True
-    else:
-        return False
-
-
-
-
-
-
-
-
+# FIN DE EXTRA
 
 # INICIO DE CLASES TEMPORALES
 class mensaje:
@@ -284,12 +264,62 @@ class mensaje:
         self.usuario = usuario
         self.mensaje = mensaje
         self.tiempo = tiempo
+# FINAL DE LAS CLASES TEMPORALES
 
-class Grupos:
-    def __init__(self, nombre):
-        self.nombre = nombre
-        self.admins = []
-# FINAL DE CLASES TEMPORALES
+
+
+#Chat /*ACABAR SI SOBRA TIEMPO*/
+@app.route("/chat", methods=['GET', 'POST'])
+def chat():
+    ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
+
+    if not current_user.is_authenticated:
+        flash('Please login', 'danger')
+        return redirect(url_for('login'))
+    return render_template("chat.html", username=current_user.name, rooms=ROOMS)
+
+@socketio.on('loadHistorial')
+def on_load(data):
+    mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
+    mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
+    mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
+    mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
+    mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
+    room = data["room"]
+    for msg in mensajes:      
+        send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
+
+@socketio.on('incoming-msg')
+def on_message(data):
+    """Broadcast messages"""
+    msg = data["msg"]
+    username = data["username"]
+    room = data["room"]
+    # Set timestamp
+    time_stamp = datetime.strftime(datetime.now(),'%b-%d %I:%M%p')
+    send({"username": username, "msg": msg, "time_stamp": time_stamp}, room=room)
+
+@socketio.on('join')
+def on_join(data):
+    """User joins a room"""
+
+    username = data["username"]
+    room = data["room"]
+    join_room(room)
+
+    # Broadcast that new user has joined
+    send({"msg": username.capitalize() + " ha entrado en la sala " + room }, room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    """User leaves a room"""
+
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send({"msg": username.capitalize() + " ha abandonado la sala"}, room=room)
+
+#Fin chat /*ACABAR SI SOBRA TIEMPO*/
         
 
 

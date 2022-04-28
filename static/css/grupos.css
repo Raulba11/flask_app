@@ -1,3 +1,10 @@
+body{
+  background-image: url("imagenes/gruposBG.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 .navbar {
   z-index: 2;
   border-bottom: solid 2px black;
@@ -5,9 +12,6 @@
 
 .contenedor {
   padding-left: 240px;
-  background-image: url("imagenes/gruposBG.jpg");
-  background-size: cover;
-  background-attachment: fixed;
 }
 
 .encabezado {
@@ -15,7 +19,6 @@
   justify-content: left;
   padding-top: 15px;
   padding-left: 15px;
-
 }
 
 .grupos {
@@ -30,7 +33,7 @@
   padding-bottom: 5px;
   border-left: solid 1px rgba(0, 0, 0, 0.267);
   border-right: solid 1px rgba(0, 0, 0, 0.267);
-  background-color: rgba(192, 186, 186, 0.623);
+  background-color: rgba(192, 186, 186, 0.438);
   padding-left: 5%;
 }
 
@@ -39,7 +42,7 @@
   padding-bottom: 5px;
   border-left: solid 1px rgba(0, 0, 0, 0.267);
   border-right: solid 1px rgba(0, 0, 0, 0.267);
-  background-color: rgb(255, 255, 255, 0.623);
+  background-color: rgba(255, 255, 255, 0.438);
   padding-left: 5%;
 }
 

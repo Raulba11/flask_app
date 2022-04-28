@@ -21,7 +21,7 @@
       window.history.replaceState(null, null, window.location.href);
     }
     
-    function confirmar(startTime, endTime, startDate, endDate) {
+    function confirmar() {
       
       return Swal.fire({
         title: '¿Está seguro?',
@@ -43,7 +43,7 @@
     
     async function validar(startTime, endTime, startDate, endDate, formName) {
       event.preventDefault()
-      var confirmado = await Promise.resolve(confirmar(startTime, endTime, startDate, endDate))
+      var confirmado = await Promise.resolve(confirmar())
       if (confirmado) {
         start = document.getElementById(startDate).value + " " + document.getElementById(startTime).value
         end = document.getElementById(endDate).value + " " + document.getElementById(endTime).value

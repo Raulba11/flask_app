@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     {%include 'imports.html'%}
     <meta charset="UTF-8">
@@ -7,50 +7,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grupos</title>
     <!-- INICIO DE IMPORTS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="static/css/grupos.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../static/JS/grupos.js"></script>
     <!-- FINAL DE IMPORTS -->
-    
+
   </head>
   {% extends 'base.html' %}
   {% block content %}
 
-<script>
+  <script>
       if (window.history.replaceState) {
       window.history.replaceState(null, null, window.location.href);
     }
-</script>
 
+{%if alertar%}
+//Texto según el error
+      {% for msg in get_flashed_messages() %}
+    //Contraseña incorrecta en enter
+        {%if msg == "Contraseña incorrecta"%}
+          title = '{{ msg }}',
+          text = 'Insértela de nuevo'
+        {%endif%}
+    //Sin resultados en search
+        {%if msg == "No se ha encontrado ningún grupo"%}
+          title = '{{ msg }}',
+          text = 'Repita la búsqueda o cree el grupo'
+        {%endif%}
+    //Ya existente en crear
+        {%if msg == "Grupo ya existente"%}
+          title = '{{ msg }}',
+          text = 'Utilice otro nombre'
+        {%endif%}
+    //Las dos contraseñas no coinciden en crear
+        {%if msg == "Las contraseñas no coinciden"%}
+          title = '{{ msg }}',
+          text = 'Compruébelas de nuevo'
+        {%endif%}
+//Texto si se crea el grupo    
+        {%if msg == "Grupo creado exitosamente"%}
+          title = '{{ msg }}',
+          text = 'Editar'
+        {%endif%}
+        
+//Mostrar alerta
+          {%if msg == "Grupo creado exitosamente"%}
+              Swal.fire({
+                    icon: 'success',
+                    title: title,
+                    text: text,
+                  }).then((result) => {
+                      location.reload();
+                  });
+                
+          {%else%}
+              Swal.fire({
+                icon: 'error',
+                title: title,
+                text: text,
+              })
+
+          {%endif%}
+    {% endfor %}
+  {%endif%}
+
+</script>
   <body>
 
     <nav class="menu" tabindex="0">
-      
+
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
         <h2 style="color: white;">{{current_user.name}}</h2>
       </header>
 
-      <form method="post">       
-        <input type="search" class="cajaBusqueda" name = "buscar" placeholder="Buscar grupo">
+      <form method="post">
+        <input type="hidden" id="action" name="action" value="search">
+        <input type="search" class="cajaBusqueda" name="search" id="search"
+          placeholder="Buscar grupo">
       </form>
 
       <ul>
-        <a style="text-decoration: none;" href = "{{ url_for('index')}}"><li tabindex="0" class="icon-dashboard" style="user-select: none;"><span href = "{{ url_for('index')}}">Perfil principal</span></li></a>
-        <a style="text-decoration: none;" href = "#"><li tabindex="0" class="icon-customers" style="user-select: none;"><span>Customers</span></li></a>
-        <a style="text-decoration: none;" href = "#"><li tabindex="0" class="icon-users" style="user-select: none;"><span>Users</span></li></a>
-        <a style="text-decoration: none;" href = "#"><li tabindex="0" class="icon-settings" style="user-select: none;"><span>Settings</span></li></a>
+        <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
+            tabindex="0" class="icon-dashboard" style="user-select: none;"><span
+              href="{{ url_for('index')}}">Perfil principal</span></li></a>
+        <a style="text-decoration: none;" href="#"><li tabindex="0"
+            class="icon-customers" style="user-select: none;"><span>Customers</span></li></a>
+        <a style="text-decoration: none;" href="#"><li tabindex="0"
+            class="icon-users" style="user-select: none;"><span>Users</span></li></a>
+        <a style="text-decoration: none;" href="#"><li tabindex="0"
+            class="icon-settings" style="user-select: none;"><span>Settings</span></li></a>
       </ul>
     </nav>
 
     <div class="contenedor">
-      
+
       <!-- INICIO ENCABEZADO -->
       <div class="encabezado">
-        <button type="button" class="btn btn-outline-primary" name = "btnCrearGrupo" id="btnCrearGrupo">
+        <button type="button" class="btn btn-outline-primary"
+          name="btnCrearGrupo"
+          id="btnCrearGrupo">
           <i class="bi bi-people-fill"></i> Crear grupo
         </button>
-        
+
       </div>
       <!-- FINAL ENCABEZADO -->
 
@@ -60,13 +121,13 @@
 
         {%if i%2 == 0%}
         <li class="par">
-          <p class="nombre">{{lista[i].nombre}}</p>
-          <p class="admin">Administradores: {{lista[i].admins}}</p>
+          <p class="nombre">{{lista[i].name}}</p>
+          <p class="admin">Administradores: {{lista[i].owner}}</p>
         </li>
         {%else%}
         <li class="impar">
-          <p class="nombre">{{lista[i].nombre}}</p>
-          <p class="admin">Administradores: {{lista[i].admins}}</p>
+          <p class="nombre">{{lista[i].name}}</p>
+          <p class="admin">Administradores: {{lista[i].owner}}</p>
         </li>
         {%endif%}
 
@@ -80,73 +141,84 @@
     <!-- MODALES -->
 
     <!-- Inicio del modal enter-->
-  <div class="modal fade" id="enterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Acceder al grupo</h5>
-      </div>
-      <div class="modal-body">
-        <!-- Inicio del formulario enter-->
-        <form method="post" name="enterForm" id="enterForm">
-          <div class="md-form md-outline input-with-post-icon">
-
-            <label for="enterName">Nombre del grupo</label>
-            <input placeholder="Nombre del grupo" type="text" name="enterName" id="enterName" class="form-control" disabled>
-
-            <label for="enterPass">Contraseña</label>
-            <input placeholder="Contraseña" type="password" id="enterPass" name="enterPass" class="form-control" >
-
+    <div class="modal fade" id="enterModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Acceder al grupo</h5>
           </div>
-      </div>
-      <div class="modal-footer">
+          <div class="modal-body">
+            <!-- Inicio del formulario enter-->
+            <form method="post" name="enterForm" id="enterForm">
+              <div class="md-form md-outline input-with-post-icon">
 
-        <button type="submit" class="btn btn-primary">Confirmar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-      </form>
-      <!-- Fin del formulario enter-->
-    </div>
-  </div>
-</div>
-<!-- Fin del modal enter-->
+                <input type="hidden" id="action" name="action" value="enter">
+                <label for="enterName">Nombre del grupo</label>
+                <input placeholder="Nombre del grupo" type="text"
+                  name="enterName" id="enterName" class="form-control" readonly>
+                <label for="enterPass">Contraseña</label>
+                <input placeholder="Contraseña" type="password" id="enterPass"
+                  name="enterPass" class="form-control">
 
-<!-- Inicio del modal create-->
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">Crear grupo</h5>
-    </div>
-    <div class="modal-body">
-      <!-- Inicio del formulario create-->
-      <form method="post" name="createForm" id="createForm">
-        <div class="md-form md-outline input-with-post-icon">
+              </div>
+            </div>
+            <div class="modal-footer">
 
-          <label for="createName">Nombre del grupo</label>
-          <input placeholder="Nombre del grupo" type="text" name="createName" id="createName" class="form-control" required>
-
-          <label for="createPass">Contraseña</label>
-          <input placeholder="Contraseña" type="password" id="createPass" name="createPass" class="form-control" required>
-
-          <label for="createPass">Repita la contraseña</label>
-          <input placeholder="Contraseña" type="password" id="createPass" name="createPass" class="form-control" required>
-
+              <button type="submit" class="btn btn-primary">Confirmar</button>
+              <button type="button" class="btn btn-secondary"
+                data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+          <!-- Fin del formulario enter-->
         </div>
+      </div>
     </div>
-    <div class="modal-footer">
+    <!-- Fin del modal enter-->
 
-      <button class="btn btn-primary">Crear grupo</button>
-      <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+    <!-- Inicio del modal create-->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Crear grupo</h5>
+          </div>
+          <div class="modal-body">
+            <!-- Inicio del formulario create-->
+            <form method="post" name="createForm" id="createForm">
+              <div class="md-form md-outline input-with-post-icon">
+
+                <input type="hidden" id="action" name="action" value="create">
+                <label for="createName">Nombre del grupo</label>
+                <input placeholder="Nombre del grupo" type="text"
+                  name="createName" id="createName" class="form-control"
+                  required>
+
+                <label for="createPass">Contraseña</label>
+                <input placeholder="Contraseña" type="password" id="createPass"
+                  name="createPass" class="form-control" required>
+
+                <label for="createConfPass">Repita la contraseña</label>
+                <input placeholder="Repita la contraseña" type="password"
+                  id="createConfPass" name="createConfPass" class="form-control"
+                  required>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+
+              <button type="submit" class="btn btn-primary">Crear grupo</button>
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+          <!-- Fin del formulario create-->
+        </div>
+      </div>
     </div>
-    </form>
-    <!-- Fin del formulario create-->
-  </div>
-</div>
-</div>
-<!-- Fin del modal create-->
+    <!-- Fin del modal create-->
 
 
 

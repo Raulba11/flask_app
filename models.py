@@ -47,3 +47,18 @@ class EventModel(db.Model):
 
     def __repr__(self):
         return f"Título: {self.title}, Inicio: {self.start}, final: {self.end}\n"
+
+class GroupModel(db.Model):
+    __tablename__ = "GruposTEMP"
+
+    name = db.Column(db.String(), primary_key = True)
+    password = db.Column(db.String(), nullable = False)
+    owner = db.Column(db.String(), nullable = False)
+
+    def __init__(self, name, password, owner):
+        self.name = name
+        self.password = password
+        self.owner = owner
+        
+    def __repr__(self):
+        return f"Nombre: {self.name}"
