@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: '¡Error!',
                     text: 'La fecha seleccionada ya pasó',
                     icon: 'error'
-                  })
+                })
             } else {
                 clickedDate = new Date((info.date))
                 clickedDate.setDate(clickedDate.getDate() + 1)
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             }
         },
-        
+
         //Actualizar o eliminar un evento al clickarlo
         eventClick: function (info) {
             update(info)
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: '¡Error!',
                     text: 'La fecha de inicio es menor a la actual',
                     icon: 'error'
-                  })
+                })
                 info.revert()
             } else {
                 update(info)
@@ -71,9 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
     );
+    calendar.render();
     calendar.setOption('locale', 'ISO');
     calendar.addEventSource("/eventos");
-    calendar.render();
 
     //Actualizar los datos de un evento
     function update(info) {

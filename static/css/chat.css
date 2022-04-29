@@ -3,12 +3,21 @@
     display: flex;
 }
 
+body{
+    background-image: url("imagenes/chatBG.jpg");
+    background-size: cover;
+}
+
 #main-section {
     overflow: hidden; /* Makee this div contain its floated children */
     width: 100%;
 }
 
 #sidebar {
+    overflow-y: scroll;
+    max-height:1px;
+    color:white;
+    background-color: black;
     margin-top: 2em;
     float: left; /* Make this div as wide as its contents */
     min-height: 96vh;
@@ -24,7 +33,7 @@
 }
 
 #sidebar p:hover {
-    background-color: #ffc107;
+    border-bottom: white solid 1px;
 }
 
 #sidebar h4 {padding-left: 0.5em;}
@@ -71,6 +80,7 @@
 }
 
 #input-area {
+    margin-top: 1%;
     padding-left: 1em;
     padding-right: 1em;
     bottom: 0;
@@ -87,8 +97,14 @@ input[type=text]:focus{
 }
 
 .others-msg {
-    margin-right:7em;
-    margin-left: 1em;
+    align-self: left;
+    width: fit-content;
+    max-width: 50%;
+    word-break: break-all;
+    white-space: pre-line;
+    text-align: right;
+    margin-top: 1%;
+    margin-left:1em;
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
     border-color: grey;
@@ -103,7 +119,15 @@ input[type=text]:focus{
 }
 
 .my-msg {
-    margin-left:7em;
+    background-color: #ffffffb7;
+    align-self: right;
+    width: fit-content;
+    margin-left: auto;
+    max-width: 50%;
+    word-break: break-all;
+    white-space: pre-line;
+    text-align: right;
+    margin-top: 1%;
     margin-right:1em;
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
@@ -118,28 +142,35 @@ input[type=text]:focus{
 }
 
 .system-msg {
-    margin-right:7em;
-    margin-left: 1em;
+    border-radius: 25px;
+    background-color: #00ff805b;
+    width: fit-content;
+    text-align: center;
+    margin: auto;
+    margin-top: 1%;
     padding: 0.5em 0.5em 0.5em 1em;
-    color: #656d78;
+    color: #ffffff;
     font-size:0.9em;
 }
 
 .timestamp {
-    color: #656d78;
+    color: #000000;
     font-size:0.7em;
 }
 
 .other-username {
+    border-radius: 25px;
+
     font-weight: bold;
     font-size: 1.1em;
     color: #206ED2;
 }
 
 .my-username {
+    border-radius: 25px;
     font-weight: bold;
     font-size: 1.1em;
-    color: #FF6B13;
+    color: #008cff;
 }
 
 #msg-input {

@@ -2,9 +2,9 @@
 <script src="https://kit.fontawesome.com/2de46ec95e.js" crossorigin="anonymous"></script>
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">MyCal</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -20,18 +20,7 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
+        
       </ul>
       <div class="d-flex">
 
@@ -65,48 +54,6 @@
   </div>
   <div class="offcanvas-body">
     ...
-   
-   
-    <body>
-      
-      
-<script type="text/javascript" src="https://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-      
-      
-
-
-      <form action = "" name = "formSala" id = "formSala" method="POST">
-        <input type="hidden" class="username" value = "{{current_user.name}}"/>
-        <input type="number" class = "room" placeholder="Sala"/>
-        <input type="submit">
-      </form>
-      
-      
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-      <script type="text/javascript">
-        var socket = io.connect();
-        
-        socket.on( 'connect', function() {
-
-          var form2 = $('#formSala').on('submit', function(e){
-            e.preventDefault()
-            let username = $('input.username').val()
-            let room = $('input.room').val()
-            socket.emit('join',{
-              username : username,
-              room : room
-            })
-          })
-        } )  
-        
-        socket.on('redirect', (dest) => {
-          window.location.href = dest;
-        });
-        
-        </script>
-</body>
-
   </div>
 </div>
 

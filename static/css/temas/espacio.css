@@ -3,26 +3,23 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
-    background-image: url("space.jpg");
+    background-image: url("../imagenes/espacioBG.jpg");
     background-size: cover;
     color: #141415;
+    overflow-y: hidden;
 }
 
-.fc th,
-.fc td {
+.fc th, .fc td {
     border-width: 0.1em;
     border-color: #000000;
 
 }
 
 
+
 .calendar {
     border: solid 0.2em #02020235;
 }
-
-
-
-
 
 
 /* Marco animado */

@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.postgresql import ARRAY
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
 db = SQLAlchemy()
+
 
 
 class UserModel(db.Model, UserMixin):
@@ -46,4 +48,20 @@ class EventModel(db.Model):
         self.backgroundColor = backgroundColor
 
     def __repr__(self):
-        return f"<Título: {self.title}>"
+        return f"Título: {self.title}, Inicio: {self.start}, final: {self.end}\n"
+
+class GroupModel(db.Model):
+    __tablename__ = "GruposTEMP"
+
+    name = db.Column(db.String(), primary_key = True)
+    password = db.Column(db.String(), nullable = False)
+    owner = db.Column(db.String(), nullable = False)
+    members = db.Column(ARRAY(db.String()))
+
+    def __init__(self, name, password, owner):
+        self.name = name
+        self.password = password
+        self.owner = owner
+        
+    def __repr__(self):
+        return {self.name}
