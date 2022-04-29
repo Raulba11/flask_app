@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     theme.href = "static/css/temas/"+ valorGuardado +".css"
     
     $('#selector').change(function(){
-        var tema = document.getElementById('theme')
         var seleccion = document.getElementById('selector').options[selector.selectedIndex].value
         localStorage.setItem('temaSeleccionado', seleccion)
         window.location.reload(true)

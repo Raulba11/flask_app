@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
@@ -64,5 +64,5 @@ class GroupModel(db.Model):
         self.owner = owner
         
     def __repr__(self):
-        return f"Nombre: {self.name}"
+        return {self.name}
 

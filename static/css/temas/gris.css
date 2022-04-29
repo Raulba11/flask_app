@@ -3,25 +3,26 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
+    background-image: url("../imagenes/grisBG.jpg");
+    background-size: cover;
+    overflow-y: hidden;
     background-color: #0a0a0a;
     color: #141415;
 }
 
-.fc th,
-.fc td {
+.fc th, .fc td {
     border-width: 0.1em;
     border-color: #0d0d0e68;
 
 }
 
+.fc .fc-view-harness {
+    border: solid 0.2em black;
+}
 
 .calendar {
     border: solid 0.2em #02020235;
 }
-
-
-
-
 
 
 /* Marco animado */

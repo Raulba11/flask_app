@@ -1,9 +1,9 @@
 # INICIO DE IMPORTS
 
-from unicodedata import name
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
+from sqlalchemy import true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -203,9 +203,12 @@ def grupos():
             if not correcto:
                 flash("Contraseña incorrecta")
             else:
-                alertar = False
-                pass
-                # enterGroup(name)
+                dentro = enterGroup(name)
+                if dentro:
+                    flash("Ya te encuentras en el grupo")
+                else:
+                    flash("Te has unido sin problemas")
+                
 
         elif action == "search":
             resultado = buscador(request.form.get('search'))
@@ -230,7 +233,7 @@ def grupos():
 @login_required
 def misGrupos():
     grupos = myGroup_loader()
-
+    
     if request.method == 'POST':
         clicado = request.form.get('grupoClicado')
         return redirect(url_for('misGruposGrupo', grupo = clicado))
@@ -245,6 +248,7 @@ def misGruposGrupo(grupo):
         return "<h1>Este es el grupo "+grupo+"</h1>"
     else:
         return redirect(url_for('index'))
+
 # FINAL DE RUTAS VISIBLES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS GRUPOS
@@ -252,12 +256,6 @@ def misGruposGrupo(grupo):
 def group_loader():
     allGroups = GroupModel.query.order_by(GroupModel.name).all()
     return allGroups
-
-def validarFechas(start, end):
-    if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
-        return True
-    else:
-        return False
 
 def buscador(search):
     grupos = GroupModel.query.filter(GroupModel.name.like("%" + search.upper() + "%")).all()
@@ -281,13 +279,17 @@ def comprobarPass(name, password):
 
 def enterGroup(groupName):
     grupo = GroupModel.query.filter_by(name = groupName).first()
+
     if grupo.members is None:
         grupo.members = []
+    if current_user.name == grupo.owner or current_user.name in grupo.members:
+        return True
+    else:    
+        grupo.members = []    
         grupo.members.append(current_user.name)
-    else:
-        grupo.members.append(current_user.name)
-    
-    db.session.commit()
+        app.logger.debug(grupo.members)
+        
+        db.session.commit()
     
 
 # FINAL MÉTODOS GRUPOS
@@ -296,9 +298,21 @@ def enterGroup(groupName):
 
 def myGroup_loader():
     grupos = GroupModel.query.filter_by(owner = current_user.name).order_by(GroupModel.name).all()
+    for grupo in GroupModel.query.filter(GroupModel.members.contains([current_user.name])).all():
+        grupos.append(grupo)
     return grupos
 
 # FINAL MÉTODOS MIS GRUPOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO MÉTODOS EVENTOS
+
+def validarFechas(start, end):
+    if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
+        return True
+    else:
+        return False
+
+# FINAL MÉTODOS EVENTOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
 

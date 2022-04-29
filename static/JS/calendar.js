@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
     );
+    calendar.render();
     calendar.setOption('locale', 'ISO');
     calendar.addEventSource("/eventos");
-    calendar.render();
 
     //Actualizar los datos de un evento
     function update(info) {

@@ -46,14 +46,24 @@
           title = '{{ msg }}',
           text = 'Compruébelas de nuevo'
         {%endif%}
-//Texto si se crea el grupo    
+    // Texto si ya estás en el grupo
+        {%if msg == "Ya te encuentras en el grupo"%}
+          title = '{{ msg }}',
+          text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
+        {%endif%}
+    // Texto si se crea el grupo    
         {%if msg == "Grupo creado exitosamente"%}
           title = '{{ msg }}',
-          text = 'Editar'
+          text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
+        {%endif%}
+    // Texto al unirte correctamente
+        {%if msg == "Te has unido sin problemas"%}
+          title = '{{ msg }}',
+          text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
         {%endif%}
         
 //Mostrar alerta
-          {%if msg == "Grupo creado exitosamente"%}
+          {%if msg == "Grupo creado exitosamente" or msg == "Te has unido sin problemas"%}
               Swal.fire({
                     icon: 'success',
                     title: title,

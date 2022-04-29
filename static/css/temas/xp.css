@@ -3,9 +3,9 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
-    background-image: url("../imagenes/xp.jpg");
+    overflow-y: hidden;
+    background-image: url("../imagenes/xpBG.jpg");
     background-size: cover;
-    color: #141415;
 }
 
 .fc th,
@@ -15,6 +15,9 @@ body {
 
 }
 
+.fc .fc-view-harness {
+    border: solid 0.2em black;
+}
 
 .calendar {
     border: solid 0.2em #02020235;
