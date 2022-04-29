@@ -204,7 +204,8 @@ def grupos():
                 flash("Contraseña incorrecta")
             else:
                 alertar = False
-                pass #Método para añadir usuario al grupo
+                pass
+                # enterGroup(name)
 
         elif action == "search":
             resultado = buscador(request.form.get('search'))
@@ -229,8 +230,21 @@ def grupos():
 @login_required
 def misGrupos():
     grupos = myGroup_loader()
+
+    if request.method == 'POST':
+        clicado = request.form.get('grupoClicado')
+        return redirect(url_for('misGruposGrupo', grupo = clicado))
+        
+
     return render_template('misGrupos.html', len = len(grupos), lista = grupos)
 
+@app.route('/misGrupos/<grupo>')
+@login_required
+def misGruposGrupo(grupo):
+    if GroupModel.query.filter_by(name = grupo).first().owner == current_user.name:
+        return "<h1>Este es el grupo "+grupo+"</h1>"
+    else:
+        return redirect(url_for('index'))
 # FINAL DE RUTAS VISIBLES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS GRUPOS
@@ -264,6 +278,17 @@ def crearGrupo(name, password, confPassword):
 def comprobarPass(name, password):
     grupo = GroupModel.query.filter_by(name = name).first()
     return password == grupo.password
+
+def enterGroup(groupName):
+    grupo = GroupModel.query.filter_by(name = groupName).first()
+    if grupo.members is None:
+        grupo.members = []
+        grupo.members.append(current_user.name)
+    else:
+        grupo.members.append(current_user.name)
+    
+    db.session.commit()
+    
 
 # FINAL MÉTODOS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------

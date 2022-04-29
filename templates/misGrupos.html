@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    {%include 'imports.html'%}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis grupos</title>
 
     <link rel="stylesheet" type="text/css" href="static/css/misGrupos.css">
-    <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../static/JS/misGrupos.js"></script>
 
   </head>
 
-  {%include 'imports.html'%}
   {% extends 'base.html' %}
   {% block content %}
+
+
   <body>
     <nav class="menu" tabindex="0">
 
@@ -75,7 +77,15 @@
 
       </ul>
       <!-- FINAL LISTA DE GRUPOS -->
+
+      <!-- INICIO FORMULARIO GRUPO CLICADO -->
+      <form method="post" name="clicado" id = "clicado">
+        <input type="hidden" name = "grupoClicado" id = "grupoClicado">
+      </form>
+      <!-- FINAL FORMULARIO GRUPO CLICADO -->
+
     </div>
+
   </body>
   {% endblock %}
 </html>

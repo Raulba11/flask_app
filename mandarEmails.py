@@ -37,7 +37,7 @@ def contenidoTablaEventos(eventos):
 try:
     eventos = obtenerEventos()
     cuerpo = contenidoTablaEventos(eventos)
-    receiver = "cowenav776@svcache.com"
+    receiver = "boyag57673@wowcg.com"
     content = " <h1 style = 'font-size: 2.5vw'>Eventos de esta semana</h1>  <table style = 'border: 1px solid black; font-size: 2vw'> <tr><th style = 'border: 1px solid black'>Título</th>    <th style = 'border: 1px solid black'>Inicio</th>  <th style = 'border: 1px solid black'>Final</th></tr>" + cuerpo + " </table>"
 
     yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")

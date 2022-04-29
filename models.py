@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ARRAY
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
 db = SQLAlchemy()
+
 
 
 class UserModel(db.Model, UserMixin):
@@ -54,6 +56,7 @@ class GroupModel(db.Model):
     name = db.Column(db.String(), primary_key = True)
     password = db.Column(db.String(), nullable = False)
     owner = db.Column(db.String(), nullable = False)
+    members = db.Column(ARRAY(db.String()))
 
     def __init__(self, name, password, owner):
         self.name = name
@@ -62,3 +65,4 @@ class GroupModel(db.Model):
         
     def __repr__(self):
         return f"Nombre: {self.name}"
+

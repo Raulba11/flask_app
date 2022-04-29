@@ -29,8 +29,26 @@ body{
 }
 
 .grupos li{
+  transition: all .2s ease-in-out;
   border-left: solid 1px rgba(0, 0, 0, 0.267);
   border-right: solid 1px rgba(0, 0, 0, 0.267);
+}
+
+.grupos li:hover{
+  transform: scale(1.1);
+}
+
+.grupos li:first-child:hover{
+  margin-bottom: 10px;
+}
+
+.grupos li:last-child:hover{
+  margin-top: 10px;
+}
+
+.grupos li:hover{
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .par {
@@ -83,7 +101,7 @@ html {
   border-right: solid 5px rgb(0, 0, 0);
   z-index: 1;
   word-break: break-all;
-  background-image: url('imagenes/restoSBGrupos.jpg');
+  background-image: url('imagenes/sidebarBG.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
