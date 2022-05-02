@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import ARRAY
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
@@ -38,13 +37,15 @@ class EventModel(db.Model):
     title = db.Column(db.String(), nullable = False)
     start = db.Column(db.DateTime(), nullable = False)
     end = db.Column(db.DateTime(), nullable = False)
+    grupo = db.Column(db.String(), nullable = False)
     backgroundColor = db.Column(db.String(), nullable = False)
 
-    def __init__(self, title, start, end, backgroundColor):
-        self.id = current_user.name + "%" + str(uuid.uuid4())
+    def __init__(self, title, start, end, grupo, backgroundColor):
+        self.id = grupo + "%" + str(uuid.uuid4())
         self.title = title
         self.start = start
         self.end = end
+        self.grupo = grupo
         self.backgroundColor = backgroundColor
 
     def __repr__(self):
@@ -56,7 +57,6 @@ class GroupModel(db.Model):
     name = db.Column(db.String(), primary_key = True)
     password = db.Column(db.String(), nullable = False)
     owner = db.Column(db.String(), nullable = False)
-    members = db.Column(ARRAY(db.String()))
 
     def __init__(self, name, password, owner):
         self.name = name
@@ -66,3 +66,17 @@ class GroupModel(db.Model):
     def __repr__(self):
         return {self.name}
 
+class GrupoUserRelation(db.Model):
+    __tablename__ = "Grupo_User_Relation"
+
+    grupo = db.Column(db.String(), primary_key = True)
+    user = db.Column(db.String(), primary_key = True)
+    admin = db.Column(db.String(1))
+    
+    def __init__(self, grupo, user, admin):
+        self.grupo = grupo
+        self.user = user
+        self.admin = admin
+
+    def __repr__(self):
+        return f"Grupo: {self.grupo}\n"

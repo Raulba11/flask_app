@@ -17,6 +17,7 @@
   <!-- Fin de imports -->
   
   <script>
+
     if (window.history.replaceState) {
       window.history.replaceState(null, null, window.location.href);
     }
@@ -64,9 +65,22 @@
     }
     </script>
 
+
 </head>
 
 <body>
+
+    <script>
+
+      {% if not admin%}
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Necesitas ser administrador',
+      })
+      {%endif%}
+
+    </script>
 
     <select class="" name="temas" id="selector">
       <option value="original" selected>Original</option>
@@ -122,7 +136,14 @@
               <label for="endTime">Hora de fin</label>
               <input placeholder="Select end" type="time" id="endTime" name="endTime" class="form-control" required>
 
-              <label for="endTime">Fondo del evento</label>
+              <label for = "eventGroup">Grupo</label>
+              <select class="form-select" aria-label="Default select example" name = "eventGroup" id = "eventGroup" required>
+                {%for grupo in grupos%}
+                <option value = "{{ grupo }}">{{ grupo }}</option>
+                {%endfor%}
+              </select>
+
+              <label for="endTime">Color del evento</label>
               <input type="color" name="eventColor" id="eventColor" class="form-control" required>
 
             </div>
@@ -180,7 +201,15 @@
               <input placeholder="Select end" type="time" id="changeEndTime" name="changeEndTime" class="form-control"
                 required>
 
-              <label for="endTime">Fondo del evento</label>
+                <label for = "changeEventGroup">Grupo</label>
+                <select class="form-select grupoSelect" tabindex="-1" aria-label="Default select example" name = "changeEventGroup" id = "changeEventGroup" aria-disabled="true">
+                {%for grupoPertenece in gruposPertenece%}
+                <option value = "{{ grupoPertenece }}">{{ grupoPertenece }}</option>
+                {%endfor%}
+              </select>
+
+
+              <label for="endTime">Color del evento</label>
               <input type="color" name="changeEventColor" id="changeEventColor" class="form-control" required>
 
             </div>

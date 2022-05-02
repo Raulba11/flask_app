@@ -3,7 +3,6 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
-from sqlalchemy import true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -38,29 +37,12 @@ def load_user(user_id):
         return user
     return None
 
-def event_loader(user_name):
-    eventos = []
-    events = db.session.query(EventModel).filter(
-        EventModel.id.match(user_name)).all()
-    for evento in events:
 
-        if not (evento.end.date() < datetime.now().date()):
-            eventos.append(            
-                {
-                    "id": evento.id,
-                    "title": evento.title,
-                    "start": evento.start.isoformat(),
-                    "end": evento.end.isoformat(),
-                    "backgroundColor": evento.backgroundColor
-                }
-            )
-
-    return jsonify(eventos)
 
 @app.route('/eventos')
 @login_required
 def eventos():
-    return event_loader(current_user.name)
+    return event_loader()
 
 # FINAL DE CONFIGURACION
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -142,50 +124,38 @@ def saludo():
 @login_required
 def calendario():
 
+    grupos = myGroup_loader()
+    gruposPertenece = []
+    gruposAdmin = []
+
+    for grupo in grupos:
+        gruposPertenece.append(grupo[0])
+        if esAdmin(grupo[0]):
+            gruposAdmin.append(grupo[0])  
+
     if request.method == 'POST':
-        
         # Añadir evento
-        if request.form.get('action') == "add":
-            title = request.form.get('title')
-            start = str(request.form.get('startDate')) + " " + \
-                str(request.form.get('startTime'))
-            end = str(request.form.get('endDate')) + " " + \
-                str(request.form.get('endTime'))
-            color = request.form.get('eventColor')
-            
+        if request.form.get('action') == "add":            
 
-            if validarFechas(start,end):
-                new_event = EventModel(title=title, start=start, end=end, backgroundColor=color)            
-                db.session.add(new_event)
-                db.session.commit()
-
+            admin = esAdmin(request.form.get('eventGroup'))
+            if admin:
+                crearEvento()
 
         # Eliminar evento
         elif request.form.get('action') == "delete":
-                        
-            id = request.form.get('changeID')
-            evento = EventModel.query.filter_by(id=id).first()
-            db.session.delete(evento)
-            db.session.commit()
+            admin = esAdmin(request.form.get('changeEventGroup'))
+            if admin:
+                eliminarEvento()
 
         # Actualizar evento
         elif request.form.get('action') == "update":
-            
-            id = request.form.get('changeID')
-            newTitle = request.form.get('changeTitle')
-            newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
-            newEnd = str(request.form.get('changeEndDate')) + " " + str(request.form.get('changeEndTime'))
-            newColor = request.form.get('changeEventColor')
+            admin = esAdmin(request.form.get('changeEventGroup'))
+            if admin:
+                actualizarEvento()
 
+        return render_template('calendario.html', grupos = gruposAdmin, gruposPertenece = gruposPertenece, admin = admin)
 
-            if validarFechas(newStart, newEnd):
-                EventModel.query.filter_by(id=id).update(
-                    dict(title=newTitle, start=newStart, end=newEnd, backgroundColor=newColor))
-                db.session.commit()
-
-        return render_template('calendario.html')
-
-    return render_template('calendario.html')
+    return render_template('calendario.html', grupos = gruposAdmin, gruposPertenece = gruposPertenece, admin = True)
 
 @app.route('/grupos' , methods=['GET', 'POST'])
 @login_required
@@ -254,7 +224,14 @@ def misGruposGrupo(grupo):
 # INICIO MÉTODOS GRUPOS
 
 def group_loader():
-    allGroups = GroupModel.query.order_by(GroupModel.name).all()
+    allGroups = []
+    grupos = GroupModel.query.order_by(GroupModel.name).all()
+    for grupo in grupos:
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.name).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        allGroups.append((grupo.name, admins))
+    
     return allGroups
 
 def buscador(search):
@@ -269,7 +246,9 @@ def crearGrupo(name, password, confPassword):
         return "Las contraseñas no coinciden"
     else:
         new_group = GroupModel(name = name.upper(), password = password, owner = current_user.name)
+        new_relation = GrupoUserRelation(grupo = name.upper(), user = current_user.name, admin = "Y")
         db.session.add(new_group)
+        db.session.add(new_relation)
         db.session.commit()
         return "Grupo creado exitosamente"
 
@@ -278,18 +257,27 @@ def comprobarPass(name, password):
     return password == grupo.password
 
 def enterGroup(groupName):
-    grupo = GroupModel.query.filter_by(name = groupName).first()
+    miembrosTEMP = GrupoUserRelation.query.with_entities(GrupoUserRelation.user).filter_by(grupo = groupName).all()
+    miembros = []
+    for miembro in miembrosTEMP:
+        miembros.append(miembro[0])
+    
 
-    if grupo.members is None:
-        grupo.members = []
-    if current_user.name == grupo.owner or current_user.name in grupo.members:
+    if current_user.name in miembros:
         return True
-    else:    
-        grupo.members = []    
-        grupo.members.append(current_user.name)
-        app.logger.debug(grupo.members)
-        
+    else:
+        nuevo_miembro = GrupoUserRelation(grupo = groupName, user = current_user.name, admin = "N")
+        db.session.add(nuevo_miembro)
         db.session.commit()
+
+def esAdmin(grupo):
+    
+    admin = GrupoUserRelation.query.with_entities(GrupoUserRelation.admin).filter_by(grupo = grupo).filter_by(user = current_user.name).first()
+    if admin[0] == 'Y':
+        return True
+    else:
+        return False
+    
     
 
 # FINAL MÉTODOS GRUPOS
@@ -297,20 +285,79 @@ def enterGroup(groupName):
 # INICIO MÉTODOS MIS GRUPOS
 
 def myGroup_loader():
-    grupos = GroupModel.query.filter_by(owner = current_user.name).order_by(GroupModel.name).all()
-    for grupo in GroupModel.query.filter(GroupModel.members.contains([current_user.name])).all():
-        grupos.append(grupo)
-    return grupos
+    misGrupos = []
+    grupos = GrupoUserRelation.query.filter_by(user = current_user.name).order_by(GrupoUserRelation.grupo).all()
+    for grupo in grupos:
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.grupo).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        misGrupos.append((grupo.grupo, admins))
+    
+    return misGrupos
 
 # FINAL MÉTODOS MIS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS EVENTOS
+
+def event_loader():
+    eventos = []
+
+    misGrupos = myGroup_loader()
+
+    for grupo in misGrupos:
+        events = EventModel.query.filter(EventModel.id.like(grupo[0]+"%")).all()
+        for evento in events:
+
+            if not (evento.end.date() < datetime.now().date()):
+                eventos.append(            
+                    {
+                        "id": evento.id,
+                        "title": evento.title,
+                        "start": evento.start.isoformat(),
+                        "end": evento.end.isoformat(),
+                        "grupo": evento.grupo,
+                        "backgroundColor": evento.backgroundColor
+                    }
+                )
+
+    return jsonify(eventos)
 
 def validarFechas(start, end):
     if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
         return True
     else:
         return False
+
+def crearEvento():
+    grupo = request.form.get('eventGroup')
+    title = request.form.get('title')
+    start = str(request.form.get('startDate')) + " " + str(request.form.get('startTime'))
+    end = str(request.form.get('endDate')) + " " + str(request.form.get('endTime'))
+    color = request.form.get('eventColor')
+    
+    if validarFechas(start,end):
+        new_event = EventModel(title=title, start=start, end=end, grupo = grupo, backgroundColor=color)           
+        db.session.add(new_event)
+        db.session.commit()
+
+def actualizarEvento():
+    id = request.form.get('changeID')
+    newTitle = request.form.get('changeTitle')
+    newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
+    newEnd = str(request.form.get('changeEndDate')) + " " + str(request.form.get('changeEndTime'))
+    newColor = request.form.get('changeEventColor')
+
+
+    if validarFechas(newStart, newEnd):
+        EventModel.query.filter_by(id=id).update(
+            dict(title=newTitle, start=newStart, end=newEnd, backgroundColor=newColor))
+        db.session.commit()
+
+def eliminarEvento():
+    id = request.form.get('changeID')
+    evento = EventModel.query.filter_by(id=id).first()
+    db.session.delete(evento)
+    db.session.commit()
 
 # FINAL MÉTODOS EVENTOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------

@@ -22,7 +22,11 @@ body {
 }
 
 
-
+.grupoSelect {
+	background: #EEE; 
+	pointer-events: none;
+	touch-action: none;
+  }
 
 
 

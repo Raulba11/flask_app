@@ -1,10 +1,8 @@
 
-
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         /*---INICIO DE REGION DE CONFIGURACION---*/
-        firstDay: 1,
         displayEventTime: true,
         editable: true,
         displayEventEnd: true,
@@ -73,8 +71,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
     );
-    calendar.render();
-    calendar.setOption('locale', 'ISO');
+    //Cargar idioma, datos al final
+    calendar.setOption('locale', 'es');
+    //Cargar los eventos, guardados en esa URL
     calendar.addEventSource("/eventos");
 
     //Actualizar los datos de un evento
@@ -86,9 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
         inicio = evento.start.toISOString().split('T')[0]
         final = evento.end.toISOString().split('T')[0]
         color = evento.backgroundColor
+        grupo = evento.id.substring(0, (evento.id.length - 37))
+        
         //Precargar el modal con los datos obtenidos
         $('#changeModal').on('show.bs.modal', function () {
-
             document.getElementById("changeEndDate").setAttribute("min", inicio)
             $("#changeTitle").val(evento.title);
             $("#changeID").val(evento.id);
@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("changeStartDate").value = inicio
             document.getElementById("changeEndDate").value = final
             document.getElementById("changeEventColor").value = color
+            document.getElementById("changeEventGroup").value = grupo
         });
         //Si el modal se cierra con el botón close, revertir los cambios
         $('#changeModal').on('hidden.bs.modal', function () {
@@ -104,9 +105,59 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         //Mostrar el modal
         $('#changeModal').modal('show');
-
     }
+    //Cargar el calendario después de que ya se cargó toda la página para evitar un mal renderizado inicial
+        $(window).on('load', function () {
+            calendar.render();
+        });
     /*---FIN DE REGION DE METODOS---*/
 
 });
 
+
+FullCalendar.globalLocales.push(function () {
+    'use strict';
+  
+    var es = {
+      code: 'es',
+      week: {
+        dow: 1, // Monday is the first day of the week.
+        doy: 4, // The week that contains Jan 4th is the first week of the year.
+      },
+      buttonText: {
+        prev: 'Ant',
+        next: 'Sig',
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        list: 'Agenda',
+      },
+      buttonHints: {
+        prev: '$0 antes',
+        next: '$0 siguiente',
+        today(buttonText) {
+          return (buttonText === 'Día') ? 'Hoy' :
+            ((buttonText === 'Semana') ? 'Esta' : 'Este') + ' ' + buttonText.toLocaleLowerCase()
+        },
+      },
+      viewHint(buttonText) {
+        return 'Vista ' + (buttonText === 'Semana' ? 'de la' : 'del') + ' ' + buttonText.toLocaleLowerCase()
+      },
+      weekText: 'Sm',
+      weekTextLong: 'Semana',
+      allDayText: 'Todo el día',
+      moreLinkText: 'más',
+      moreLinkHint(eventCnt) {
+        return `Mostrar ${eventCnt} eventos más`
+      },
+      noEventsText: 'No hay eventos para mostrar',
+      navLinkHint: 'Ir al $0',
+      closeHint: 'Cerrar',
+      timeHint: 'La hora',
+      eventHint: 'Evento',
+    };
+  
+    return es;
+  
+  }());
