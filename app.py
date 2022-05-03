@@ -16,7 +16,7 @@ from time import *
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
-socketio = SocketIO(app, manage_session=False)
+socketio = SocketIO(app, manage_session=False) #Eliminar junto a la librería si no se hace el chat
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -42,7 +42,6 @@ def load_user(user_id):
     if user:
         return user
     return None
-
 
 
 @app.route('/eventos')
@@ -134,14 +133,6 @@ def logout():
     """
     logout_user()
     return redirect(url_for('login'))
-
-@app.route('/saludo')
-@login_required
-def saludo():
-    """
-    Únicamente para probar el @login_required *ELIMINAR AL FINAL*
-    """
-    return render_template('pruebaLoginRequired.html')
 
 @app.route('/calendario', methods=['GET', 'POST'])
 @login_required
@@ -282,7 +273,8 @@ def group_loader() -> list:
 
     allGroups = []
     grupos = GroupModel.query.order_by(GroupModel.name).all()
-    for grupo in grupos:
+    
+    for grupo in grupos:        
         admins = []
         for admin in GrupoUserRelation.query.filter_by(grupo = grupo.name).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
             admins.append(admin[0])
@@ -290,16 +282,19 @@ def group_loader() -> list:
     
     return allGroups
 
-def buscador(search) :
+def buscador(search : str) -> list:
     """
     Retorna los grupos que contengan el texto pasado en el buscador
     """
-
+    resultado = []
     grupos = db.session.query(GroupModel).filter(GroupModel.name.like("%" + search.upper() + "%")).all()
-    app.logger.debug(grupos)
+    for grupo in grupos:        
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.name).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        resultado.append((grupo.name, admins))
     
-    
-    return grupos
+    return resultado
 
 def crearGrupo(name : str, password : str, confPassword : str) -> str:
     """
@@ -355,8 +350,6 @@ def esAdmin(grupo : str) -> bool:
     else:
         return False
     
-    
-
 # FINAL MÉTODOS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS MIS GRUPOS

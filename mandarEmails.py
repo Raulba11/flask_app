@@ -14,23 +14,48 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #MÉTODOS
 
-def contenidoTablaEventos(eventos):
+def contenidoTablaEventos(eventos : EventModel, contador : int) -> tuple:
+    """
+    Retorna la parte de HTML correspondiente a fila con los datos de un evento.
+    Además devuelve el contador actualizado para poder mostrar el diseño de forma par e impar.
+    Acceder al contenido como una lista: [0] es el HTML [1] es el contador
+    """
     cuerpo = ""
- 
+    contador = contador
     for evento in eventos:
-        cuerpo += " <tr>"
-        cuerpo += " <td style = 'border: 1px solid black'>" +evento.title + "</td>"
-        cuerpo += " <td style = 'border: 1px solid black'>" + evento.grupo + "</td>"
-        cuerpo += " <td style = 'border: 1px solid black'>" + str(evento.start.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
-        cuerpo += " <td style = 'border: 1px solid black'>" + str(evento.end.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
+        if contador % 2 != 0:            
+            cuerpo += "<tr class = 'impar'>"
+        else:
+            cuerpo += "<tr>"
+        cuerpo += " <td>" + evento.grupo + "</td>"
+        cuerpo += " <td>" + evento.title + "</td>"
+        cuerpo += " <td>" + str(evento.start.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
+        cuerpo += " <td>" + str(evento.end.strftime('%A %d-%m-%y %H:%M')).capitalize() + "</td>"
         cuerpo += " </tr>"
-    return cuerpo
+        contador += 1
+    return cuerpo, contador
 
-def mandarEmail(cuerpo, receptor):
-    try:
-        
+def mandarEmail(cuerpo : str, receptor : UserModel.email) -> None:
+    """
+    Construye el email y lo manda
+    """
+    try:    
         receiver = receptor
-        content = " <h1 style = 'font-size: 2.5vw'>Eventos de esta semana</h1>  <table style = 'border: 1px solid black; font-size: 2vw'> <tr><th style = 'border: 1px solid black'>Título</th> <th style = 'border: 1px solid black'>Grupo</th>    <th style = 'border: 1px solid black'>Inicio</th>  <th style = 'border: 1px solid black'>Final</th></tr>" + cuerpo + " </table>"
+        content = "<style>"\
+        +".container{display: flex; justify-content: center; align-items: center; margin: auto;}"\
+        +"table{width: 100%; border: 1px solid #EEEEEE; border-collapse: collapse}"\
+        +"th{color: white; background: #000; padding: 5px; font-size: 25px}"\
+        +".impar{background: #EEEEEE;}"\
+        +"td{font-size:20px; text-align:center;}"\
+        +"</style>"\
+        +"<h1>Eventos de esta semana</h1> " \
+        +"<div class = 'container'>"\
+        + "<table><tr>" \
+           + "<th>GRUPO</th>" \
+           + "<th>TITULO</th>" \
+           + "<th>INICIO</th>" \
+           + "<th>FINAL</th>" \
+         + "</tr>" + cuerpo + "</table></div>"
 
         yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")
 
@@ -56,11 +81,12 @@ usuarios = UserModel.query.all()
 for usuario in usuarios:
     cuerpo = ""
     grupos = GrupoUserRelation.query.with_entities(GrupoUserRelation.grupo).filter_by(user = usuario.name).order_by(GrupoUserRelation.grupo)
-
+    contador = 1
 #Por cada grupo sus eventos
     for grupo in grupos:
-        eventos = EventModel.query.filter(EventModel.grupo == grupo[0]). filter(EventModel.start >= hoy).filter(EventModel.end <= endOfWeek).all()
-        cuerpo += contenidoTablaEventos(eventos)
+        eventos = EventModel.query.filter(EventModel.grupo == grupo[0]). filter(EventModel.start >= hoy).filter(EventModel.start <= endOfWeek).all()
+        cuerpo += contenidoTablaEventos(eventos, contador)[0]
+        contador = contenidoTablaEventos(eventos, contador)[1]
 #Por cada usuario mandarle su email
     mandarEmail(cuerpo, usuario.email)
 

@@ -6,7 +6,8 @@ import uuid
 
 db = SQLAlchemy()
 
-
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DEL MODELO DE LOS USUARIOS
 
 class UserModel(db.Model, UserMixin):
     """
@@ -46,6 +47,10 @@ class UserModel(db.Model, UserMixin):
         """
         return f"<Nombre: {self.name} - Email: {self.email}>"
 
+# FINAL DEL MODELO DE LOS USUARIOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DEL MODELO DE LOS EVENTOS
+
 class EventModel(db.Model):
     """
     Clase de los eventos
@@ -76,6 +81,10 @@ class EventModel(db.Model):
         """
         return f"Título: {self.title}, Inicio: {self.start}, final: {self.end}\n"
 
+# FINAL DEL MODELO DE LOS EVENTOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DEL MODELO DE LOS GRUPOS
+
 class GroupModel(db.Model):
     """
     Clase de los grupos
@@ -100,7 +109,12 @@ class GroupModel(db.Model):
         """
         return f"Nombre: {self.name}"
 
+# FINAL DEL MODELO DE LOS GRUPOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DE LA RELACIÓN DE LOS GRUPOS Y LOS USUARIOS
+
 class GrupoUserRelation(db.Model):
+
     """
     Clase que establece la relación entre los usuarios y los grupos
     """
@@ -123,3 +137,5 @@ class GrupoUserRelation(db.Model):
         Equivalente a toString()
         """
         return f"Grupo: {self.grupo}\n"
+
+# FINAL DE LA RELACIÓN DE LOS GRUPOS Y LOS USUARIOS
