@@ -133,13 +133,13 @@
 
         {%if i%2 == 0%}
         <li class="par">
-          <p class="nombre">{{lista[i].name}}</p>
-          <p class="admin">Administradores: {{lista[i].owner}}</p>
+          <p class="nombre">{{lista[i][0]}}</p>
+          <p class="admin">Administradores: {{lista[i][1]}}</p>
         </li>
         {%else%}
         <li class="impar">
-          <p class="nombre">{{lista[i].name}}</p>
-          <p class="admin">Administradores: {{lista[i].owner}}</p>
+          <p class="nombre">{{lista[i][0]}}</p>
+          <p class="admin">Administradores: {{lista[i][1]}}</p>
         </li>
         {%endif%}
 

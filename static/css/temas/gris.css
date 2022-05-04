@@ -24,6 +24,11 @@ body {
     border: solid 0.2em #02020235;
 }
 
+.grupoSelect {
+	background: #EEE; 
+	pointer-events: none;
+	touch-action: none;
+  }
 
 /* Marco animado */
 .block {

@@ -24,7 +24,11 @@ body {
 	border: solid 0.2em #0c09da35;
 }
 
-
+.grupoSelect {
+	background: #EEE; 
+	pointer-events: none;
+	touch-action: none;
+  }
 
 
 

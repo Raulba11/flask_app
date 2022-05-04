@@ -3,7 +3,6 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from flask_socketio import *
-from sqlalchemy import true
 from models import *
 from config import *
 from werkzeug.security import check_password_hash
@@ -17,7 +16,7 @@ from time import *
 app = Flask(__name__)
 setup(app)
 migrate = Migrate(app, db)
-socketio = SocketIO(app, manage_session=False)
+socketio = SocketIO(app, manage_session=False) #Eliminar junto a la librería si no se hace el chat
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -26,6 +25,9 @@ login_manager.login_message = "Necesitas iniciar sesión para ver esta página"
 db.init_app(app)
 
 def create_app():
+    """
+    Necesario para pasar el contexto al script encargado de los emails
+    """
     app = Flask(__name__)
     setup(app)
     db.init_app(app)
@@ -33,34 +35,22 @@ def create_app():
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Iniciar sesión automáticamente
+    """
     user = UserModel.query.filter_by(id=user_id).first()
     if user:
         return user
     return None
 
-def event_loader(user_name):
-    eventos = []
-    events = db.session.query(EventModel).filter(
-        EventModel.id.match(user_name)).all()
-    for evento in events:
-
-        if not (evento.end.date() < datetime.now().date()):
-            eventos.append(            
-                {
-                    "id": evento.id,
-                    "title": evento.title,
-                    "start": evento.start.isoformat(),
-                    "end": evento.end.isoformat(),
-                    "backgroundColor": evento.backgroundColor
-                }
-            )
-
-    return jsonify(eventos)
 
 @app.route('/eventos')
 @login_required
 def eventos():
-    return event_loader(current_user.name)
+    """
+    Carga la URL con el JSON de eventos que será usado para cargar estos en el calendario *NO HECHO PARA SER VISIBLE*
+    """
+    return event_loader()
 
 # FINAL DE CONFIGURACION
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -68,11 +58,16 @@ def eventos():
 
 @app.route('/')
 def index():
-    # ELIMINAR O EDITAR A POSTERIORI, AHORA CON ACCESO A PÁGINAS PARA TESTEO
-    return render_template('index.html')
+    """
+    Página índice para la prueba de métodos *TEMPORAL*
+    """
+    return render_template('cover.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """
+    Página de login, si se intenta acceder ya estándolo redirige al index
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -85,7 +80,7 @@ def login():
     if request.method == 'POST':
         if user and check_password_hash(user.password, password):            
             login_user(user, remember= request.form.get('remember'))
-            return redirect(url_for('saludo'))
+            return redirect(url_for('index'))
         elif not user:
             flash("Usuario no encontrado")
         elif not check_password_hash(user.password, password):
@@ -96,6 +91,9 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """
+    Página de signup
+    """
     created = False
     if request.method == 'POST':
         username = request.form.get('username')        
@@ -130,66 +128,59 @@ def signup():
 @app.route('/logout')
 @login_required
 def logout():
+    """
+    URL que cierra la sesión del usuario
+    """
     logout_user()
     return redirect(url_for('login'))
-
-@app.route('/saludo')
-@login_required
-def saludo():
-    return render_template('pruebaLoginRequired.html')
 
 @app.route('/calendario', methods=['GET', 'POST'])
 @login_required
 def calendario():
+    """
+    URL que carga el calendario
+    """
+
+    grupos = myGroup_loader()
+    gruposPertenece = []
+    gruposAdmin = []
+
+    for grupo in grupos:
+        gruposPertenece.append(grupo[0])
+        if esAdmin(grupo[0]):
+            gruposAdmin.append(grupo[0])  
 
     if request.method == 'POST':
-        
         # Añadir evento
-        if request.form.get('action') == "add":
-            title = request.form.get('title')
-            start = str(request.form.get('startDate')) + " " + \
-                str(request.form.get('startTime'))
-            end = str(request.form.get('endDate')) + " " + \
-                str(request.form.get('endTime'))
-            color = request.form.get('eventColor')
-            
+        if request.form.get('action') == "add":            
 
-            if validarFechas(start,end):
-                new_event = EventModel(title=title, start=start, end=end, backgroundColor=color)            
-                db.session.add(new_event)
-                db.session.commit()
-
+            admin = esAdmin(request.form.get('eventGroup'))
+            if admin:
+                crearEvento()
 
         # Eliminar evento
         elif request.form.get('action') == "delete":
-                        
-            id = request.form.get('changeID')
-            evento = EventModel.query.filter_by(id=id).first()
-            db.session.delete(evento)
-            db.session.commit()
+            admin = esAdmin(request.form.get('changeEventGroup'))
+            if admin:
+                eliminarEvento()
 
         # Actualizar evento
         elif request.form.get('action') == "update":
-            
-            id = request.form.get('changeID')
-            newTitle = request.form.get('changeTitle')
-            newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
-            newEnd = str(request.form.get('changeEndDate')) + " " + str(request.form.get('changeEndTime'))
-            newColor = request.form.get('changeEventColor')
+            admin = esAdmin(request.form.get('changeEventGroup'))
+            if admin:
+                actualizarEvento()
 
+        return render_template('calendario.html', grupos = gruposAdmin, gruposPertenece = gruposPertenece, admin = admin)
 
-            if validarFechas(newStart, newEnd):
-                EventModel.query.filter_by(id=id).update(
-                    dict(title=newTitle, start=newStart, end=newEnd, backgroundColor=newColor))
-                db.session.commit()
-
-        return render_template('calendario.html')
-
-    return render_template('calendario.html')
+    return render_template('calendario.html', grupos = gruposAdmin, gruposPertenece = gruposPertenece, admin = True)
 
 @app.route('/grupos' , methods=['GET', 'POST'])
 @login_required
 def grupos():
+    """
+    URL que carga todos los grupos
+    """
+
     grupos = group_loader()
 
     if request.method == 'POST':
@@ -207,8 +198,7 @@ def grupos():
                 if dentro:
                     flash("Ya te encuentras en el grupo")
                 else:
-                    flash("Te has unido sin problemas")
-                
+                    flash("Te has unido sin problemas")                
 
         elif action == "search":
             resultado = buscador(request.form.get('search'))
@@ -224,7 +214,8 @@ def grupos():
             confPass = request.form.get('createConfPass')
             msg = crearGrupo(name, password, confPass)
             flash(msg)
-        
+                
+
         return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = alertar)
         
     return render_template('grupos.html', len = len(grupos), lista = grupos, alertar = False)
@@ -232,19 +223,41 @@ def grupos():
 @app.route('/misGrupos' , methods=['GET', 'POST'])
 @login_required
 def misGrupos():
+    """
+    URL que carga los grupos de cada usuario
+    """
+
     grupos = myGroup_loader()
     
     if request.method == 'POST':
-        clicado = request.form.get('grupoClicado')
-        return redirect(url_for('misGruposGrupo', grupo = clicado))
+
+        action = request.form.get('action')
+
+        if action == "search":
+            resultado = buscador(request.form.get('search'))
+            
+            if len(resultado) == 0:
+                pass
+            else:
+
+                grupos = resultado
+        else:
+            clicado = request.form.get('grupoClicado')
+            return redirect(url_for('misGruposGrupo', grupo = clicado))
         
+        return render_template('misGrupos.html', len = len(grupos), lista = grupos)
 
     return render_template('misGrupos.html', len = len(grupos), lista = grupos)
 
 @app.route('/misGrupos/<grupo>')
 @login_required
-def misGruposGrupo(grupo):
-    if GroupModel.query.filter_by(name = grupo).first().owner == current_user.name:
+def misGruposGrupo(grupo : str):
+    """
+    Retorna la página de un grupo concreto o el índice si se escribe a mano la URL y no se es usuario del grupo
+    """
+    pertenece = GrupoUserRelation.query.filter_by(grupo = grupo).filter_by(user = current_user.name).first()
+
+    if pertenece:
         return "<h1>Este es el grupo "+grupo+"</h1>"
     else:
         return redirect(url_for('index'))
@@ -253,15 +266,41 @@ def misGruposGrupo(grupo):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS GRUPOS
 
-def group_loader():
-    allGroups = GroupModel.query.order_by(GroupModel.name).all()
+def group_loader() -> list:
+    """
+    Obtiene todos los grupos y los administradores de estos
+    """
+
+    allGroups = []
+    grupos = GroupModel.query.order_by(GroupModel.name).all()
+    
+    for grupo in grupos:        
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.name).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        allGroups.append((grupo.name, admins))
+    
     return allGroups
 
-def buscador(search):
-    grupos = GroupModel.query.filter(GroupModel.name.like("%" + search.upper() + "%")).all()
-    return grupos
+def buscador(search : str) -> list:
+    """
+    Retorna los grupos que contengan el texto pasado en el buscador
+    """
+    resultado = []
+    grupos = db.session.query(GroupModel).filter(GroupModel.name.like("%" + search.upper() + "%")).all()
+    for grupo in grupos:        
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.name).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        resultado.append((grupo.name, admins))
+    
+    return resultado
 
-def crearGrupo(name, password, confPassword):
+def crearGrupo(name : str, password : str, confPassword : str) -> str:
+    """
+    Valida los parámetros y si está todo correcto crea un grupo. Retorna un mensaje
+    """
+
     grupo = GroupModel.query.filter_by(name = name.upper()).all()
     if grupo:
         return "Grupo ya existente"
@@ -269,48 +308,148 @@ def crearGrupo(name, password, confPassword):
         return "Las contraseñas no coinciden"
     else:
         new_group = GroupModel(name = name.upper(), password = password, owner = current_user.name)
+        new_relation = GrupoUserRelation(grupo = name.upper(), user = current_user.name, admin = "Y")
         db.session.add(new_group)
+        db.session.add(new_relation)
         db.session.commit()
         return "Grupo creado exitosamente"
 
-def comprobarPass(name, password):
+def comprobarPass(name : str, password : str) -> bool:
+    """
+    Comprueba si la contraseña pasada es la del grupo
+    """
+
     grupo = GroupModel.query.filter_by(name = name).first()
     return password == grupo.password
 
-def enterGroup(groupName):
-    grupo = GroupModel.query.filter_by(name = groupName).first()
+def enterGroup(groupName : str) -> bool:
+    """
+    Comprueba si el usuario está en el grupo y si no lo está lo añade
+    """
 
-    if grupo.members is None:
-        grupo.members = []
-    if current_user.name == grupo.owner or current_user.name in grupo.members:
+    miembrosTEMP = GrupoUserRelation.query.with_entities(GrupoUserRelation.user).filter_by(grupo = groupName).all()
+    miembros = []
+    for miembro in miembrosTEMP:
+        miembros.append(miembro[0])
+
+    if current_user.name in miembros:
         return True
-    else:    
-        grupo.members = []    
-        grupo.members.append(current_user.name)
-        app.logger.debug(grupo.members)
-        
+    else:
+        nuevo_miembro = GrupoUserRelation(grupo = groupName, user = current_user.name, admin = "N")
+        db.session.add(nuevo_miembro)
         db.session.commit()
-    
 
+def esAdmin(grupo : str) -> bool:
+    """
+    Comprueba si el usuario es administrador del grupo pasado
+    """
+
+    admin = GrupoUserRelation.query.with_entities(GrupoUserRelation.admin).filter_by(grupo = grupo).filter_by(user = current_user.name).first()
+    if admin[0] == 'Y':
+        return True
+    else:
+        return False
+    
 # FINAL MÉTODOS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS MIS GRUPOS
 
-def myGroup_loader():
-    grupos = GroupModel.query.filter_by(owner = current_user.name).order_by(GroupModel.name).all()
-    for grupo in GroupModel.query.filter(GroupModel.members.contains([current_user.name])).all():
-        grupos.append(grupo)
-    return grupos
+def myGroup_loader() -> list:
+    """
+    Obtiene los grupos a los que pertenece el usuario y los administradores de estos
+    """
+
+    misGrupos = []
+    grupos = GrupoUserRelation.query.filter_by(user = current_user.name).order_by(GrupoUserRelation.grupo).all()
+    for grupo in grupos:
+        admins = []
+        for admin in GrupoUserRelation.query.filter_by(grupo = grupo.grupo).filter_by(admin = 'Y').with_entities(GrupoUserRelation.user).all():
+            admins.append(admin[0])
+        misGrupos.append((grupo.grupo, admins))
+    
+    return misGrupos
 
 # FINAL MÉTODOS MIS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS EVENTOS
 
-def validarFechas(start, end):
+def event_loader():
+    """
+    Retorna en formato JSON todos los eventos de los grupos a los que pertenece el usuario
+    """
+
+    eventos = []
+    misGrupos = myGroup_loader()
+
+    for grupo in misGrupos:
+        events = EventModel.query.filter(EventModel.id.like(grupo[0]+"%")).all()
+        for evento in events:
+
+            if not (evento.end.date() < datetime.now().date()):
+                eventos.append(            
+                    {
+                        "id": evento.id,
+                        "title": evento.title,
+                        "start": evento.start.isoformat(),
+                        "end": evento.end.isoformat(),
+                        "grupo": evento.grupo,
+                        "backgroundColor": evento.backgroundColor
+                    }
+                )
+
+    return jsonify(eventos)
+
+def validarFechas(start, end) -> bool:
+    """
+    Valida que la fecha final del evento sea posterior a la inicial
+    """
+
     if datetime.strptime(end, "%Y-%m-%d %H:%M") > datetime.strptime(start, "%Y-%m-%d %H:%M"):
         return True
     else:
         return False
+
+def crearEvento():
+    """
+    Crea un evento si está correcto
+    """
+
+    grupo = request.form.get('eventGroup')
+    title = request.form.get('title')
+    start = str(request.form.get('startDate')) + " " + str(request.form.get('startTime'))
+    end = str(request.form.get('endDate')) + " " + str(request.form.get('endTime'))
+    color = request.form.get('eventColor')
+    
+    if validarFechas(start,end):
+        new_event = EventModel(title=title, start=start, end=end, grupo = grupo, backgroundColor=color)           
+        db.session.add(new_event)
+        db.session.commit()
+
+def actualizarEvento():
+    """
+    Actualiza un evento si está correcto
+    """
+    id = request.form.get('changeID')
+    newTitle = request.form.get('changeTitle')
+    newStart = str(request.form.get('changeStartDate')) + " " + str(request.form.get('changeStartTime'))
+    newEnd = str(request.form.get('changeEndDate')) + " " + str(request.form.get('changeEndTime'))
+    newColor = request.form.get('changeEventColor')
+
+
+    if validarFechas(newStart, newEnd):
+        EventModel.query.filter_by(id=id).update(
+            dict(title=newTitle, start=newStart, end=newEnd, backgroundColor=newColor))
+        db.session.commit()
+
+def eliminarEvento():
+    """
+    Elimina un evento
+    """
+
+    id = request.form.get('changeID')
+    evento = EventModel.query.filter_by(id=id).first()
+    db.session.delete(evento)
+    db.session.commit()
 
 # FINAL MÉTODOS EVENTOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -318,6 +457,9 @@ def validarFechas(start, end):
 
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
+    """
+    *PROBABLEMENTE ELIMINAR*
+    """
     ROOMS = ["lounge", "news", "games", "coding", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]
 
     if not current_user.is_authenticated:
@@ -326,15 +468,16 @@ def chat():
     return render_template("chat.html", username=current_user.name, rooms=ROOMS)
 
 @socketio.on('loadHistorial')
-# def on_load(data):
-#     mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
-#     mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
-#     mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
-#     mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
-#     mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
-#     room = data["room"]
-#     for msg in mensajes:      
-#         send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
+def on_load(data):
+    # mensaje1 = mensaje("user1", "Mensaje 1", datetime.now())
+    # mensaje2 = mensaje("user2", "Mensaje 2", datetime.now())
+    # mensaje3 = mensaje("user1", "Mensaje 3", datetime.now())
+    # mensaje4 = mensaje("user2", "Mensaje 4", datetime.now())
+    # mensajes = [mensaje1, mensaje2, mensaje3, mensaje4]    
+    # room = data["room"]
+    # for msg in mensajes:      
+    #     send({"username": msg.usuario, "msg": msg.mensaje, "time_stamp": str(msg.tiempo)}, room=room)
+    pass
 
 @socketio.on('incoming-msg')
 def on_message(data):

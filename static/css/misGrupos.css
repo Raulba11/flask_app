@@ -75,7 +75,7 @@ body {
 }
 
 .par {
-    text-shadow: 2px 2px 2px rgb(206, 206, 206);
+    color: rgb(255, 255, 255);
     padding-top: 5px;
     padding-bottom: 5px;
     background-color: rgba(155, 39, 155, 0.267);
@@ -83,7 +83,7 @@ body {
 }
 
 .impar {
-    text-shadow: 2px 2px 2px rgb(206, 206, 206);
+    color: white;
     padding-top: 5px;
     padding-bottom: 5px;
     background-color: rgba(230, 174, 19, 0.267);
