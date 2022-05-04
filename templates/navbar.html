@@ -30,11 +30,6 @@
         <li class="nav-item"><a class="link-light" href="{{ url_for('signup')
             }}">Registrar</a></li>
         {% else %}
-        <div type="button" data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" >
-          <i role = "button" class="fa-solid fa-comment text-white "></i>
-        </div>
-
         <span class="text-white nav-item ps-3">{{ current_user.name }}</span>
         <span class="nav-item ps-3"><a class="link-light" href="{{ url_for('logout')
             }}">Cerrar sesión</a></span>
@@ -45,14 +40,3 @@
     </div>
   </div>
 </nav>
-
-<div class="offcanvas offcanvas-end" style="border: 0.1em solid rgb(255, 0, 0);" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" data-bs-scroll="false" data-bs-backdrop = "false">
-  <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
-    <button type="button" class="btn-close text-reset"
-      data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    ...
-  </div>
-</div>

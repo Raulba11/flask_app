@@ -18,7 +18,7 @@ def contenidoTablaEventos(eventos : EventModel, contador : int) -> tuple:
     """
     Retorna la parte de HTML correspondiente a fila con los datos de un evento.
     Además devuelve el contador actualizado para poder mostrar el diseño de forma par e impar.
-    Acceder al contenido como una lista: [0] es el HTML [1] es el contador
+    Acceder al contenido como una lista: [0] es el HTML [1] es el contador.
     """
     cuerpo = ""
     contador = contador
@@ -37,7 +37,7 @@ def contenidoTablaEventos(eventos : EventModel, contador : int) -> tuple:
 
 def mandarEmail(cuerpo : str, receptor : UserModel.email) -> None:
     """
-    Construye el email y lo manda
+    Construye el email y lo manda.
     """
     try:    
         receiver = receptor

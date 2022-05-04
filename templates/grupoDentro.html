@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {%include 'imports.html'%}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href = "../static/css/grupoDentro.css">
+    <link rel = "stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <title>{{ grupo }}</title>
+</head>
+    {% extends 'base.html' %}
+    {% block content %}
+<body>
+    <!-- INICIO SIDEBAR -->
+    <nav class="menu" tabindex="0">
+
+        <div class="smartphone-menu-trigger"></div>
+        <header class="avatar">
+          <h2 style="color: white;">{{current_user.name}}</h2>
+        </header>
+
+        <ul>
+          <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
+              tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil
+                principal</span></li></a>
+  
+          <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li
+              tabindex="0"
+              class="icon-misGrupos" style="user-select: none;"><span>Mis grupos</span></li></a>
+          <a style="text-decoration: none;" href="{{ url_for('grupos')}}"><li
+              tabindex="0"
+              class="icon-grupos" style="user-select: none;"><span>Todos los
+                grupos</span></li></a>
+  
+          <a style="text-decoration: none;" href="{{ url_for('calendario')}}"><li
+              tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
+        </ul>
+      </nav>
+    <!-- FINAL SIDEBAR -->
+
+    <!-- INICIO OFFCANVAS USUARIOS -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel" data-bs-scroll = "false">
+      <div class="offcanvas-header">
+        <h3 class="offcanvas-title" id="offcanvasLabel" style="margin: auto;">Usuarios</h3>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class ="usuarios">
+          
+          {%for miembro in miembros%}
+          {% if miembro[1] == "Y"%}
+    
+            <li><p style="color: green">{{miembro[0]}}⚔</p></li>
+    
+          {% else %}
+    
+            <li><p style="color: red">{{miembro[0]}}</p></li>
+    
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <!-- FINAL OFFCANVAS USUARIOS -->
+
+    <div class = "contenedor">
+      <button data-bs-toggle="offcanvas" data-bs-target = "#offcanvas">ASDASD</button>
+    </div>
+
+</body>
+{% endblock %}
+</html>

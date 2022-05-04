@@ -30,34 +30,34 @@
         {%if msg == "Contraseña incorrecta"%}
           title = '{{ msg }}',
           text = 'Insértela de nuevo'
-        {%endif%}
+        
     //Sin resultados en search
-        {%if msg == "No se ha encontrado ningún grupo"%}
+        {%elif msg == "No se ha encontrado ningún grupo"%}
           title = '{{ msg }}',
           text = 'Repita la búsqueda o cree el grupo'
-        {%endif%}
+        
     //Ya existente en crear
-        {%if msg == "Grupo ya existente"%}
+        {%elif msg == "Grupo ya existente"%}
           title = '{{ msg }}',
           text = 'Utilice otro nombre'
-        {%endif%}
+        
     //Las dos contraseñas no coinciden en crear
-        {%if msg == "Las contraseñas no coinciden"%}
+        {%elif msg == "Las contraseñas no coinciden"%}
           title = '{{ msg }}',
           text = 'Compruébelas de nuevo'
-        {%endif%}
+        
     // Texto si ya estás en el grupo
-        {%if msg == "Ya te encuentras en el grupo"%}
+        {%elif msg == "Ya te encuentras en el grupo"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
-        {%endif%}
+        
     // Texto si se crea el grupo    
-        {%if msg == "Grupo creado exitosamente"%}
+        {%elif msg == "Grupo creado exitosamente"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
-        {%endif%}
+        
     // Texto al unirte correctamente
-        {%if msg == "Te has unido sin problemas"%}
+        {%elif msg == "Te has unido sin problemas"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
         {%endif%}
@@ -221,7 +221,6 @@
               </div>
             </div>
             <div class="modal-footer">
-
               <button type="submit" class="btn btn-primary">Crear grupo</button>
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -231,7 +230,6 @@
       </div>
     </div>
     <!-- Fin del modal create-->
-
   </body>
   {%endblock%}
 </html>

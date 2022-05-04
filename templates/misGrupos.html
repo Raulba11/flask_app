@@ -7,9 +7,11 @@
     <title>Mis grupos</title>
 
     <link rel="stylesheet" type="text/css" href="static/css/misGrupos.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../static/JS/misGrupos.js"></script>
+
 
   </head>
 
@@ -17,7 +19,76 @@
   {% block content %}
 
 
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+
+    {% if alertar %}
+      {% for msg in get_flashed_messages() %}
+//Seleccionar el título y el mensaje
+    //Sin resultados en search
+    {%if msg == "No se ha encontrado ningún grupo"%}
+          title = '{{ msg }}',
+          text = 'Repita la búsqueda o cree el grupo'
+
+    //Contraseña incorrecta en eliminar grupo
+      {%elif msg == "La contraseña introducida es incorrecta"%}
+        title = '{{ msg }}',
+        text = 'Inténtelo de nuevo'
+
+    //Confirmación incorrecta en eliminar
+      {%elif msg == "Confirmación incorrecta"%}
+        title = '{{ msg }}',
+        text = 'Revise que las mayúsculas coinciden'
+
+    //No coinciden las dos contraseñas en actualizar
+      {%elif msg == "No coinciden las contraseñas"%}
+        title = '{{ msg }}',
+        text = 'No coinciden la nueva contraseña y la repetición'
+
+    //No coinciden las dos contraseñas en actualizar
+    {%elif msg == "Grupo eliminado correctamente"%}
+        title = '{{ msg }}',
+        text = 'Grupo removido exitosamente'
+
+    //No coinciden las dos contraseñas en actualizar
+    {%elif msg == "Grupo actualizado correctamente"%}
+        title = '{{ msg }}',
+        text = 'Contraseña actualizada exitosamente'
+
+      {% endif %}
+
+//Mostrar la alerta
+  {%if msg == "Grupo eliminado correctamente" or msg == "Grupo actualizado correctamente"%}
+              Swal.fire({
+                    icon: 'success',
+                    title: title,
+                    text: text,
+                  }).then((result) => {
+                      location.reload();
+                  });
+                
+          {%else%}
+              Swal.fire({
+                icon: 'error',
+                title: title,
+                text: text,
+              })
+
+          {%endif%}
+
+      {% endfor %}
+    {% endif %}
+
+
+
+
+
+
+  </script>
   <body>
+    <!-- INICIO SIDEBAR -->
     <nav class="menu" tabindex="0">
 
       <div class="smartphone-menu-trigger"></div>
@@ -48,17 +119,27 @@
             tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
       </ul>
     </nav>
+    <!-- FINAL SIDEBAR -->
 
+
+
+    <!-- INICIO DEL CONTENEDOR -->
     <div class="contenedor">
       <!-- INICIO ENCABEZADO -->
       <div class="encabezado">
-        <h1 style="color: white; margin: auto;">Editar</h1>
+        <button type="button" class="btn btn-outline-danger"
+          name="btnConfigurarGrupos"
+          id="btnConfigurarGrupos">
+          <i class="bi bi-gear-fill"></i> Gestionar tus grupos
+        </button>
       </div>
       <!-- FINAL ENCABEZADO -->
 
+
+
       <!-- INICIO LISTA DE GRUPOS -->
       <ul class="grupos" id="grupos">
-        
+
         {%for i in range(0,len)%}
 
         {%if i%2 == 0%}
@@ -78,14 +159,148 @@
       </ul>
       <!-- FINAL LISTA DE GRUPOS -->
 
+
+
       <!-- INICIO FORMULARIO GRUPO CLICADO -->
-      <form method="post" name="clicado" id = "clicado">
-        <input type="hidden" name = "grupoClicado" id = "grupoClicado">
+      <form method="post" name="clicado" id="clicado">
+        <input type="hidden" name="action" id="action" value="grupoClicado">
+        <input type="hidden" name="grupoClicado" id="grupoClicado">
       </form>
       <!-- FINAL FORMULARIO GRUPO CLICADO -->
 
-    </div>
 
+
+      <!-- INICIO DEL MODAL OPCIONES -->
+      <div class="modal fade" tabindex="-1" role="dialog"
+        id="configGruposModal"
+        name="configGruposModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Opciones</h5>
+              <button type="button" class="close" data-bs-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+              <button type="button" class="btn btn-danger"
+                id="btnOpcionEliminar"
+                name="btnOpcionEliminar" style="margin: 10px;">Eliminar grupo</button>
+              <button type="button" class="btn btn-warning"
+                id="btnOpcionActualizar"
+                name="btnOpcionActualizar" style="margin: 10px;">Cambiar contraseña</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FINAL DEL MODAL OPCIONES -->
+
+
+
+      <!-- INICIO DEL MODAL DELETE GROUP -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="removeGroupModal" name="removeGroupModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Eliminar grupo</h5>
+              <button type="button" class="close" data-bs-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- INICIO DEL FORMULARIO DELETE -->
+              <form method="post" name="removeGroupForm" id="removeGroupForm">
+                <div class="md-form md-outline input-with-post-icon">
+
+                  <input type="hidden" name="action" id="action"
+                    value="eliminar">
+
+                  <label for="removedGroup">Selecciona el grupo a eliminar</label>
+                  <select class="form-select" aria-label="Default select
+                    example" name="removedGroup" id="removedGroup" required>
+                    {% for grupo in tusGrupos %}
+                    <option value="{{ grupo.name }}">{{ grupo.name }}</option>
+                    {%endfor%}
+                  </select>
+
+                  <label for = "passRemovedGroup">Contraseña del grupo</label>
+                  <input type="password" class="form-control" id = "passRemovedGroup" name = "passRemovedGroup">
+
+                  <label for = "confRemovedGroup">Introduce el nombre del grupo para confirmar el borrado</label>
+                  <input type = "text" class="form-control" id = "confRemovedGroup" name = "confRemovedGroup">
+
+
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger btnPeligroso">Eliminar grupo</button>
+                <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </form>
+            <!-- FINAL DEL FORMULARIO DELETE -->
+          </div>
+        </div>
+      </div>
+      <!-- FINAL DEL MODAL DELETE GROUP -->
+
+
+
+      <!-- INICIO DEL MODAL UPDATE GROUP -->
+       <div class="modal fade" tabindex="-1" role="dialog"
+       id="updateGroupModal"
+       name="updateGroupModal"
+       aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+             <button type="button" class="close" data-bs-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+             <!-- INICIO DEL FORMULARIO UPDATE -->
+             <form method="post" name="updateGroupForm" id="updateGroupForm">
+               <div class="md-form md-outline input-with-post-icon">
+
+                 <input type="hidden" name="action" id="action"
+                   value="actualizar">
+
+                 <label for="updateGroup">Selecciona el grupo cuya contraseña será cambiada</label>
+                 <select class="form-select" aria-label="Default select
+                   example" name="updateGroup" id="updateGroup" required>
+                   {% for grupo in tusGrupos %}
+                   <option value="{{ grupo.name }}">{{ grupo.name }}</option>
+                   {%endfor%}
+                 </select>
+
+                 <label for = "passUpdateGroup">Nueva contraseña del grupo</label>
+                 <input type="password" class="form-control" id = "passRemovedGroup" name = "passRemovedGroup">
+
+                 <label for = "confPassRemovedGroup">Repita la nueva contraseña del grupo</label>
+                 <input type="password" class="form-control" id = "confPassRemovedGroup" name = "confPassRemovedGroup">
+
+               </div>
+             </div>
+             <div class="modal-footer">
+               <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
+               <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+             </div>
+           </form>
+           <!-- FINAL DEL FORMULARIO UPDATE -->
+         </div>
+        </div>
+        </div>
+      <!-- FINAL DEL MODAL UPDATE GROUP -->
+
+
+
+    </div>
+    <!-- FINAL DEL CONTENEDOR -->
   </body>
   {% endblock %}
 </html>

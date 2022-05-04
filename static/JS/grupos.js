@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
     //Al clicar al botón de crear grupo
-
     $('#btnCrearGrupo').click(function(){
         $('#createModal').modal('show')
     })
