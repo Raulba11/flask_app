@@ -86,8 +86,9 @@
 </script>
   <body>
 
-    <nav class="menu" tabindex="0">
+    <!-- INICIO SIDEBAR -->
 
+    <nav class="menu" tabindex="0">
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
         <h2 style="color: white;">{{current_user.name}}</h2>
@@ -101,7 +102,7 @@
 
       <ul>
         <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
-            tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil principal</span></li></a>
+            tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil personal</span></li></a>
         
         <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li tabindex="0"
             class="icon-misGrupos" style="user-select: none;"><span>Mis grupos</span></li></a>
@@ -113,6 +114,8 @@
             tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
       </ul>
     </nav>
+
+    <!-- FINAL SIDEBAR -->
 
     <div class="contenedor">
 

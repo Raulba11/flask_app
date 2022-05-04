@@ -7,8 +7,7 @@
     <title>Mis grupos</title>
 
     <link rel="stylesheet" type="text/css" href="static/css/misGrupos.css">
-    <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../static/JS/misGrupos.js"></script>
 
@@ -103,9 +102,9 @@
       </form>
 
       <ul>
-        <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
+        <a style="text-decoration: none;" href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}"><li
             tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil
-              principal</span></li></a>
+              personal</span></li></a>
 
         <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li
             tabindex="0"

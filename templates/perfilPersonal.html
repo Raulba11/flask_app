@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perfil personal</title>
+        <!-- INICIO DE IMPORTS -->
+        {%include 'imports.html'%}
+        <link rel="stylesheet" href="../static/css/perfilPersonal.css">
+        <!-- FINAL DE IMPORTS -->
+    </head>
+    {% extends 'base.html' %}
+    {% block content %}
+    <body>
+        <!-- INICIO SIDEBAR -->
+        <nav class="menu" tabindex="0">
+
+            <div class="smartphone-menu-trigger"></div>
+            <header class="avatar">
+                <h2 style="color: white;">{{current_user.name}}</h2>
+            </header>
+
+            <ul>
+                <a style="text-decoration: none;" href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}"><li
+                        tabindex="0" class="icon-main" style="user-select:
+                        none;"><span>Perfil
+                            personal</span></li></a>
+
+                <a style="text-decoration: none;" href="{{url_for('misGrupos')}}"><li
+                        tabindex="0"
+                        class="icon-misGrupos" style="user-select: none;"><span>Mis
+                            grupos</span></li></a>
+                <a style="text-decoration: none;" href="{{ url_for('grupos')}}"><li
+                        tabindex="0"
+                        class="icon-grupos" style="user-select: none;"><span>Todos
+                            los
+                            grupos</span></li></a>
+
+                <a style="text-decoration: none;" href="{{
+                    url_for('calendario')}}"><li
+                        tabindex="0" class="icon-calendar" style="user-select:
+                        none;"><span>Calendario</span></li></a>
+            </ul>
+        </nav>
+        <!-- FINAL SIDEBAR -->
+
+        <!-- INICIO DEL CUERPO -->
+        <div class="contenedor">
+            <h1 class="titulo" style="font-size: 50px;">PERFIL PERSONAL</h1>
+            <hr>
+
+            <h2 class="titulo">Aquí el calendario</h1>
+            <hr>
+
+            <h2 class="titulo">Aquí todos los eventos por grupo seleccionado</h1>
+            <hr>
+
+            <h2 class="titulo">Aquí todos los eventos</h1>
+            <div class="contenedorTabla">
+                <table id="todosEventos">
+                    <tr>
+                        <th>GRUPO</th>
+                        <th>TITULO</th>
+                        <th>INICIO</th>
+                        <th>FINAL</th>
+                    </tr>
+                    {% for evento in todosEventos %}
+                    <tr>
+                        <td>{{ evento.grupo }}</td>
+                        <td>{{ evento.title }}</td>
+                        <td>{{ evento.start }}</td>
+                        <td>{{ evento.end }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <!-- FINAL DEL CUERPO -->
+
+
+    </body>
+    {% endblock%}
+</html>

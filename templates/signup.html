@@ -55,10 +55,10 @@
 
 
                   <div class="pt-2">
-                    {% for mesg in get_flashed_messages() %}
+                    {% for msg in get_flashed_messages() %}
                     {%if not created%}
                     <h4 class="text-danger animate__animated
-                      animate__heartBeat">{{ mesg }}</h4>
+                      animate__heartBeat">{{ msg }}</h4>
                     {% endif %}
                     {% endfor %}
                   </div>

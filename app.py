@@ -8,6 +8,7 @@ from config import *
 from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
+import locale
 
 # FINAL DE IMPORTS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -287,6 +288,17 @@ def misGruposGrupo(grupo: str):
     else:
         return redirect(url_for('index'))
 
+@app.route('/<usuario>')
+@login_required
+def perfilPersonal(usuario: str):
+    """
+    URL que carga el perfil personal del usuario actual
+    """
+    
+    todosEventos = misEventosTodos()
+    return render_template('perfilPersonal.html', todosEventos = todosEventos)
+
+
 # FINAL DE RUTAS VISIBLES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS GRUPOS
@@ -456,7 +468,7 @@ def eliminarGrupo(grupo: str, pwd: str, conf: str) -> str:
         relacion = GrupoUserRelation.query.filter_by(grupo = grupo).all()
         for r in relacion:
             db.session.delete(r)
-        eventos = EventModel.query.filter(EventModel.title.like(grupo + "%")).all()
+        eventos = EventModel.query.filter_by(grupo = grupo).all()
         for evento in eventos:
             db.session.delete(evento)
         db.session.delete(grupoObj)
@@ -523,8 +535,7 @@ def crearEvento():
     color = request.form.get('eventColor')
 
     if validarFechas(start, end):
-        new_event = EventModel(title=title, start=start,
-                               end=end, grupo=grupo, backgroundColor=color)
+        new_event = EventModel(title=title, start=start,end=end, grupo=grupo, backgroundColor=color)
         db.session.add(new_event)
         db.session.commit()
 
@@ -557,8 +568,33 @@ def eliminarEvento():
     db.session.delete(evento)
     db.session.commit()
 
-
 # FINAL MÉTODOS EVENTOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO MÉTODOS PERFIL PERSONAL
+
+
+def misEventosTodos():
+    """
+    Retorna en formato JSON todos los eventos de los grupos a los que pertenece el usuario.
+    """
+
+    eventos = []
+    misGrupos = myGroup_loader()
+
+    for grupo in misGrupos:
+        events = EventModel.query.filter(
+            EventModel.id.like(grupo[0]+"%")).all()
+
+        for evento in events:
+            if not (evento.end.date() < datetime.now().date()):
+                evento.start = evento.start.strftime('%A %d-%m-%y %H:%M').capitalize()
+                evento.end = evento.end.strftime('%A %d-%m-%y %H:%M').capitalize()
+                eventos.append(evento)
+
+    return eventos
+
+
+# FINAL MÉTODOS PERFIL PERSONAL
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
 
