@@ -292,12 +292,15 @@ def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     """
     URL que carga el perfil personal del usuario actual
     """
+    grupos = tusGrupos()
+    
+    todosEventos = misEventosTodos()
+    eventosGrupo = eventosGrupoConcreto(grupos[0].name)
     if request.method == "POST":
         pass
 
 
-    todosEventos = misEventosTodos()
-    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = [])
+    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo))
 
 @app.route('/principal')
 def principal():
@@ -594,12 +597,19 @@ def misEventosTodos() -> list:
 
         for evento in events:
             if ((evento.end.date() > datetime.now().date()) and (evento.end.time() > datetime.now().time())):
-                evento.start = evento.start.strftime("%A %d-%m-%y %H:%M")
-                evento.end = evento.end.strftime("%A %d-%m-%y %H:%M")
                 eventos.append(evento)
 
     return eventos
 
+def eventosGrupoConcreto(grupo):
+    eventos = []
+    events = EventModel.query.filter_by(grupo = grupo).all()
+
+    for evento in events:        
+        if ((evento.end > datetime.now()) and (evento.end > datetime.now())):
+            eventos.append(evento)
+
+    return eventos    
 
 # FINAL MÉTODOS PERFIL PERSONAL
 # ---------------------------------------------------------------------------------------------------------------------------------------------------

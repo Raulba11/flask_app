@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -60,7 +60,7 @@
             <!-- INICIO DE LA ZONA DE LOS EVENTOS DE UN GRUPO CONCRETO -->
 
             <h2 class="titulo">Aquí todos los eventos por grupo seleccionado</h1>
-                {% if len == 0 %}
+                {% if lenConcreto == 0 %}
                 <h1 style="margin: auto; width: fit-content;">No tienes ningún evento</h1>
                 {% else %}
             <div class="contenedorTabla">
@@ -78,8 +78,8 @@
                     <tr>
                         <td>{{ evento.grupo }}</td>
                         <td>{{ evento.title }}</td>
-                        <td>{{ evento.start }}</td>
-                        <td>{{ evento.end }}</td>
+                        <td>{{ evento.start.strftime("%A %d-%m-%Y %H:%M") }}</td>
+                        <td>{{ evento.end.strftime("%A %d-%m-%Y %H:%M") }}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -107,8 +107,8 @@
                     <tr>
                         <td>{{ evento.grupo }}</td>
                         <td>{{ evento.title }}</td>
-                        <td>{{ evento.start }}</td>
-                        <td>{{ evento.end }}</td>
+                        <td>{{ evento.start.strftime("%A %d-%m-%Y %H:%M") }}</td>
+                        <td>{{ evento.end.strftime("%A %d-%m-%Y %H:%M") }}</td>
                     </tr>
                     {% endfor %}
                 </table>
