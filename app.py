@@ -8,8 +8,6 @@ from config import *
 from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
-import locale
-
 # FINAL DE IMPORTS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CONFIGURACION
@@ -140,7 +138,7 @@ def logout():
     URL que cierra la sesión del usuario.
     """
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('principal'))
 
 
 @app.route('/calendario', methods=['GET', 'POST'])
@@ -298,6 +296,12 @@ def perfilPersonal(usuario: str):
     todosEventos = misEventosTodos()
     return render_template('perfilPersonal.html', todosEventos = todosEventos)
 
+@app.route('/principal')
+def principal():
+    """
+    URL que contiene la página principal de la web. SUSTITUIR POR INDEX EN EL MONTAJE.
+    """
+    return render_template('principal.html')
 
 # FINAL DE RUTAS VISIBLES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -495,7 +499,7 @@ def event_loader():
             EventModel.id.like(grupo[0]+"%")).all()
         for evento in events:
 
-            if not (evento.end.date() < datetime.now().date()):
+            if not (evento.end.date() < datetime.now().date() and evento.end.time() < datetime.now().date().time()):
                 eventos.append(
                     {
                         "id": evento.id,
@@ -587,8 +591,8 @@ def misEventosTodos():
 
         for evento in events:
             if not (evento.end.date() < datetime.now().date()):
-                evento.start = evento.start.strftime('%A %d-%m-%y %H:%M').capitalize()
-                evento.end = evento.end.strftime('%A %d-%m-%y %H:%M').capitalize()
+                evento.start = evento.start.strftime("%d-%m-%y %H:%M")
+                evento.end = evento.end.strftime("%d-%m-%y %H:%M")
                 eventos.append(evento)
 
     return eventos

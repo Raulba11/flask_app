@@ -60,7 +60,7 @@
     border-right: solid 5px rgb(0, 0, 0);
     z-index: 1;
     word-break: break-all;
-    background-image: url('imagenes/sidebarBG.jpg');
+    background-image: url('imagenes/sidebarBG.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 100vh;
@@ -70,7 +70,7 @@
 }
 
 .menu .avatar {
-    background-image: url('imagenes/topSBGrupos.jpg');
+    background-image: url('imagenes/topSBGrupos.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
     padding: 2em 0.5em;

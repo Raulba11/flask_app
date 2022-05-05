@@ -84,7 +84,7 @@ for usuario in usuarios:
     contador = 1
 #Por cada grupo sus eventos
     for grupo in grupos:
-        eventos = EventModel.query.filter(EventModel.grupo == grupo[0]). filter(EventModel.start >= hoy).filter(EventModel.start <= endOfWeek).all()
+        eventos = EventModel.query.filter(EventModel.grupo == grupo[0]). filter(EventModel.start >= hoy).filter(EventModel.start <= endOfWeek).order_by(EventModel.start).all()
         cuerpo += contenidoTablaEventos(eventos, contador)[0]
         contador = contenidoTablaEventos(eventos, contador)[1]
 #Por cada usuario mandarle su email
