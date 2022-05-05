@@ -16,7 +16,7 @@ body {
 }
 
 #intro {
-  animation: fondo 25s infinite linear;
+  animation: fondo 25s infinite ease-in-out;
   width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -25,7 +25,7 @@ body {
 /* Height for devices larger than 576px */
 @media (min-width: 992px) {
   #intro {
-    margin-top: -57px;
+    margin-top: -56.5px;
   }
 }
 
@@ -46,10 +46,10 @@ body {
     background-image: url("imagenes/principal2.jpeg");
   }
   50%{
-    background-image: url("imagenes/chatBG.jpeg");
+    background-image: url("imagenes/principal3.jpeg");
   }
   75%{
-    background-image: url("imagenes/azulBG.jpeg");
+    background-image: url("imagenes/principal4.jpeg");
   }
   100%{
     background-image: url("imagenes/principal1.jpeg");

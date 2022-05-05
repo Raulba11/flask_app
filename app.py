@@ -82,13 +82,14 @@ def login():
 
     # Al rellenar el formulario y presionar el botón pasa por la verficación
     if request.method == 'POST':
-        if user and check_password_hash(user.password, password):
-            login_user(user, remember=request.form.get('remember'))
-            return redirect(url_for('index'))
-        elif not user:
+        
+        if not user:
             flash("Usuario no encontrado")
         elif not check_password_hash(user.password, password):
             flash("Contraseña incorrecta")
+        else:
+            login_user(user, remember=request.form.get('remember'))
+            return redirect(url_for('index'))
         return render_template('login.html')
     # Carga de HTML del método GET
     return render_template('login.html')
@@ -99,7 +100,6 @@ def signup():
     """
     Página de signup.
     """
-    created = False
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -124,11 +124,11 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash("Usuario creado")
-            return render_template('login.html')
+            return render_template('signup.html', created = True)
 
-        return render_template('signup.html', created=created)
+        return render_template('signup.html', created=False)
     # Carga de HTML del método GET
-    return render_template('signup.html', created=created)
+    return render_template('signup.html', created=False)
 
 
 @app.route('/logout')
@@ -286,15 +286,18 @@ def misGruposGrupo(grupo: str):
     else:
         return redirect(url_for('index'))
 
-@app.route('/<usuario>')
+@app.route('/<usuario>', methods=['GET', 'POST'])
 @login_required
-def perfilPersonal(usuario: str):
+def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     """
     URL que carga el perfil personal del usuario actual
     """
-    
+    if request.method == "POST":
+        pass
+
+
     todosEventos = misEventosTodos()
-    return render_template('perfilPersonal.html', todosEventos = todosEventos)
+    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = [])
 
 @app.route('/principal')
 def principal():
@@ -499,7 +502,7 @@ def event_loader():
             EventModel.id.like(grupo[0]+"%")).all()
         for evento in events:
 
-            if not (evento.end.date() < datetime.now().date() and evento.end.time() < datetime.now().date().time()):
+            if ((evento.end.date() > datetime.now().date()) and (evento.end.time() > datetime.now().time())):
                 eventos.append(
                     {
                         "id": evento.id,
@@ -577,9 +580,9 @@ def eliminarEvento():
 # INICIO MÉTODOS PERFIL PERSONAL
 
 
-def misEventosTodos():
+def misEventosTodos() -> list:
     """
-    Retorna en formato JSON todos los eventos de los grupos a los que pertenece el usuario.
+    Retorna una lista con todos los eventos de los grupos a los que pertenece el usuario.
     """
 
     eventos = []
@@ -590,9 +593,9 @@ def misEventosTodos():
             EventModel.id.like(grupo[0]+"%")).all()
 
         for evento in events:
-            if not (evento.end.date() < datetime.now().date()):
-                evento.start = evento.start.strftime("%d-%m-%y %H:%M")
-                evento.end = evento.end.strftime("%d-%m-%y %H:%M")
+            if ((evento.end.date() > datetime.now().date()) and (evento.end.time() > datetime.now().time())):
+                evento.start = evento.start.strftime("%A %d-%m-%y %H:%M")
+                evento.end = evento.end.strftime("%A %d-%m-%y %H:%M")
                 eventos.append(evento)
 
     return eventos

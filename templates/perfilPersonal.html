@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,13 +50,51 @@
             <h1 class="titulo" style="font-size: 50px;">PERFIL PERSONAL</h1>
             <hr>
 
+            <!-- INICIO DE LA ZONA DEL CALENDARIO -->
+
             <h2 class="titulo">Aquí el calendario</h1>
             <hr>
 
+            <!-- FINAL DE LA ZONA DEL CALENDARIO -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+            <!-- INICIO DE LA ZONA DE LOS EVENTOS DE UN GRUPO CONCRETO -->
+
             <h2 class="titulo">Aquí todos los eventos por grupo seleccionado</h1>
+                {% if len == 0 %}
+                <h1 style="margin: auto; width: fit-content;">No tienes ningún evento</h1>
+                {% else %}
+            <div class="contenedorTabla">
+                <form method="post">
+                    <input type="hidden" id = "grupo" name = "grupo" value="ad">
+                </form>
+                <table id="todosEventos">
+                    <tr>
+                        <th>GRUPO</th>
+                        <th>TITULO</th>
+                        <th>INICIO</th>
+                        <th>FINAL</th>
+                    </tr>
+                    {% for evento in eventosGrupo %}
+                    <tr>
+                        <td>{{ evento.grupo }}</td>
+                        <td>{{ evento.title }}</td>
+                        <td>{{ evento.start }}</td>
+                        <td>{{ evento.end }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+                {% endif %}
             <hr>
 
+            <!-- FINAL DE LA ZONA DE LOS EVENTOS DE UN GRUPO CONCRETO -->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+            <!-- INICIO DE LA ZONA DE TODOS LOS EVENTOS DE TODOS LOS GRUPOS -->
+
             <h2 class="titulo">Aquí todos los eventos</h1>
+                {% if len == 0 %}
+                <h1 style="margin: auto; width: fit-content;">No tienes ningún evento</h1>
+                {% else %}
             <div class="contenedorTabla">
                 <table id="todosEventos">
                     <tr>
@@ -75,7 +113,11 @@
                     {% endfor %}
                 </table>
             </div>
+                {% endif %}
         </div>
+
+        <!-- FINAL DE LA ZONA DE TODOS LOS EVENTOS DE TODOS LOS GRUPOS -->
+
         <!-- FINAL DEL CUERPO -->
 
 

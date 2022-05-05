@@ -3,12 +3,12 @@
 <html lang = "es">
   <head>
   <title>Signup</title>
+  <link href="static/css/login.css" rel = "stylesheet" type="text/css">
   </head>
+  {% include 'imports.html' %}
+  {% block content %}
   <body>
-    <link href="static/css/login.css" rel = "stylesheet" type="text/css">
 
-    {% include 'imports.html' %}
-    {% block content %}
 
 
     <section class="vh-100 gradient-custom">
@@ -60,6 +60,8 @@
                     <h4 class="text-danger animate__animated
                       animate__heartBeat">{{ msg }}</h4>
                     {% endif %}
+                    <h4 class="text-danger animate__animated
+                      animate__heartBeat">{{ msg }}</h4>
                     {% endfor %}
                   </div>
                   <div>
