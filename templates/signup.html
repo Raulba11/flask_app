@@ -2,12 +2,12 @@
 <html lang = "es">
   <head>
   <title>Signup</title>
+  <link href="static/css/login.css" rel = "stylesheet" type="text/css">
   </head>
+  {% include 'imports.html' %}
+  {% block content %}
   <body>
-    <link href="static/css/login.css" rel = "stylesheet" type="text/css">
 
-    {% include 'imports.html' %}
-    {% block content %}
 
 
     <section class="vh-100 gradient-custom">
@@ -39,13 +39,14 @@
                         form-control-lg" placeholder="Contraseña" required
                         minlength="8"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" />
-                      <p class="text-white-50">La contraseña debe contener una
-                        letra <strong>MAYÚSCULA</strong>, un <strong>NÚMERO</strong>
-                        y como <strong>MÍNIMO 8 CARACTERES</strong></p>
+                      
                     </div>
                     <div class="form-outline form-white mb-4">
                       <input type="password" name="confirmpassword"
                         class="form-control form-control-lg" placeholder="Repita la contraseña" required/>
+                        <p class="text-white-50">La contraseña debe contener una
+                          letra <strong>MAYÚSCULA</strong>, un <strong>NÚMERO</strong>
+                          y como <strong>MÍNIMO 8 CARACTERES</strong></p>
                     </div>
                     <button class="btn btn-outline-light btn-lg px-5"
                       type="submit">Crear cuenta</button>
@@ -53,11 +54,16 @@
 
 
                   <div class="pt-2">
-                    {% for mesg in get_flashed_messages() %}
+                    {% for msg in get_flashed_messages() %}
                     {%if not created%}
                     <h4 class="text-danger animate__animated
-                      animate__heartBeat">{{ mesg }}</h4>
+                      animate__heartBeat">{{ msg }}</h4>
+                    {% else %}
+                    <h4 class="text-success animate__animated
+                      animate__heartBeat">{{ msg }}</h4>
                     {% endif %}
+                    <h4 class="text-danger animate__animated
+                      animate__heartBeat">{{ msg }}</h4>
                     {% endfor %}
                   </div>
                   <div>

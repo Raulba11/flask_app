@@ -30,34 +30,34 @@
         {%if msg == "Contraseña incorrecta"%}
           title = '{{ msg }}',
           text = 'Insértela de nuevo'
-        {%endif%}
+        
     //Sin resultados en search
-        {%if msg == "No se ha encontrado ningún grupo"%}
+        {%elif msg == "No se ha encontrado ningún grupo"%}
           title = '{{ msg }}',
           text = 'Repita la búsqueda o cree el grupo'
-        {%endif%}
+        
     //Ya existente en crear
-        {%if msg == "Grupo ya existente"%}
+        {%elif msg == "Grupo ya existente"%}
           title = '{{ msg }}',
           text = 'Utilice otro nombre'
-        {%endif%}
+        
     //Las dos contraseñas no coinciden en crear
-        {%if msg == "Las contraseñas no coinciden"%}
+        {%elif msg == "Las contraseñas no coinciden"%}
           title = '{{ msg }}',
           text = 'Compruébelas de nuevo'
-        {%endif%}
+        
     // Texto si ya estás en el grupo
-        {%if msg == "Ya te encuentras en el grupo"%}
+        {%elif msg == "Ya te encuentras en el grupo"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
-        {%endif%}
+        
     // Texto si se crea el grupo    
-        {%if msg == "Grupo creado exitosamente"%}
+        {%elif msg == "Grupo creado exitosamente"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
-        {%endif%}
+        
     // Texto al unirte correctamente
-        {%if msg == "Te has unido sin problemas"%}
+        {%elif msg == "Te has unido sin problemas"%}
           title = '{{ msg }}',
           text = 'Puedes encontrar el grupo en el apartado "Mis grupos"'
         {%endif%}
@@ -86,8 +86,9 @@
 </script>
   <body>
 
-    <nav class="menu" tabindex="0">
+    <!-- INICIO SIDEBAR -->
 
+    <nav class="menu" tabindex="0">
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
         <h2 style="color: white;">{{current_user.name}}</h2>
@@ -101,7 +102,7 @@
 
       <ul>
         <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
-            tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil principal</span></li></a>
+            tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil personal</span></li></a>
         
         <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li tabindex="0"
             class="icon-misGrupos" style="user-select: none;"><span>Mis grupos</span></li></a>
@@ -113,6 +114,8 @@
             tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
       </ul>
     </nav>
+
+    <!-- FINAL SIDEBAR -->
 
     <div class="contenedor">
 
@@ -221,7 +224,6 @@
               </div>
             </div>
             <div class="modal-footer">
-
               <button type="submit" class="btn btn-primary">Crear grupo</button>
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -231,7 +233,6 @@
       </div>
     </div>
     <!-- Fin del modal create-->
-
   </body>
   {%endblock%}
 </html>
