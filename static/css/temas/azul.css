@@ -9,6 +9,11 @@ body {
 	overflow-y: hidden;
 }
 
+.fc-toolbar-title::first-letter,
+.fc .fc-col-header-cell-cushion {
+    text-transform: capitalize;
+}
+
 .fc th, .fc td {
 	border-width: 0.1em;
 	border-color:#0629ed68 ;

@@ -13,6 +13,11 @@ body {
 	border-color: #000000;
 }
 
+.fc-toolbar-title::first-letter,
+.fc .fc-col-header-cell-cushion {
+    text-transform: capitalize;
+}
+
 .fc .fc-view-harness {
     border: solid 0.2em black;
 }

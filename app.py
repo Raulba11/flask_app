@@ -8,6 +8,7 @@ from config import *
 from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
+import locale
 # FINAL DE IMPORTS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CONFIGURACION
@@ -17,6 +18,8 @@ setup(app)
 migrate = Migrate(app, db)
 # Eliminar junto a la librería si no se hace el chat
 socketio = SocketIO(app, manage_session=False)
+
+locale.setlocale(locale.LC_TIME, 'Spanish_Spain')
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -292,15 +295,19 @@ def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     """
     URL que carga el perfil personal del usuario actual
     """
-    grupos = tusGrupos()
+    grupos = myGroup_loader()
     
     todosEventos = misEventosTodos()
-    eventosGrupo = eventosGrupoConcreto(grupos[0].name)
+    eventosGrupo = eventosGrupoConcreto(grupos[0][0])
+
     if request.method == "POST":
-        pass
+        res = request.form.get('grupoEventos')
+        eventosGrupo = eventosGrupoConcreto(res)
+        return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = res)
+        
 
 
-    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo))
+    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = grupos[0][0])
 
 @app.route('/principal')
 def principal():
@@ -308,6 +315,15 @@ def principal():
     URL que contiene la página principal de la web. SUSTITUIR POR INDEX EN EL MONTAJE.
     """
     return render_template('principal.html')
+
+@app.route('/sobreNosotros')
+def sobreNosotros():
+    return render_template('sobreNosotros.html')
+
+@app.route('/contactenos')
+def contactenos():
+    return render_template('contactenos.html')
+
 
 # FINAL DE RUTAS VISIBLES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -505,7 +521,8 @@ def event_loader():
             EventModel.id.like(grupo[0]+"%")).all()
         for evento in events:
 
-            if ((evento.end.date() > datetime.now().date()) and (evento.end.time() > datetime.now().time())):
+            if (datetime.now() < evento.end):
+                
                 eventos.append(
                     {
                         "id": evento.id,
@@ -596,7 +613,7 @@ def misEventosTodos() -> list:
             EventModel.id.like(grupo[0]+"%")).all()
 
         for evento in events:
-            if ((evento.end.date() > datetime.now().date()) and (evento.end.time() > datetime.now().time())):
+            if (datetime.now() < evento.end):
                 eventos.append(evento)
 
     return eventos
