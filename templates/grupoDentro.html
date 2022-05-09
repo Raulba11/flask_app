@@ -16,7 +16,9 @@
 
     <script src="js/jquery-1.10.2.js"></script>
 <script src="js/bootstrap.js"></script>
+{% if admin == "Y"%}
     <script src="../static/JS/popover.js"></script>
+    {% endif %}
     <script type="text/javascript">
   
       </script>
@@ -27,6 +29,9 @@
     {% block content %}
 <body>
     <!-- INICIO SIDEBAR -->
+    
+            
+    <button type="button"  id="btn" class="btn btn-primary">Eliminar</button>
     <nav class="menu" tabindex="0">
 
         <div class="smartphone-menu-trigger"></div>
@@ -70,26 +75,9 @@
     
           {% else %}
     
-            <li><a href="#"  data-bs-toggle="popover" data-bs-placement="right"  data-bs-trigger="hover" data-bs-content="<form><input type='text'/></form>"title="Popover Header" >{{miembro[0]}}</a></li>
+            <li><a href="#"  data-bs-toggle="popover" >{{miembro[0]}}</a></li>
            
-           <li>
-            
-<div class="container" style="margin-top: 20px;">
-  <div class="row">
-      <div class="col-md-12 text-center well">
-          <button id="subscribe" type="button" class="btn btn-lg btn-default" data-bs-toggle="popover">Subscribe</button>
-          <div id="popover-bs-form" class="hide">
-              <form id="myform" class="form-inline" role="form">
-              <div class="form-group">
-                  <input id="email" type="email" placeholder="Enter Email-ID" class="form-control" />
-              </div>
-              <button type="submit" class="btn btn-warning">Subscribe</button>
-              </form>
-          </div>
-      </div>
-  </div>
-  </div>
-           </li>
+          
     
           {% endif %}
           {% endfor %}

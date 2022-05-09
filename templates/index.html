@@ -25,6 +25,7 @@
           <h1><a href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}" class="text-dark-50
               fw-bold">Perfil personal</a></h1>
         </div>
+
       </div>
       <div class="row border border-dark">
         <div class="col border border-dark text-center">
@@ -39,6 +40,7 @@
           <h1><a href="{{ url_for('grupos') }}" class="text-dark-50
               fw-bold">Grupos</a></h1>
         </div>
+
       </div>
       <div class="row border border-dark">
         <div class="col border border-dark text-center">
@@ -50,10 +52,19 @@
               fw-bold">Principal</a></h1>
         </div>
         <div class="col border border-dark text-center">
-          <h1><a href="" class="text-dark-50
-              fw-bold">#</a></h1>
+          <h1><a href="{{ url_for('sobreNosotros') }}" class="text-dark-50
+              fw-bold">Sobre nosotros</a></h1>
         </div>
       </div>
+
+      <div class="row border border-dark">
+        <div class="col border border-dark text-center">
+          <h1><a href="{{ url_for('contactenos') }}" class="text-dark-50
+              fw-bold">Contactenos</a></h1>
+        </div>
+        
+      </div>
+
     </div>
 
     {% endblock %}

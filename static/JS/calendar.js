@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function () {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
+        dayHeaderFormat: {
+            weekday: 'long'
+        },
         /*---FIN DE REGION DE CONFIGURACION---*/
 
 

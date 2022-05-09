@@ -8,7 +8,7 @@
     max-width: fit-content;
 }
 
-.contenedorTabla{
+.contenedorTabla {
     margin: auto;
     overflow-y: auto;
     margin-top: 10px;
@@ -19,6 +19,21 @@
     border: 1px solid rgb(0, 0, 0);
 }
 
+
+/* INICIO DEL CSS DEL CALENDARIO */
+
+.fc-toolbar-title::first-letter,
+.fc .fc-col-header-cell-cushion {
+    text-transform: capitalize;
+}
+
+.contenedorCalendario{
+    margin: auto;
+    width: fit-content;
+}
+
+/* FINAL DEL CSS DEL CALENDARIO */
+
 /* INICIO DEL CSS DE LA TABLA DE TODOS LOS EVENTOS */
 
 #todosEventos {
@@ -26,7 +41,8 @@
     border-collapse: collapse;
 }
 
-#todosEventos td, #todosEventos th {
+#todosEventos td,
+#todosEventos th {
     font-size: 25px;
     padding: 8px;
     padding-left: 18px;
@@ -48,7 +64,7 @@
     color: white;
 }
 
-#todosEventos td{
+#todosEventos td {
     border: 1px solid rgb(0, 0, 0);
 }
 
