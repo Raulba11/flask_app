@@ -4,7 +4,7 @@ body {
 	padding-left: 100;
 	padding-right: 100;
 	color: #1375cb;
-    background-image: url("../imagenes/azulBG.jpeg");
+    background-image: url("../imagenes/temas/azulBG.jpeg");
     background-size: cover;
 	overflow-y: hidden;
 }

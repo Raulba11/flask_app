@@ -1,29 +1,23 @@
-
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>MyCal</title>
         {%include 'imports.html'%}
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-            crossorigin="anonymous">
-        <link href="../static/css/principal.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+        <link href="../static/css/contactenos.css" rel="stylesheet">
     </head>    
-    <!-- INICIO DEL SCRIPT DE PRECARGA DE LAS IMÁGENES     -->
+    <!-- INICIO DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
     <script type="text/javascript">
 
         var preload = new Array();
         
         //Carga el array con la dirección de las imágenes
         
-        preload[0] = "../static/css/imagenes/principal1.jpeg";
-        preload[1] = "../static/css/imagenes/principal2.jpeg";
-        preload[2] = "../static/css/imagenes/principal3.jpeg";
-        preload[3] = "../static/css/imagenes/principal4.jpeg";
+        preload[0] = "../static/css/imagenes/contacto/contacto1.jpg";
+        preload[1] = "../static/css/imagenes/contacto/contacto2.jpg";
+        preload[2] = "../static/css/imagenes/contacto/contacto3.jpg";
+        preload[3] = "../static/css/imagenes/contacto/contacto4.jpg";
         
         // Carga las imágenes
         var loadedimages = new Array();
@@ -33,8 +27,6 @@
         }
     </script>
     <!-- FINAL DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
-        
-        
 
     {% block content %}
     <body>
@@ -61,19 +53,20 @@
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" aria-current="page" href="{{
-                                    url_for('contactenos') }}">Contáctenos</a>
+                                    url_for('contacto') }}">Contáctenos</a>
                             </li>
                         </ul>
                         <div class="d-flex">
-                        {% if not current_user.is_anonymous %}
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 me-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" aria-current="page" href="{{
-                                    url_for('logout') }}">Cerrar sesión</a>
-                            </li>
-                        </ul>
-                        {% endif %}
-                    </div>
+                            {% if not current_user.is_anonymous %}
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0 me-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" aria-current="page"
+                                        href="{{
+                                        url_for('logout') }}">Cerrar sesión</a>
+                                </li>
+                            </ul>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -88,27 +81,41 @@
                         <div class="text-white">
                             <h1>Contacto</h1>
                             <hr>
-                        <h5>Para cualquier consulta, por favor contáctanos completando el siguiente formulario</h5>
-                        <h2 style="float: left; font-weight: bold;">¿Cómo podemos ayudarle?</h2>
-                        <br><br><br>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id = "barraProgreso" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>
-                        </div>
-                        <div id = "cambiante">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected disabled hidden>Tipo de mensaje</option>
-                                <option value="problema">Problema</option>
-                                <option value="duda">Duda</option>
-                                <option value="sugerencia">Sugerencia</option>
-                                <option value="otro">Otro</option>
-                              </select>
-                        </div>
-                        
-                        
+                            <h5>Para cualquier consulta, por favor contáctenos
+                                completando el siguiente formulario</h5>
+                            <h2 style="float: left; font-weight: bold;">¿Cómo
+                                podemos ayudarle?</h2>
+                            <br><br><br>
+                            
 
-                          <button type="button" class="btn btn-info" style="width: 100%;" id = "btnSiguiente" name = "btnSiguiente">Continuar</button>
+                            <div id="cambiante">
+                            <div class="form-floating">
+                                <select class="form-select" id="tipoMensaje"
+                                    name="tipoMensaje" autofocus>
+                                    <option value="" selected disabled hidden>Tipo
+                                        de mensaje</option>
+                                    <option value="problema">Problema</option>
+                                    <option value="duda">Duda</option>
+                                    <option value="sugerencia">Sugerencia</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                                <label class="form-label" for = "tipoMensaje">Tipo de mensaje</label>
+                            </div>
                         </div>
-                        
+                            <button type="button" class="btn btn-info"
+                                style="width: 100%;" id="btnSiguiente"
+                                name="btnSiguiente">Continuar</button>
+                            
+                                <div class="progress" >
+                                    <div class="progress-bar progress-bar-striped
+                                        progress-bar-animated" role="progressbar"
+                                        id="barraProgreso"
+                                        aria-valuenow="0" aria-valuemin="0"
+                                        aria-valuemax="100" style="width: 25%"></div>
+                                </div>
+                            
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -124,11 +131,14 @@
                     <footer class="py-3 my-4">
                         <ul class="nav justify-content-center border-bottom pb-3
                             mb-3">
-                            <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link
+                            <li class="nav-item"><a href="{{ url_for('index')
+                                    }}" class="nav-link
                                     px-2 text-muted">Home</a></li>
-                            <li class="nav-item"><a href="{{ url_for('sobreNosotros') }}" class="nav-link
+                            <li class="nav-item"><a href="{{
+                                    url_for('sobreNosotros') }}" class="nav-link
                                     px-2 text-muted">About Us</a></li>
-                            <li class="nav-item"><a href="{{ url_for('contactenos') }}" class="nav-link
+                            <li class="nav-item"><a href="{{
+                                    url_for('contacto') }}" class="nav-link
                                     px-2 text-muted">Contact Us</a></li>
                         </ul>
                         <p class="text-center text-muted">&copy; 2022 MyCal</p>
@@ -137,44 +147,122 @@
             </div>
         </footer>
         <!-- Footer -->
+        <!-- INICIO DEL FORMULARIO OCULTO -->
+            <form method="post" name = "formContacto" id = "formContacto">
+                <input type="hidden" name = "email" id = "email">
+                <input type = "hidden" name = "tipoMensaje" id = "tipoMensaje">
+                <input type = "hidden" name = "mensaje" id = "mensaje">
+            </form>
+        <!-- FINAL DEL FORMULARIO OCULTO -->
     </body>
-
+    {% endblock %}
     <script>
+        if (window.history.replaceState) {
+             window.history.replaceState(null, null, window.location.href);
+        }
+
+        {% if alerta%}
+        Swal.fire({
+            icon: 'success',
+            title: '¡Mensaje enviado!',
+            text: 'Nuestro equipo le contactará lo antes posible',
+        })
+        {% endif %}
+
+        //Valida que el email tenga el formato correcto(x@x.x)
+        function validarEmail(valor) {
+        if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
+            return true
+        } else {
+            return false
+        }
+        }
+
+        //Ya que JS no tiene un método para capitalizar propio, hay que crearlo
+        function capitalize(str){
+        return str[0].toUpperCase()+str.slice(1)
+        }
+
+        //Muestra la alerta de error usando el título y el texto pasados por parámetro
+        function mostrarError(titulo, texto){
+            Swal.fire({
+                icon: 'error',
+                title: titulo,
+                text: texto
+            })
+        }
+
         contador = 0
         div = document.getElementById("cambiante")
         barraProgreso = document.getElementById("barraProgreso");
         btn = document.getElementById("btnSiguiente")
+        var enEmail = false
+        var tipoMensaje
+        var email
+        var mensaje
 
+        
+
+        //Al apretar el botón el contador aumenta
         $('#btnSiguiente').click(function(){
         contador++
 
         switch(contador){
 
+            //Contador == 1 => Obtiene el valor del select y si es correcto cambia el select por el input del email y aumenta la barra de progreso
             case 1:
-            div.innerHTML = "<div class='form-outline form-white mb-4'><input type='email' name = 'email' class='form-control form-control-lg 'placeholder='Tu email'/></div>"
-            barraProgreso.style.width = "50%";
-
+                enEmail = false
+                tipoMensaje = document.getElementById('tipoMensaje').value
+                if(tipoMensaje != ""){
+                    div.innerHTML = "<div class = 'form-floating'><input type='email' id = 'email' name = 'email' class='form-control form-control-lg 'placeholder='Tu email' autofocus/><label class = 'form-label' for = 'email'>Tu email</label></div>"
+                    barraProgreso.style.width = "50%";
+                } else {
+                    mostrarError("Tipo de mensaje incorrecto", "Debe seleccionar el tipo de mensaje")
+                    contador = 0
+                }
                 break;
+
+            //Contador == 2 => Obtiene el valor del input del email y si tiene el formato correcto sustituye a este por un textarea para el mensaje
             case 2:
-
-            div.innerHTML = "<div class='form-floating'><textarea class='form-control' id='floatingTextarea'></textarea><label for='floatingTextarea' style = 'color: black'>Tu mensaje</label></div>"
-            barraProgreso.style.width = "75%";
-
+                enEmail = true
+                email = document.getElementById('email').value
+                if(validarEmail(email)){
+                    div.innerHTML = "<div class='form-floating'><textarea class='form-control' style='height: 100px' id='mensaje' placeholder = 'Tu mensaje' autofocus></textarea><label class = 'form-label' for='mensaje'>Tu mensaje</label></div>"
+                    barraProgreso.style.width = "75%";
+                } else {
+                    mostrarError("Email no válido", "El formato del email es incorrecto")
+                    contador = 1
+                }
                 break;
+
+            //Contador == 3 => Obtiene el valor del textarea y si este no está vacío muestra todos los datos anteriores en pantalla
             case 3:
-            div.innerHTML = "<p>Poner los datos recopilados antes</p>"
-            btn.innerHTML = "Enviar"
-            barraProgreso.style.width = "100%";
+                mensaje = document.getElementById('mensaje').value
+                if(mensaje != ""){
+                    document.getElementById('barraProgreso').className += " bg-success"
+                    btn.innerHTML = "Enviar"
+                    barraProgreso.style.width = "100%"
+                    div.innerHTML = "<div class = 'enviar'><h3><span style = 'font-weight: bolder'>Tipo de mensaje: </span><span class = 'subrayado'>"+ capitalize(tipoMensaje) +"</span></h3></p><p><h3><span style = 'font-weight: bolder'>Tu email: </span><span class = 'subrayado'>"+ email +"</span></h3></p><div class = 'msg'><h5>"+ mensaje +" </h5></div></div>"
+                    
+                    document.getElementById('email').value = email
+                    document.getElementById('tipoMensaje').value = tipoMensaje
+                    document.getElementById('mensaje').value = mensaje
+
+
+                } else {
+                    mostrarError("Mensaje vacío", "Debe añadir el mensaje por el que contacta")
+                    contador = 2
+                }
+                break;
+            //Contador == 4 => Envía el formulario
+            case 4:
+                document.getElementById('formContacto').submit()
+                break;
+            default:
+                contador = contador - 1
                 break;
         }
         })
 
-
-        
-        
-
     </script>
-
-
-    {% endblock %}
 </html>

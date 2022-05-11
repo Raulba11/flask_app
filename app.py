@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash
 from datetime import *
 from time import *
 import locale
+import yagmail
 # FINAL DE IMPORTS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CONFIGURACION
@@ -49,8 +50,8 @@ def load_user(user_id):
     return None
 
 
-@app.route('/eventos')
 @login_required
+@app.route('/eventos')
 def eventos():
     """
     Carga la URL con el JSON de eventos que será usado para cargar estos en el calendario *NO HECHO PARA SER VISIBLE*.
@@ -134,8 +135,8 @@ def signup():
     return render_template('signup.html', created=False)
 
 
-@app.route('/logout')
 @login_required
+@app.route('/logout')
 def logout():
     """
     URL que cierra la sesión del usuario.
@@ -144,8 +145,8 @@ def logout():
     return redirect(url_for('principal'))
 
 
-@app.route('/calendario', methods=['GET', 'POST'])
 @login_required
+@app.route('/calendario', methods=['GET', 'POST'])
 def calendario():
     """
     URL que carga el calendario.
@@ -185,8 +186,8 @@ def calendario():
     return render_template('calendario.html', grupos=gruposAdmin, gruposPertenece=gruposPertenece, admin=True)
 
 
-@app.route('/grupos', methods=['GET', 'POST'])
 @login_required
+@app.route('/grupos', methods=['GET', 'POST'])
 def grupos():
     """
     URL que carga todos los grupos.
@@ -231,8 +232,8 @@ def grupos():
     return render_template('grupos.html', len=len(grupos), lista=grupos, alertar=False)
 
 
-@app.route('/misGrupos', methods=['GET', 'POST'])
 @login_required
+@app.route('/misGrupos', methods=['GET', 'POST'])
 def misGrupos():
     """
     URL que carga los grupos de cada usuario.
@@ -288,13 +289,24 @@ def misGruposGrupo(grupo: str):
             admin="Y"
         else:
             admin="N"
+        
+        action = request.form.get('action')
+
+           
+        if action == "eliminar":
+            grupo, user, conf = grupo, "raul", request.form.get('confRemovedGroup')
+            flash(eliminarUsuarioGrupo(grupo, user, conf))
+            
+           
+
+            return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
 
         return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
     else:
         return redirect(url_for('index'))
 
-@app.route('/<usuario>', methods=['GET', 'POST'])
 @login_required
+@app.route('/perfilPersonal-<usuario>', methods=['GET', 'POST'])
 def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     """
     URL que carga el perfil personal del usuario actual
@@ -304,11 +316,10 @@ def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     todosEventos = misEventosTodos()
     eventosGrupo = eventosGrupoConcreto(grupos[0][0])
 
-    if request.method == "POST":
+    if request.method == "POST":        
         res = request.form.get('grupoEventos')
         eventosGrupo = eventosGrupoConcreto(res)
         return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = res)
-        
 
 
     return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = grupos[0][0])
@@ -322,11 +333,25 @@ def principal():
 
 @app.route('/sobreNosotros')
 def sobreNosotros():
+    """
+    URL que contiene la página 'Sobre nosotros'
+    """
     return render_template('sobreNosotros.html')
 
-@app.route('/contactenos')
-def contactenos():
-    return render_template('contactenos.html')
+@app.route('/contacto', methods = ['GET', 'POST'])
+def contacto():
+    """
+    URL que contiene la página con el formulario de contacto
+    """
+    if request.method == "POST":
+        email = request.form.get('email')
+        tipoMensaje = request.form.get('tipoMensaje')
+        mensaje = request.form.get('mensaje')
+        mandarEmail(email, tipoMensaje, mensaje)
+        
+        return render_template('contactenos.html', alerta = True)
+        
+    return render_template('contactenos.html', alerta = False)
 
 
 # FINAL DE RUTAS VISIBLES
@@ -507,6 +532,24 @@ def eliminarGrupo(grupo: str, pwd: str, conf: str) -> str:
         return "Grupo eliminado correctamente"
 
 
+
+def eliminarUsuarioGrupo(grupo: str, user: str, conf: str):
+    grupoUser = GrupoUserRelation.query.filter_by(user = user, grupo=grupo).first()
+    if user != conf:
+        return "Confirmación incorrecta"
+    
+    else:
+       
+        for linea in grupoUser:
+            if linea.user == user:
+
+                db.session.delete(linea)
+       
+
+        db.session.commit()
+        return "Usuario eliminado correctamente"
+
+
 # FINAL MÉTODOS MIS GRUPOS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS EVENTOS
@@ -541,7 +584,7 @@ def event_loader():
     return jsonify(eventos)
 
 
-def validarFechas(start, end) -> bool:
+def validarFechas(start : str, end : str) -> bool:
     """
     Valida que la fecha final del evento sea posterior a la inicial.
     """
@@ -603,7 +646,6 @@ def eliminarEvento():
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS PERFIL PERSONAL
 
-
 def misEventosTodos() -> list:
     """
     Retorna una lista con todos los eventos de los grupos a los que pertenece el usuario.
@@ -622,6 +664,7 @@ def misEventosTodos() -> list:
 
     return eventos
 
+
 def eventosGrupoConcreto(grupo):
     eventos = []
     events = EventModel.query.filter_by(grupo = grupo).all()
@@ -634,8 +677,31 @@ def eventosGrupoConcreto(grupo):
 
 # FINAL MÉTODOS PERFIL PERSONAL
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
-# INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
+# INICIO MÉTODOS CONTACTO
 
+def mandarEmail(receptor : str, tipoMensaje : str, mensaje : str):
+    """
+    Manda un email a ti mismo con los datos pasados como parámetro y otro mensaje al receptor diciendo que fue recibido
+    """
+    yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")
+    try:
+        yag.send(
+            to="MycalTFG@gmail.com",
+            subject= "Contacto",
+            contents="<h1>"+ tipoMensaje.capitalize() +" de "+ receptor +":<h1><h2>"+ mensaje +"</h2>"
+        )
+
+        yag.send(
+            to=receptor,
+            subject="Contacto",
+            contents="<h1>Hemos recibido tu mensaje</h1><h2>Nuestro equipo recibió tu mensaje y se pondrán en contacto con usted lo antes posible.</h2>"
+        )
+    except Exception as ex:
+        app.logger.debug("Error: " + str(ex))
+
+# FINAL MÉTODOS CONTACTO
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
 
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():

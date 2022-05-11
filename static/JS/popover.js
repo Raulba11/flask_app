@@ -7,7 +7,7 @@ $(function () {
         placement: 'right',
         html: true, 
         content: function() {
-              return $('#btn');
+              return $('#removeUser');
         }
     });
     

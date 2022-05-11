@@ -14,6 +14,26 @@
         <link href="../static/css/sobreNosotros.css" rel="stylesheet">
     </head>            
         
+    <!-- INICIO DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
+    <script type="text/javascript">
+
+        var preload = new Array();
+        
+        //Carga el array con la dirección de las imágenes
+        
+        preload[0] = "../static/css/imagenes/sobrenosotros/sobrenosotros1.jpg";
+        preload[1] = "../static/css/imagenes/sobrenosotros/sobrenosotros2.jpg";
+        preload[2] = "../static/css/imagenes/sobrenosotros/sobrenosotros3.jpg";
+        preload[3] = "../static/css/imagenes/sobrenosotros/sobrenosotros4.jpg";
+        
+        // Carga las imágenes
+        var loadedimages = new Array();
+        for(var i=0; i<preload.length; i++) {
+        loadedimages[i] = new Image();
+        loadedimages[i].src = preload[i];
+        }
+    </script>
+    <!-- FINAL DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
 
     {% block content %}
     <body>
@@ -40,7 +60,7 @@
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" aria-current="page" href="{{
-                                    url_for('contactenos') }}">Contáctenos</a>
+                                    url_for('contacto') }}">Contáctenos</a>
                             </li>
                         </ul>
                         <div class="d-flex">
@@ -60,9 +80,13 @@
 
             <!-- Background image -->
             <div id="intro" class="bg-image shadow-2-strong">
-                <div class="mask" style="background-color: rgba(0, 0, 0, 0.432);">
+                <div class="mask" style="background-color: hsla(0, 0%, 0%, 0.8);">
                     <div class="container d-flex align-items-center
                         text-left h-100">
+
+                        <div class="text-white">
+                            <h1>Sobre nosotros</h1>
+                            <hr>
 
                         <div class = "contenedorTexto">
                             <div class="texto">
@@ -71,7 +95,7 @@
                                 </p>
                             </div>
                             <div class="imagen">
-                               <img src="static/css/imagenes/jovellanos.jpg" alt="Jovellanos">
+                               <img src="static/css/imagenes/sobrenosotros/jovellanos.jpg" alt="Jovellanos">
                             </div>
                         </div>
                         
@@ -96,7 +120,7 @@
                                     px-2 text-muted">Home</a></li>
                             <li class="nav-item"><a href="{{ url_for('sobreNosotros') }}" class="nav-link
                                     px-2 text-muted">About Us</a></li>
-                            <li class="nav-item"><a href="{{ url_for('contactenos') }}" class="nav-link
+                            <li class="nav-item"><a href="{{ url_for('contacto') }}" class="nav-link
                                     px-2 text-muted">Contact Us</a></li>
                         </ul>
                         <p class="text-center text-muted">&copy; 2022 MyCal</p>
