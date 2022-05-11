@@ -67,19 +67,19 @@ img {
 
 @keyframes fondo{
   0%{
-    background-image: url("imagenes/principal1.jpeg");
+    background-image: url("imagenes/sobrenosotros/sobrenosotros1.jpg");
   }
   25%{
-    background-image: url("imagenes/principal2.jpeg");
+    background-image: url("imagenes/sobrenosotros/sobrenosotros2.jpg");
   }
   50%{
-    background-image: url("imagenes/principal3.jpeg");
+    background-image: url("imagenes/sobrenosotros/sobrenosotros3.jpg");
   }
   75%{
-    background-image: url("imagenes/principal4.jpeg");
+    background-image: url("imagenes/sobrenosotros/sobrenosotros4.jpg");
   }
   100%{
-    background-image: url("imagenes/principal1.jpeg");
+    background-image: url("imagenes/sobrenosotros/sobrenosotros1.jpg");
   }
 }
 

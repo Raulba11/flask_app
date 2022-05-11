@@ -670,7 +670,6 @@ def mandarEmail(receptor : str, tipoMensaje : str, mensaje : str):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO DE CHAT /*ACABAR SI SOBRA TIEMPO*/
 
-
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
     """

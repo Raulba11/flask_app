@@ -3,7 +3,7 @@ body {
 	padding-top: 75;
 	padding-left: 100;
 	padding-right: 100;
-	background-image: url("../imagenes/originalBG.jpeg");
+	background-image: url("../imagenes/temas/originalBG.jpeg");
 	background-size: cover;
 	overflow-y: hidden;
 }
