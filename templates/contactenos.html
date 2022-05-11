@@ -1,28 +1,20 @@
-
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>MyCal</title>
         {%include 'imports.html'%}
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-            crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
         <link href="../static/css/contactenos.css" rel="stylesheet">
-        <script
-            src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
-    </head>
-    <!-- INICIO DEL SCRIPT DE PRECARGA DE LAS IMÁGENES     -->
+    </head>    
+    <!-- INICIO DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
     <script type="text/javascript">
 
         var preload = new Array();
         
         //Carga el array con la dirección de las imágenes
         
-        preload[0] = "../static/css/imagenes/principal1.jpeg";
+        preload[0] = "../static/css/imagenes/contacto1.jpeg";
         preload[1] = "../static/css/imagenes/principal2.jpeg";
         preload[2] = "../static/css/imagenes/principal3.jpeg";
         preload[3] = "../static/css/imagenes/principal4.jpeg";
@@ -35,8 +27,6 @@
         }
     </script>
     <!-- FINAL DEL SCRIPT DE PRECARGA DE LAS IMÁGENES -->
-
-
 
     {% block content %}
     <body>
@@ -63,7 +53,7 @@
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" aria-current="page" href="{{
-                                    url_for('contactenos') }}">Contáctenos</a>
+                                    url_for('contacto') }}">Contáctenos</a>
                             </li>
                         </ul>
                         <div class="d-flex">
@@ -91,7 +81,7 @@
                         <div class="text-white">
                             <h1>Contacto</h1>
                             <hr>
-                            <h5>Para cualquier consulta, por favor contáctanos
+                            <h5>Para cualquier consulta, por favor contáctenos
                                 completando el siguiente formulario</h5>
                             <h2 style="float: left; font-weight: bold;">¿Cómo
                                 podemos ayudarle?</h2>
@@ -112,7 +102,7 @@
                                 <label class="form-label" for = "tipoMensaje">Tipo de mensaje</label>
                             </div>
                         </div>
-                            <button type="submit" class="btn btn-info"
+                            <button type="button" class="btn btn-info"
                                 style="width: 100%;" id="btnSiguiente"
                                 name="btnSiguiente">Continuar</button>
                             
@@ -148,7 +138,7 @@
                                     url_for('sobreNosotros') }}" class="nav-link
                                     px-2 text-muted">About Us</a></li>
                             <li class="nav-item"><a href="{{
-                                    url_for('contactenos') }}" class="nav-link
+                                    url_for('contacto') }}" class="nav-link
                                     px-2 text-muted">Contact Us</a></li>
                         </ul>
                         <p class="text-center text-muted">&copy; 2022 MyCal</p>
@@ -157,9 +147,27 @@
             </div>
         </footer>
         <!-- Footer -->
+        <!-- INICIO DEL FORMULARIO OCULTO -->
+            <form method="post" name = "formContacto" id = "formContacto">
+                <input type="hidden" name = "email" id = "email">
+                <input type = "hidden" name = "tipoMensaje" id = "tipoMensaje">
+                <input type = "hidden" name = "mensaje" id = "mensaje">
+            </form>
+        <!-- FINAL DEL FORMULARIO OCULTO -->
     </body>
-
+    {% endblock %}
     <script>
+        if (window.history.replaceState) {
+             window.history.replaceState(null, null, window.location.href);
+        }
+
+        {% if alerta%}
+        Swal.fire({
+            icon: 'success',
+            title: '¡Mensaje enviado!',
+            text: 'Nuestro equipo le contactará lo antes posible',
+        })
+        {% endif %}
 
         //Valida que el email tenga el formato correcto(x@x.x)
         function validarEmail(valor) {
@@ -229,18 +237,26 @@
 
             //Contador == 3 => Obtiene el valor del textarea y si este no está vacío muestra todos los datos anteriores en pantalla
             case 3:
-
                 mensaje = document.getElementById('mensaje').value
                 if(mensaje != ""){
                     document.getElementById('barraProgreso').className += " bg-success"
                     btn.innerHTML = "Enviar"
-                    barraProgreso.style.width = "100%";
-                    div.innerHTML = "<div class = 'enviar'><h3><span style = 'font-weight: bold'>Tipo de mensaje</span>: "+ capitalize(tipoMensaje) +" </h3></p><p><h3><span style = 'style = 'font-weight: bold''>Tu email:</span> "+ email +" </h3></p><div class = 'msg'><h5 id = 'mensaje' name = 'mensaje'>"+ mensaje +" </h5></div></div>"
+                    barraProgreso.style.width = "100%"
+                    div.innerHTML = "<div class = 'enviar'><h3><span style = 'font-weight: bolder'>Tipo de mensaje: </span><span class = 'subrayado'>"+ capitalize(tipoMensaje) +"</span></h3></p><p><h3><span style = 'font-weight: bolder'>Tu email: </span><span class = 'subrayado'>"+ email +"</span></h3></p><div class = 'msg'><h5>"+ mensaje +" </h5></div></div>"
+                    
+                    document.getElementById('email').value = email
+                    document.getElementById('tipoMensaje').value = tipoMensaje
+                    document.getElementById('mensaje').value = mensaje
+
 
                 } else {
                     mostrarError("Mensaje vacío", "Debe añadir el mensaje por el que contacta")
                     contador = 2
                 }
+                break;
+            //Contador == 4 => Envía el formulario
+            case 4:
+                document.getElementById('formContacto').submit()
                 break;
             default:
                 contador = contador - 1
@@ -249,5 +265,4 @@
         })
 
     </script>
-    {% endblock %}
 </html>

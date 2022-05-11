@@ -16,6 +16,7 @@ body {
 }
 
 #intro {
+  animation: fondo 25s infinite ease-in-out;
   width: 100%;
   background-image: url('imagenes/aboutUsBG.jpeg');
   background-size: cover;
@@ -64,7 +65,23 @@ img {
   height: 100%; 
 }
 
-
+@keyframes fondo{
+  0%{
+    background-image: url("imagenes/principal1.jpeg");
+  }
+  25%{
+    background-image: url("imagenes/principal2.jpeg");
+  }
+  50%{
+    background-image: url("imagenes/principal3.jpeg");
+  }
+  75%{
+    background-image: url("imagenes/principal4.jpeg");
+  }
+  100%{
+    background-image: url("imagenes/principal1.jpeg");
+  }
+}
 
 /*
  * Header

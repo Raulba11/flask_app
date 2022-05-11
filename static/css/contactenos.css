@@ -30,10 +30,23 @@ label{
     height: 1000px;
 }
 
+#cambiante{
+  margin-bottom: 5px;
+}
+
+#btnSiguiente{
+  margin-bottom: 5px;
+  font-size: large;
+}
+
 :not(.msg)::-webkit-scrollbar{
     display: none;
 }
 
+.subrayado{
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+}
 
 .msg{
     padding-left: 10px;

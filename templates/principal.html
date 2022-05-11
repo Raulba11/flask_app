@@ -2,8 +2,6 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>MyCal</title>
         {%include 'imports.html'%}
         <link
@@ -61,7 +59,7 @@
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" aria-current="page" href="{{
-                                    url_for('contactenos') }}">Contáctenos</a>
+                                    url_for('contacto') }}">Contáctenos</a>
                             </li>
                         </ul>
                         <div class="d-flex">
@@ -127,7 +125,7 @@
                                     px-2 text-muted">Home</a></li>
                             <li class="nav-item"><a href="{{ url_for('sobreNosotros') }}" class="nav-link
                                     px-2 text-muted">About Us</a></li>
-                            <li class="nav-item"><a href="{{ url_for('contactenos') }}" class="nav-link
+                            <li class="nav-item"><a href="{{ url_for('contacto') }}" class="nav-link
                                     px-2 text-muted">Contact Us</a></li>
                         </ul>
                         <p class="text-center text-muted">&copy; 2022 MyCal</p>
