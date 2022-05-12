@@ -132,19 +132,12 @@
 
       <!-- INICIO LISTA DE GRUPOS -->
       <ul class="grupos" id="grupos">
-        {%for i in range(0,len)%}
+        {%for grupo in lista%}
 
-        {%if i%2 == 0%}
-        <li class="par">
-          <p class="nombre">{{lista[i][0]}}</p>
-          <p class="admin">Administradores: {{lista[i][1]}}</p>
+        <li>
+          <p class="nombre">{{grupo[0]}}</p>
+          <p class="admin">Administradores: {% for admin in grupo[1] %}{{admin.capitalize()}}&nbsp&nbsp{% endfor %}</p>
         </li>
-        {%else%}
-        <li class="impar">
-          <p class="nombre">{{lista[i][0]}}</p>
-          <p class="admin">Administradores: {{lista[i][1]}}</p>
-        </li>
-        {%endif%}
 
         {%endfor%}
       </ul>

@@ -227,9 +227,9 @@ def grupos():
             msg = crearGrupo(name, password, confPass)
             flash(msg)
 
-        return render_template('grupos.html', len=len(grupos), lista=grupos, alertar=alertar)
+        return render_template('grupos.html', lista=grupos, alertar=alertar)
 
-    return render_template('grupos.html', len=len(grupos), lista=grupos, alertar=False)
+    return render_template('grupos.html', lista=grupos, alertar=False)
 
 
 @login_required

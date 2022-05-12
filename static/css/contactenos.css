@@ -50,6 +50,7 @@ label{
 
 .msg{
     padding-left: 10px;
+    padding-right: 3px;
     max-width: 100%;
     max-height: 50%;
     text-align: left;
@@ -62,8 +63,10 @@ label{
 }
 
 .msg::-webkit-scrollbar{
-    background-color: transparent;
-    width: 7px;
+  border-left: solid rgba(255, 255, 255, 0.397) 1px;
+  border-radius: 2px;
+  background-color: transparent;
+  width: 7px;
 }
 
 .msg::-webkit-scrollbar-thumb{
