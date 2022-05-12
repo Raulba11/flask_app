@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import ForeignKey
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -61,7 +62,7 @@ class EventModel(db.Model):
     title = db.Column(db.String(), nullable = False)
     start = db.Column(db.DateTime(), nullable = False)
     end = db.Column(db.DateTime(), nullable = False)
-    grupo = db.Column(db.String(), nullable = False)
+    grupo = db.Column(db.String(), db.ForeignKey('Grupos.name'), nullable = False)
     backgroundColor = db.Column(db.String(), nullable = False)
 
     def __init__(self, title , start , end , grupo , backgroundColor ):
@@ -93,7 +94,7 @@ class GroupModel(db.Model):
 
     name = db.Column(db.String(), primary_key = True)
     password = db.Column(db.String(), nullable = False)
-    owner = db.Column(db.String(), nullable = False)
+    owner = db.Column(db.String(), db.ForeignKey('Usuarios.name'), nullable = False)
 
     def __init__(self, name , password , owner ):
         """
@@ -120,8 +121,8 @@ class GrupoUserRelation(db.Model):
     """
     __tablename__ = "Grupo_User_Relation"
 
-    grupo = db.Column(db.String(), primary_key = True)
-    user = db.Column(db.String(), primary_key = True)
+    grupo = db.Column(db.String(), db.ForeignKey('Grupos.name'), primary_key = True)
+    user = db.Column(db.String(), db.ForeignKey('Usuarios.name'),  primary_key = True)
     admin = db.Column(db.String(1))
     
     def __init__(self, grupo, user, admin):
