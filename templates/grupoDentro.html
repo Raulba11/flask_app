@@ -16,9 +16,9 @@
 
     <script src="js/jquery-1.10.2.js"></script>
 <script src="js/bootstrap.js"></script>
-{% if admin == "Y"%}
+
     <script src="../static/JS/popover.js"></script>
-    {% endif %}
+   
     <script type="text/javascript">
   
       </script>
@@ -29,27 +29,9 @@
     {% block content %}
 <body>
     <!-- INICIO SIDEBAR -->
+
     
-    <form method="post" name="removeGroupForm" id="removeUser">
-      <div class="md-form md-outline input-with-post-icon">
-
-      
-
-        <label for = "passRemovedGroup">Confirma el nombre del usuario:</label>
-        <input type="text" class="form-control" id = "confRemovedGroup" name = "confRemovedGroup">
-
-       
-
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-danger btnPeligroso">Eliminar usuario</button>
-      <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-    </div>
-  </form>
-            
-    <button type="button"  id="btn" class="btn btn-primary">Eliminar</button>
-    <nav class="menu" tabindex="0">
+    
 
         <div class="smartphone-menu-trigger"></div>
         <header class="avatar">
@@ -106,9 +88,160 @@
     <div class = "contenedor">
       <button data-bs-toggle="offcanvas" data-bs-target = "#offcanvas">ASDASD</button>
     </div>
+    {% if admin == "Y"%}
     <div class = "contenedor">
-      <button  data-bs-toggle="popover" data-bs-target = "#offcanvas">eliminar</button>
+      <button   id="btnConfigurarGrupos" data-bs-target = "#offcanvas">Gestionar</button>
     </div>
+    {%endif%}
+    
+    <div class="modal fade" tabindex="-1" role="dialog"
+    id="configGruposModal"
+    name="configGruposModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Opciones</h5>
+          <button type="button" class="close" data-bs-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+          <button type="button" class="btn btn-danger"
+            id="btnOpcionEliminar"
+            name="btnOpcionEliminar" style="margin: 10px;">Eliminar usuario</button>
+            {% if current_user.name == owner %}
+          <button type="button" class="btn btn-warning"
+            id="btnOpcionHacerAdminr"
+            name="btnOpcionHacerAdminr" style="margin: 10px;">Hacer admin</button>
+            <button type="button" class="btn btn-warning"
+            id="btnOpcionDeshacerAdminr"
+            name="btnOpcionDeshacerAdminr" style="margin: 10px;">Deshacer admin</button>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+    
+      <!-- INICIO DEL MODAL DELETE GROUP -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="removeGroupModal" name="removeGroupModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Eliminar grupo</h5>
+              <button type="button" class="close" data-bs-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- INICIO DEL FORMULARIO DELETE -->
+              <form method="post" name="removeGroupForm" id="removeGroupForm">
+                <div class="md-form md-outline input-with-post-icon">
+
+                  <input type="hidden" name="action" id="action"
+                    value="eliminar">
+
+                  <label for="removedGroup">Usuario:</label>
+                  <input type="text" class="form-control" id = "usuario" name = "usuario">
+
+                
+
+                  <label for = "confRemovedGroup">Confirmacion usuario:</label>
+                  <input type = "text" class="form-control" id = "confusuario" name = "confusuario">
+
+
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger btnPeligroso">Eliminar usuario</button>
+                <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </form>
+            <!-- FINAL DEL FORMULARIO DELETE -->
+          </div>
+        </div>
+      </div>
+
+            <!-- INICIO DEL MODAL HACER ADMIN -->
+            <div class="modal fade" tabindex="-1" role="dialog" id="adminGroupModal" name="adminGroupModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hacer Admin</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                      aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- INICIO DEL FORMULARIO ADMIN -->
+                    <form method="post" name="removeGroupForm" id="removeGroupForm">
+                      <div class="md-form md-outline input-with-post-icon">
+      
+                        <input type="hidden" name="action" id="action"
+                          value="admin">
+      
+                        <label for="admingroup">Usuario:</label>
+                        <input type="text" class="form-control" id = "usuarioadmin" name = "usuarioadmin">
+      
+                      
+      
+                        <label for = "haceradmingroup">Confirmacion usuario:</label>
+                        <input type = "text" class="form-control" id = "confusuarioadmin" name = "confusuarioadmin">
+      
+      
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-danger btnPeligroso">Hacer Admin</button>
+                      <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                  </form>
+                  <!-- FINAL DEL FORMULARIO ADMIN -->
+                </div>
+              </div>
+            </div>
+          <!-- INICIO DEL MODAL DESHACER ADMIN -->
+          <div class="modal fade" tabindex="-1" role="dialog" id="desadminGroupModal" name="desadminGroupModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Deshacer Admin</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!-- INICIO DEL FORMULARIO DESHACER ADMIN -->
+                  <form method="post" name="removeGroupForm" id="removeGroupForm">
+                    <div class="md-form md-outline input-with-post-icon">
+    
+                      <input type="hidden" name="action" id="action"
+                        value="desadmin">
+    
+                      <label for="desadmingroup">Usuario:</label>
+                      <input type="text" class="form-control" id = "usuariodesadmin" name = "usuariodesadmin">
+    
+                    
+    
+                      <label for = "deshaceradmingroup">Confirmacion usuario:</label>
+                      <input type = "text" class="form-control" id = "confusuariodesadmin" name = "confusuariodesadmin">
+    
+    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btnPeligroso">Deshacer Admin</button>
+                    <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  </div>
+                </form>
+                <!-- FINAL DEL FORMULARIO DESHACER ADMIN -->
+              </div>
+            </div>
+          </div>
+
 
 </body>
 {% endblock %}

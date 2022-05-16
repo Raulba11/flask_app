@@ -295,8 +295,22 @@ def misGruposGrupo(grupo: str):
 
             
             if action == "eliminar":
-                grupo, user, conf = grupo, "raul", request.form.get('confRemovedGroup')
+                grupo, user, conf = grupo, request.form.get('usuario'), request.form.get('confusuario')
                 flash(eliminarUsuarioGrupo(grupo, user, conf))
+                
+            
+
+                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+            if action == "admin":
+                grupo, user, conf,opadmin = grupo, request.form.get('usuarioadmin'), request.form.get('confusuarioadmin'),"Y"
+                flash(adminUsuarioGrupo(grupo, user, conf,opadmin))
+                
+            
+
+                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+            if action == "desadmin":
+                grupo, user, conf,opadmin = grupo, request.form.get('usuariodesadmin'), request.form.get('confusuariodesadmin'),"N"
+                flash(adminUsuarioGrupo(grupo, user, conf,opadmin))
                 
             
 
@@ -535,7 +549,7 @@ def eliminarGrupo(grupo: str, pwd: str, conf: str) -> str:
 
 
 def eliminarUsuarioGrupo(grupo: str, user: str, conf: str):
-    grupoUser = GrupoUserRelation.query.filter_by(user = user, grupo=grupo).first()
+    grupoUser = GrupoUserRelation.query.filter_by(user = user, grupo=grupo).all()
     if user != conf:
         return "Confirmación incorrecta"
     
@@ -545,6 +559,20 @@ def eliminarUsuarioGrupo(grupo: str, user: str, conf: str):
             if linea.user == user:
 
                 db.session.delete(linea)
+       
+
+        db.session.commit()
+        return "Usuario eliminado correctamente"
+
+def adminUsuarioGrupo(grupo: str, user: str, conf: str, opadmin:str):
+   
+    if user != conf:
+        return "Confirmación incorrecta"
+    
+    else:
+      
+        GrupoUserRelation.query.filter_by(user = user, grupo=grupo).update(
+            dict(admin=opadmin))
        
 
         db.session.commit()
