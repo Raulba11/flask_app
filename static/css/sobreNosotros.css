@@ -18,7 +18,7 @@ body {
 #intro {
   animation: fondo 25s infinite ease-in-out;
   width: 100%;
-  background-image: url('imagenes/aboutUsBG.jpeg');
+  background-image: url('imagenes/sobrenosotros/sobrenosotros1.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -43,6 +43,10 @@ body {
     width: 100%;
     height: 50%;
     border: solid 5px black;
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 .texto{

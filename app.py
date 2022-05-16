@@ -227,9 +227,9 @@ def grupos():
             msg = crearGrupo(name, password, confPass)
             flash(msg)
 
-        return render_template('grupos.html', len=len(grupos), lista=grupos, alertar=alertar)
+        return render_template('grupos.html', lista=grupos, alertar=alertar)
 
-    return render_template('grupos.html', len=len(grupos), lista=grupos, alertar=False)
+    return render_template('grupos.html', lista=grupos, alertar=False)
 
 
 @login_required
@@ -272,7 +272,7 @@ def misGrupos():
     return render_template('misGrupos.html', len=len(grupos), lista=grupos, tusGrupos=ownerDe, alertar = False)
 
 
-@app.route('/misGrupos/<grupo>')
+@app.route('/misGrupos/<grupo>' , methods=['GET', 'POST'])
 @login_required
 def misGruposGrupo(grupo: str):
     """
@@ -289,17 +289,18 @@ def misGruposGrupo(grupo: str):
             admin="Y"
         else:
             admin="N"
+        if request.method == 'POST':
         
-        action = request.form.get('action')
+            action = request.form.get('action')
 
-           
-        if action == "eliminar":
-            grupo, user, conf = grupo, "raul", request.form.get('confRemovedGroup')
-            flash(eliminarUsuarioGrupo(grupo, user, conf))
             
-           
+            if action == "eliminar":
+                grupo, user, conf = grupo, "raul", request.form.get('confRemovedGroup')
+                flash(eliminarUsuarioGrupo(grupo, user, conf))
+                
+            
 
-            return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
 
         return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
     else:

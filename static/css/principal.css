@@ -37,6 +37,9 @@ body {
   max-width: 42em;
 }
 
+::-webkit-scrollbar{
+  display: none;
+}
 
 @keyframes fondo{
   0%{
@@ -55,9 +58,6 @@ body {
     background-image: url("imagenes/principal/principal1.jpeg");
   }
 }
-
-
-
 
 /*
  * Header

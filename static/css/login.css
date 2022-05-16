@@ -1,10 +1,14 @@
-.gradient-custom {
-    /* fallback for old browsers */
-    background-color: #6a11cb;
-    
-    /* Chrome 10-25, Safari 5.1-6 */
-    background-color: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgb(37, 117, 252));
-    
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-color: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-    }
+.bg{
+    background-image: url("imagenes/loginBG.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+}
+
+.blur{
+    backdrop-filter: blur(5px);
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
