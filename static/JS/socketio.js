@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    
     // Connect to websocket
     var socket = io.connect();
 
@@ -142,3 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#user_message").focus();
     }
 });
+$(function () {
+
+         //Al clicar al botón de gestionar salas abrir un modal con las opciones
+     $('#btnConfigurarSalas').click(function(){
+        $('#configSalasModal').modal('show')
+    })
+})

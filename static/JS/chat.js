@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#sidebar').classList.toggle('view-sidebar');
     };
 
+    
+
     // Make 'enter' key submit message
     let msg = document.getElementById("user_message");
     msg.addEventListener("keyup", function(event) {
