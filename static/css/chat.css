@@ -157,6 +157,10 @@ input[type=text]:focus{
     color: #000000;
     font-size:0.7em;
 }
+.navbar {
+    z-index: 2;
+    border-bottom: solid 2px black;
+  }
 
 .other-username {
     border-radius: 25px;

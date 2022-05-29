@@ -1,12 +1,72 @@
 .contenedor {
     padding-left: 240px;
 }
+body {
+    background-image: url("imagenes/perfilBG.jpeg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    padding-right: 0px !important;
+}
+
 
 .titulo {
     margin: auto;
     margin-top: 20px;
     max-width: fit-content;
+
 }
+
+
+
+
+
+/*flechas*/
+.fc-button .fc-icon {
+	margin: 0 .1em;
+	font-size: 2em;
+	color: rgb(250, 249, 249);
+	font-family: "Courier New", Courier, monospace;
+	vertical-align: baseline; /* for IE7 */
+	}
+
+
+    /*encabezado calendario Ej:lunes,martes*/
+.fc th {
+        padding: 0;
+        vertical-align: top;
+       color:rgb(9, 9, 9);
+}
+/*celdas de dias del calendario */
+.fc td{
+
+    padding: 0;
+        vertical-align: top;
+        border-style: double;
+        border-color: rgb(9, 9, 9);
+        
+     
+}
+
+
+/*Mes del calendario:Ej Abril de 2022 */
+html .fc{
+ 
+	font-size: 1em;
+	color:rgb(9, 9, 9);
+    
+
+}
+
+
+
+
+/*numeros de dias del calendario */
+.fc table {
+	font-size: 1em;
+	color:rgb(9, 9, 9);
+	}
+
 
 .contenedorTabla {
     margin: auto;
@@ -105,7 +165,7 @@
 }
 
 .menu ul li {
-    border-bottom: solid 1px rgba(255, 255, 255, 0.623);
+    border-bottom: solid 1px rgb(255, 252, 252);
     color: white;
     padding: 0.5em 1em 0.5em 3em;
     font-size: 0.95em;
@@ -132,9 +192,12 @@
 .menu ul li.icon-calendar {
     background-image: url("http://www.entypo.com/images/calendar.svg");
 }
+.menu ul li.icon-chat {
+    background-image: url("http://www.entypo.com/images/chat.svg");
+}
 
 .menu ul li:hover {
-    background-color: rgba(255, 255, 255, 0.534);
+    background-color: rgb(255, 255, 255);
 }
 
 .menu ul li:focus {

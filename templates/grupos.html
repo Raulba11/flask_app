@@ -101,7 +101,7 @@
       </form>
 
       <ul>
-        <a style="text-decoration: none;" href="{{ url_for('index')}}"><li
+        <a style="text-decoration: none;" href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}"><li
             tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil personal</span></li></a>
         
         <a style="text-decoration: none;" href="{{ url_for('misGrupos')}}"><li tabindex="0"
@@ -112,6 +112,10 @@
         
         <a style="text-decoration: none;" href="{{ url_for('calendario')}}"><li
             tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
+            <a style="text-decoration: none;" href="{{
+              url_for('chat')}}"><li
+                  tabindex="0" class="icon-chat" style="user-select:
+                  none;"><span>Chat</span></li></a>
       </ul>
     </nav>
 

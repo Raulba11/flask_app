@@ -68,7 +68,7 @@ def index():
     """
     Página índice para la prueba de métodos *TEMPORAL*.
     """
-    return render_template('index.html')
+    return render_template('principal.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -77,7 +77,7 @@ def login():
     Página de login, si se intenta acceder ya estándolo redirige al index.
     """
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect('/perfilPersonal-{current_user.name}')
 
     # Inicia con el método GET
     email = request.form.get('email')
@@ -93,7 +93,7 @@ def login():
             flash("Contraseña incorrecta")
         else:
             login_user(user, remember=request.form.get('remember'))
-            return redirect(url_for('index'))
+            return redirect('/perfilPersonal-{current_user.name}')
         return render_template('login.html')
     # Carga de HTML del método GET
     return render_template('login.html')
@@ -329,15 +329,19 @@ def perfilPersonal(usuario: str, methods = ['GET', 'POST']):
     grupos = myGroup_loader()
     
     todosEventos = misEventosTodos()
-    eventosGrupo = eventosGrupoConcreto(grupos[0][0])
+    if len(grupos) !=0:
 
-    if request.method == "POST":        
-        res = request.form.get('grupoEventos')
-        eventosGrupo = eventosGrupoConcreto(res)
-        return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = res)
+        eventosGrupo = eventosGrupoConcreto(grupos[0][0])
+
+        if request.method == "POST":        
+            res = request.form.get('grupoEventos')
+            eventosGrupo = eventosGrupoConcreto(res)
+            return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = res)
 
 
-    return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = grupos[0][0])
+        return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), eventosGrupo = eventosGrupo, lenConcreto = len(eventosGrupo), grupos = grupos, seleccionado = grupos[0][0])
+    else:
+         return render_template('perfilPersonal.html', todosEventos = todosEventos, len = len(todosEventos), grupos = grupos)
 
 @app.route('/principal')
 def principal():

@@ -69,6 +69,7 @@
 
 </head>
 
+
 <body>
 
     <script>
@@ -91,7 +92,7 @@
       <option value = "azul">Azul</option>
     </select>
 
-    <a href="{{ url_for('index') }}">
+    <a href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}">
       <button>Salir</button>
     </a>
 

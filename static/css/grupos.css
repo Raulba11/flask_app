@@ -155,6 +155,9 @@ html {
 .menu ul li.icon-calendar {
   background-image: url("http://www.entypo.com/images/calendar.svg");
 }
+.menu ul li.icon-chat {
+  background-image: url("http://www.entypo.com/images/chat.svg");
+}
 
 .menu ul li:hover {
   background-color: rgba(255, 255, 255, 0.534);
