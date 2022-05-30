@@ -285,6 +285,7 @@ def misGruposGrupo(grupo: str):
         owner = GroupModel.query.with_entities(
             GroupModel.owner).filter_by(name=grupo).first()
         miembros = listaMiembros(grupo)
+        eventosGrupo = eventosGrupoConcreto(grupo)
         if esAdmin(grupo):
             admin="Y"
         else:
@@ -300,23 +301,23 @@ def misGruposGrupo(grupo: str):
                 
             
 
-                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+                return render_template('grupoDentro.html', grupo=grupo,eventosGrupo=eventosGrupo,lenConcreto = len(eventosGrupo) ,miembros=miembros,admin=admin, owner=owner[0])
             if action == "admin":
                 grupo, user, conf,opadmin = grupo, request.form.get('usuarioadmin'), request.form.get('confusuarioadmin'),"Y"
                 flash(adminUsuarioGrupo(grupo, user, conf,opadmin))
                 
             
 
-                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+                return render_template('grupoDentro.html', grupo=grupo,lenConcreto = len(eventosGrupo),eventosGrupo=eventosGrupo, miembros=miembros,admin=admin, owner=owner[0])
             if action == "desadmin":
                 grupo, user, conf,opadmin = grupo, request.form.get('usuariodesadmin'), request.form.get('confusuariodesadmin'),"N"
                 flash(adminUsuarioGrupo(grupo, user, conf,opadmin))
                 
             
 
-                return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+                return render_template('grupoDentro.html', grupo=grupo,eventosGrupo=eventosGrupo,lenConcreto = len(eventosGrupo), miembros=miembros,admin=admin, owner=owner[0])
 
-        return render_template('grupoDentro.html', grupo=grupo, miembros=miembros,admin=admin, owner=owner[0])
+        return render_template('grupoDentro.html', grupo=grupo,eventosGrupo=eventosGrupo,lenConcreto = len(eventosGrupo), miembros=miembros,admin=admin, owner=owner[0])
     else:
         return redirect(url_for('index'))
 

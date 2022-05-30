@@ -11,9 +11,7 @@ body {
     border-bottom: solid 2px black;
 }
 
-.contenedor {
-  padding-left: 240px;
-}
+
 
 ul{
   list-style: none;
@@ -29,16 +27,16 @@ ul{
 }
 
 .btn-outline-primary{
-  padding: 15px !important;
-  margin-top: 10%;
-  margin-left: 33%;
+  padding: 5px !important;
+  margin-top: 2%;
+  margin-left: 1%;
   background-color: rgba(129, 170, 247, 0.466) !important;
 }
 
 .btn-outline-danger{
-  padding: 15px !important;
-  margin-top: 10%;
-  margin-left: 10%;
+  padding: 5px !important;
+  margin-top: 0.5%;
+  margin-left: 1%;
   background-color: rgb(247, 129, 129, 0.466) !important;
 }
 
