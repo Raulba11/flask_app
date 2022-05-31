@@ -49,6 +49,11 @@
                     url_for('calendario')}}"><li
                         tabindex="0" class="icon-calendar" style="user-select:
                         none;"><span>Calendario</span></li></a>
+                          <a style="text-decoration: none;" href="{{
+                            url_for('chat')}}"><li
+                                tabindex="0" class="icon-chat" style="user-select:
+                                none;"><span>Chat</span></li></a>
+
             </ul>
         </nav>
         <!-- FINAL SIDEBAR -->
@@ -63,8 +68,8 @@
             
             <!-- INICIO DE LA ZONA DEL CALENDARIO -->
             
-            <h2 class="titulo">Aquí el calendario</h1>
-                
+            <h2 class="titulo">Mi Calendario</h1>
+                <br>
                 <div class="contenedorCalendario">
                 <div class="container">
                     <div id = "calendar" class="block calendar">
@@ -77,7 +82,7 @@
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
             <!-- INICIO DE LA ZONA DE LOS EVENTOS DE UN GRUPO CONCRETO -->
 
-            <h2 class="titulo">Aquí todos los eventos por grupo seleccionado</h1>
+            <h2 class="titulo">Todos Mis Eventos Por Grupo </h1>
 
                 <form method="post" name = "formGrupoEventos" id = "formGrupoEventos">
                     <select id = "grupoEventos" name = "grupoEventos" selected = "GRUPO 2">
@@ -114,7 +119,7 @@
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
             <!-- INICIO DE LA ZONA DE TODOS LOS EVENTOS DE TODOS LOS GRUPOS -->
 
-            <h2 class="titulo">Aquí todos los eventos</h1>
+            <h2 class="titulo">Todos Mis Eventos</h1>
                 {% if len == 0 %}
                 <h1 style="margin: auto; width: fit-content;">No tienes ningún evento</h1>
                 {% else %}
@@ -144,17 +149,17 @@
         <!-- FINAL DEL CUERPO -->
 
         <!-- INICIO DEL FOOTER -->
-        <footer class="bg-light text-lg-start">
+        <footer class="">
             <div class="container">
                 <div class="container">
-                    <footer class="py-3 my-4">
+                    <footer class="">
                         <ul class="nav justify-content-center border-bottom pb-3
                             mb-3">
                             <li class="nav-item"><a href="/" class="nav-link
                                     px-2 text-muted">Home</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link
+                            <li class="nav-item"><a href="/sobreNosotros" class="nav-link
                                     px-2 text-muted">Sobre nosotros</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link
+                            <li class="nav-item" ><a href="/contacto" class="nav-link
                                     px-2 text-muted">Contáctanos</a></li>
                         </ul>
                         <p class="text-center text-muted">&copy; 2022 MyCal</p>

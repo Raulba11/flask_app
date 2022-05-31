@@ -7,7 +7,8 @@
     <title>Mis grupos</title>
 
     <link rel="stylesheet" type="text/css" href="static/css/misGrupos.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../static/JS/misGrupos.js"></script>
 
@@ -102,7 +103,8 @@
       </form>
 
       <ul>
-        <a style="text-decoration: none;" href="{{ url_for('perfilPersonal', usuario = current_user.name ) }}"><li
+        <a style="text-decoration: none;" href="{{ url_for('perfilPersonal',
+          usuario= current_user.name ) }}"><li
             tabindex="0" class="icon-main" style="user-select: none;"><span>Perfil
               personal</span></li></a>
 
@@ -116,11 +118,13 @@
 
         <a style="text-decoration: none;" href="{{ url_for('calendario')}}"><li
             tabindex="0" class="icon-calendar" style="user-select: none;"><span>Calendario</span></li></a>
+        <a style="text-decoration: none;" href="{{
+          url_for('chat')}}"><li
+            tabindex="0" class="icon-chat" style="user-select:
+            none;"><span>Chat</span></li></a>
       </ul>
     </nav>
     <!-- FINAL SIDEBAR -->
-
-
 
     <!-- INICIO DEL CONTENEDOR -->
     <div class="contenedor">
@@ -143,7 +147,8 @@
 
         <li>
           <p class="nombre">{{grupo[0]}}</p>
-          <p class="admin">Administradores: {% for admin in grupo[1] %}{{admin.capitalize()}}&nbsp&nbsp{% endfor %}</p>
+          <p class="admin">Administradores: {% for admin in grupo[1]
+            %}{{admin.capitalize()}}&nbsp&nbsp{% endfor %}</p>
         </li>
 
         {%endfor%}
@@ -181,7 +186,8 @@
                 name="btnOpcionEliminar" style="margin: 10px;">Eliminar grupo</button>
               <button type="button" class="btn btn-warning"
                 id="btnOpcionActualizar"
-                name="btnOpcionActualizar" style="margin: 10px;">Cambiar contraseña</button>
+                name="btnOpcionActualizar" style="margin: 10px;">Cambiar
+                contraseña</button>
             </div>
           </div>
         </div>
@@ -191,7 +197,9 @@
 
 
       <!-- INICIO DEL MODAL DELETE GROUP -->
-      <div class="modal fade" tabindex="-1" role="dialog" id="removeGroupModal" name="removeGroupModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" tabindex="-1" role="dialog" id="removeGroupModal"
+        name="removeGroupModal" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -217,18 +225,23 @@
                     {%endfor%}
                   </select>
 
-                  <label for = "passRemovedGroup">Contraseña del grupo</label>
-                  <input type="password" class="form-control" id = "passRemovedGroup" name = "passRemovedGroup">
+                  <label for="passRemovedGroup">Contraseña del grupo</label>
+                  <input type="password" class="form-control" id="passRemovedGroup"
+                    name="passRemovedGroup">
 
-                  <label for = "confRemovedGroup">Introduce el nombre del grupo para confirmar el borrado</label>
-                  <input type = "text" class="form-control" id = "confRemovedGroup" name = "confRemovedGroup">
+                  <label for="confRemovedGroup">Introduce el nombre del grupo
+                    para confirmar el borrado</label>
+                  <input type="text" class="form-control" id="confRemovedGroup"
+                    name="confRemovedGroup">
 
 
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-danger btnPeligroso">Eliminar grupo</button>
-                <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-danger btnPeligroso">Eliminar
+                  grupo</button>
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Cerrar</button>
               </div>
             </form>
             <!-- FINAL DEL FORMULARIO DELETE -->
@@ -240,53 +253,58 @@
 
 
       <!-- INICIO DEL MODAL UPDATE GROUP -->
-       <div class="modal fade" tabindex="-1" role="dialog"
-       id="updateGroupModal"
-       name="updateGroupModal"
-       aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-       <div class="modal-dialog" role="document">
-         <div class="modal-content">
-           <div class="modal-header">
-             <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
-             <button type="button" class="close" data-bs-dismiss="modal"
+      <div class="modal fade" tabindex="-1" role="dialog"
+        id="updateGroupModal"
+        name="updateGroupModal"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+              <button type="button" class="close" data-bs-dismiss="modal"
                 aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-           </div>
-           <div class="modal-body">
-             <!-- INICIO DEL FORMULARIO UPDATE -->
-             <form method="post" name="updateGroupForm" id="updateGroupForm">
-               <div class="md-form md-outline input-with-post-icon">
+            </div>
+            <div class="modal-body">
+              <!-- INICIO DEL FORMULARIO UPDATE -->
+              <form method="post" name="updateGroupForm" id="updateGroupForm">
+                <div class="md-form md-outline input-with-post-icon">
 
-                 <input type="hidden" name="action" id="action"
-                   value="actualizar">
+                  <input type="hidden" name="action" id="action"
+                    value="actualizar">
 
-                 <label for="updateGroup">Selecciona el grupo cuya contraseña será cambiada</label>
-                 <select class="form-select" aria-label="Default select
-                   example" name="updateGroup" id="updateGroup" required>
-                   {% for grupo in tusGrupos %}
-                   <option value="{{ grupo.name }}">{{ grupo.name }}</option>
-                   {%endfor%}
-                 </select>
+                  <label for="updateGroup">Selecciona el grupo cuya contraseña
+                    será cambiada</label>
+                  <select class="form-select" aria-label="Default select
+                    example" name="updateGroup" id="updateGroup" required>
+                    {% for grupo in tusGrupos %}
+                    <option value="{{ grupo.name }}">{{ grupo.name }}</option>
+                    {%endfor%}
+                  </select>
 
-                 <label for = "passUpdateGroup">Nueva contraseña del grupo</label>
-                 <input type="password" class="form-control" id = "passRemovedGroup" name = "passRemovedGroup">
+                  <label for="passUpdateGroup">Nueva contraseña del grupo</label>
+                  <input type="password" class="form-control" id="passRemovedGroup"
+                    name="passRemovedGroup">
 
-                 <label for = "confPassRemovedGroup">Repita la nueva contraseña del grupo</label>
-                 <input type="password" class="form-control" id = "confPassRemovedGroup" name = "confPassRemovedGroup">
+                  <label for="confPassRemovedGroup">Repita la nueva contraseña
+                    del grupo</label>
+                  <input type="password" class="form-control" id="confPassRemovedGroup"
+                    name="confPassRemovedGroup">
 
-               </div>
-             </div>
-             <div class="modal-footer">
-               <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
-               <button type = "button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-             </div>
-           </form>
-           <!-- FINAL DEL FORMULARIO UPDATE -->
-         </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </form>
+            <!-- FINAL DEL FORMULARIO UPDATE -->
+          </div>
         </div>
-        </div>
+      </div>
       <!-- FINAL DEL MODAL UPDATE GROUP -->
 
 

@@ -273,7 +273,7 @@ def misGrupos():
 
 
 @login_required
-@app.route('/misGrupos/<grupo>')
+@app.route('/misGrupos/<grupo>', methods = ['GET', 'POST'])
 def misGruposGrupo(grupo: str):
     """
     Retorna la página de un grupo concreto o el índice si se escribe a mano la URL y no se es usuario del grupo.
@@ -282,11 +282,30 @@ def misGruposGrupo(grupo: str):
         grupo=grupo).filter_by(user=current_user.name).first()
 
     if pertenece:
+        admin = esAdmin(grupo)
         owner = GroupModel.query.with_entities(
             GroupModel.owner).filter_by(name=grupo).first()
         miembros = listaMiembros(grupo)
 
-        return render_template('grupoDentro.html', grupo=grupo, miembros=miembros, owner=owner[0])
+        if request.method == 'POST':
+            accion = request.form.get('action')
+
+            if accion == 'eliminar':
+                usuario = request.form.get('usuario')
+                conf = request.form.get('confusuario')
+                flash(eliminarUsuario(grupo, usuario, conf))
+            elif accion == 'admin':
+                usuario = request.form.get('usuarioadmin')
+                conf = request.form.get('confusuarioadmin')
+                flash(actualizarAdmin(grupo, usuario, conf, 'Y'))
+            elif accion == 'desadmin':
+                usuario = request.form.get('usuariodesadmin')
+                conf = request.form.get('confusuariodesadmin')
+                flash(actualizarAdmin(grupo, usuario, conf, 'N'))
+
+            return render_template('grupoDentro.html', grupo=grupo, miembros=miembros, owner=owner[0], admin = admin, alertar = True)
+
+        return render_template('grupoDentro.html', grupo=grupo, miembros=miembros, owner=owner[0], admin = admin, alertar = False)
     else:
         return redirect(url_for('index'))
 
@@ -518,6 +537,32 @@ def eliminarGrupo(grupo: str, pwd: str, conf: str) -> str:
 
 
 # FINAL MÉTODOS MIS GRUPOS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+# INICIO MÉTODOS DENTRO DE GRUPO
+
+def eliminarUsuario(grupo, usuario, confirmacion):
+    if usuario != confirmacion:
+        return 'Confirmación incorrecta'
+    else:
+        try:
+            rel = GrupoUserRelation.query.filter_by(user = usuario, grupo = grupo).first()
+            db.session.delete(rel)
+            db.session.commit()
+            return 'Usuario eliminado del grupo correctamente'
+        except Exception as ex:
+            return 'Hubo un problema y no se pudo eliminar al usuario'
+
+def actualizarAdmin(grupo, usuario, confirmacion, nuevoValor):
+    if usuario != confirmacion:
+        return 'Confirmación incorrecta'
+    else:
+        try:
+            GrupoUserRelation.query.filter_by(grupo = grupo, user = usuario).update(dict(admin = nuevoValor))
+            return 'Usuario actualizado'
+        except Exception as ex:
+            return 'Hubo un problema y no se pudo actualizar al usuario'
+
+# FINAL MÉTODOS DENTRO DE GRUPO
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # INICIO MÉTODOS EVENTOS
 
