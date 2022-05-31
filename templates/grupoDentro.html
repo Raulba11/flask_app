@@ -24,27 +24,27 @@
     {% if alertar %}
       {% for msg in get_flashed_messages() %}
 
-        {% if msg = 'Confirmación incorrecta' %}
-          title = '{{ msg }}',
-          text = 'Inténtelo de nuevo'
-        
-        {% elif msg = 'Usuario eliminado del grupo correctamente' %}
-            title = '{{ msg }}',
-            text = 'Este ya no podrá ver el contenido del grupo a menos que vuelva a entrar.'
-
-        {% elif msg = 'Hubo un problema y no se pudo eliminar al usuario' %}
-            title = '{{ msg }}',
-            text = 'Inténtelo de nuevo más tarde'
-
-        {% elif msg = 'Usuario actualizado' %}
-            title = '{{ msg }}',
-            text = 'Administrador actualizado'
-
-        {% elif msg = 'Hubo un problema y no se pudo actualizar al usuario' %}
-            title = '{{ msg }}',
-            text = 'Inténtelo de nuevo más tarde'
-
-        {% endif %}
+      {%if msg == 'Confirmación incorrecta'%}
+      title = '{{ msg }}',
+      text = 'Inténtelo de nuevo'
+    
+    {%elif msg == "Usuario eliminado del grupo correctamente"%}
+      title = '{{ msg }}',
+      text = 'Este ya no podrá ver el contenido del grupo a menos que vuelva a entrar'
+    
+    {%elif msg == "Hubo un problema y no se pudo eliminar al usuario"%}
+      title = '{{ msg }}',
+      text = 'Inténtelo de nuevo más tarde'
+    
+    {%elif msg == "Usuario actualizado"%}
+      title = '{{ msg }}',
+      text = 'Administrador actualizado'
+    
+    {%elif msg == "Hubo un problema y no se pudo actualizar al usuario"%}
+      title = '{{ msg }}',
+      text = 'Inténtelo de nuevo más tarde"'
+    
+    {%endif%}
 
         {% if msg == 'Usuario eliminado del grupo correctamente' or msg == "Usuario actualizado" %}
 
