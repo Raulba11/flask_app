@@ -57,7 +57,7 @@ def mandarEmail(cuerpo : str, receptor : UserModel.email) -> None:
            + "<th>FINAL</th>" \
          + "</tr>" + cuerpo + "</table></div>"
 
-        yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")
+        yag = yagmail.SMTP("Correo", "Contraseña")
 
         yag.send(
             to=receiver,
