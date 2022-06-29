@@ -695,10 +695,10 @@ def mandarEmail(receptor : str, tipoMensaje : str, mensaje : str):
     """
     Manda un email a ti mismo con los datos pasados como parámetro y otro mensaje al receptor diciendo que fue recibido
     """
-    yag = yagmail.SMTP("MycalTFG@gmail.com", "MyCalTFG21/22")
+    yag = yagmail.SMTP("Correo", "Contraseña")
     try:
         yag.send(
-            to="MycalTFG@gmail.com",
+            to="Correo",
             subject= "Contacto",
             contents="<h1>"+ tipoMensaje.capitalize() +" de "+ receptor +":<h1><h2>"+ mensaje +"</h2>"
         )
